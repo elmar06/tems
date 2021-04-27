@@ -51,6 +51,10 @@
                       <label for="exampleInputEmail1" style="font-size: 16px">Tools & Equipment Code</label>&nbsp;<span style="color: red; font-size: 16px">*</span>
                       <input type="text" class="form-control" id="code" placeholder="Please scan the Code" required="required">
                     </div>
+                    <div class="col-lg-4">
+                      <center><label style="font-size: 16px">T & E Status</label><br>
+                      <label id="tool-status" style="font-size: 20px"></label></center>
+                    </div>
                   </div><br>
                   <div class="row">
                     <div class="col-lg-12">
@@ -76,6 +80,12 @@
                     <div class="col-lg-6">
                       <label for="exampleInputEmail1">Model</label>
                       <input type="text" class="form-control" id="model" disabled>
+                      <input type="text" class="form-control" id="tool-id" hidden>
+                    </div>
+                  </div><br>
+                  <div class="row">
+                    <div class="col-lg-12">
+                      <div id="tool-warning" class="alert alert-danger" role="alert" style="display: none"></div>
                     </div>
                   </div>
                 </div>
@@ -95,11 +105,11 @@
                   <div class="row">
                     <div class="col-lg-6">
                       <label for="exampleInputEmail1">Borrower Name</label>
-                      <input type="text" class="form-control" id="fullname" disabled>
+                      <input type="text" class="form-control" id="emp-name" disabled>
                     </div>
                     <div class="col-lg-6">
                       <label for="exampleInputEmail1">Trade</label>
-                      <input type="text" class="form-control" id="trade" disabled>
+                      <input type="text" class="form-control" id="emp-trade" disabled>
                     </div>
                   </div><br>
                   <div class="row">
@@ -118,7 +128,7 @@
                           <div class="input-group-prepend">
                             <span class="input-group-text fa fa-calendar"></span>
                           </div>
-                          <input type="text" class="form-control date-warranty" id="date_retruned"/>
+                          <input type="text" class="form-control date-warranty" id="date_retruned" disabled/>
                         </div>
                     </div>
                   </div>
@@ -129,7 +139,15 @@
                   </div><br>
                   <div class="row">
                     <div class="col-lg-12">
-                      <button id="save_asset" type="button" class="btn btn-primary pull-right">Submit</button>
+                      <div id="emp-warning" class="alert alert-danger" role="alert" style="display: none"></div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-10">                      
+                      <button id="clear" type="button" class="btn btn-default pull-right" onclick="clearFields()">Clear</button>
+                    </div>
+                    <div class="col-lg-2">                      
+                      <button id="btnSubmit" type="button" class="btn btn-primary pull-right">Submit</button> 
                     </div>
                   </div>
                 </div>
@@ -247,19 +265,13 @@ $(document).ready(function(){
 
   $('#date_retruned').datepicker({
     format: 'mm/dd/yyyy'
-  });
+  }).datepicker('setDate', new Date());
 });
-</script>
-
-<!-- autofocus in code -->
-<script>
+//autofocus in code
 $(document).ready(function(){
   $('#code').focus();
 })
-</script>
-
-<!-- search the code in db when changed -->
-<script>
+//search the code in db when changed
 $('#code').change(function(){
   var code = $(this).val();
 
@@ -272,20 +284,109 @@ $('#code').change(function(){
 
     success: function(result)
     {
-      var description = result[0];
-      var brand = result[1];
-      var serial = result[2];
-      var barcode = result[3];
-      var model = result[4];
-
-      $('#description').val(description);
-      $('#brand').val(brand);
-      $('#serial').val(serial);
-      $('#barcode').val(barcode);
-      $('#model').val(model);
+      if(result == ''){
+        $('#tool-warning').html("<center><i class='fa fa-warning menu-icon'></i> ERROR! Tool not found!.</center>");
+        $('#tool-warning').show();
+        setTimeout(function(){
+          $('#tool-warning').fadeOut();
+        }, 3000)
+        //clear input fields
+        clearToolData();
+      }else{
+         //initialize data
+        var description = result[0];
+        var brand = result[1];
+        var serial = result[2];
+        var barcode = result[3];
+        var model = result[4];
+        var status = result[5];
+        var id = result[6];
+        //display data in the input box
+        $('#description').val(description);
+        $('#brand').val(brand);
+        $('#serial').val(serial);
+        $('#barcode').val(barcode);
+        $('#model').val(model);
+        $('#tool-id').val(id);
+        //check the status of tools & equipment
+        if(status == '1'){
+         $('#tool-status').html(' <label id="tool-status" style="font-size: 20px; color: green;">Returned</label>');
+        }else{
+          $('#tool-status').html(' <label id="tool-status" style="font-size: 20px; color: red;">Borrowed</label>');
+        }        
+      }
+    },
+    error: function(xhr, ajaxOptions, thrownError)
+    {
+      alert(thrownError);
     }
   })
 })
+//search employee ID in db
+$('#borrow-code').change(function(){
+  var emp_code = $(this).val();
+
+  $.ajax({
+    type: 'POST',
+    url: '../../controls/toolkeeper/get_emp_details.php',
+    data: {emp_code: emp_code},
+    dataType: 'json',
+    cache: false,
+
+    success: function(result)
+    {
+      if(result == ''){
+        $('#emp-warning').html("<center><i class='fa fa-warning menu-icon'></i> ERROR! Worker details not found!.</center>");
+        $('#emp-warning').show();
+        setTimeout(function(){
+          $('#emp-warning').fadeOut();
+        }, 3000)
+        clearWorkerData();
+      }else{
+         //initialize data
+        var name = result[0];
+        var trade = result[1];
+        //display data in the input box
+        $('#emp-name').val(name);
+        $('#emp-trade').val(trade);
+      }
+    },
+    error: function(xhr, ajaxOptions, thrownError)
+    {
+      alert(thrownError);
+    }
+  })
+})
+//btnSubmit event handler
+//clear functions
+function clearFields()
+{
+  $('#code').val('');
+  $('#description').val('');
+  $('#brand').val('');
+  $('#serial').val('');
+  $('#barcode').val('');
+  $('#model').val('');
+  $('#borrow-code').val('');
+  $('#emp-name').val('');
+  $('#emp-trade').val('');
+  $('#tool-status').html(' <label id="tool-status" style="font-size: 20px;"></label>');
+}
+//clear tools & equipment details except for barcode
+function clearToolData()
+{
+  $('#description').val('');
+  $('#brand').val('');
+  $('#serial').val('');
+  $('#barcode').val('');
+  $('#model').val('');
+}
+//clear worker details
+function clearWorkerData()
+{
+  $('#emp-name').val('');
+  $('#emp-trade').val('');
+}
 </script>
 
 </body>
