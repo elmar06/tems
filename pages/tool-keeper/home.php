@@ -81,6 +81,8 @@
                       <label for="exampleInputEmail1">Model</label>
                       <input type="text" class="form-control" id="model" disabled>
                       <input type="text" class="form-control" id="tool-id" hidden>
+                      <input type="text" class="form-control" id="record-id" hidden>
+                      <input type="text" class="form-control" id="status" hidden>
                     </div>
                   </div><br>
                   <div class="row">
@@ -128,7 +130,7 @@
                           <div class="input-group-prepend">
                             <span class="input-group-text fa fa-calendar"></span>
                           </div>
-                          <input type="text" class="form-control date-warranty" id="date_retruned" disabled/>
+                          <input type="text" class="form-control date-warranty" id="date_returned" disabled/>
                         </div>
                     </div>
                   </div>
@@ -140,6 +142,8 @@
                   <div class="row">
                     <div class="col-lg-12">
                       <div id="emp-warning" class="alert alert-danger" role="alert" style="display: none"></div>
+                      <div id="borrow-success" class="alert alert-success" role="alert" style="display: none"></div>
+                      <div id="borrow-warning" class="alert alert-danger" role="alert" style="display: none"></div>
                     </div>
                   </div>
                   <div class="row">
@@ -148,6 +152,11 @@
                     </div>
                     <div class="col-lg-2">                      
                       <button id="btnSubmit" type="button" class="btn btn-primary pull-right">Submit</button> 
+                    </div>
+                    <div class="col-lg-12 borrowers-detail" style="display: none;">
+                      <label for="exampleInputEmail1" style="font-size: 16px">Borrower Details</label><br>
+                      <label>Emp Code:</label>&nbsp;<label id="borrowers-code"></label><br>
+                      <label>Emp Name:</label>&nbsp;<label id="borrowers-name"></label>
                     </div>
                   </div>
                 </div>
@@ -234,7 +243,6 @@
   
 <!-- data tables -->
 <script src="../../components/dataTables/js/jquery.dataTables.min.js"></script>
-
 <!-- plugins:js -->
 <script src="../../components/js/vendor.bundle.base.js"></script>
 <script src="../../components/js/vendor.bundle.addons.js"></script>
@@ -252,9 +260,21 @@
 <!-- End custom js for this page-->
 <!-- date picker -->
 <script src="../../components/datetimepicker/js/bootstrap-datepicker.js"></script>
+<!-- toast js -->
+<script src="../../components/js/jquery.toast.js"></script>
 
 <!-- call the function of select2 plug-in -->
 <script>
+//toast
+function showToast(){
+  var title = 'Loading...';
+  var duration = 500;
+  $.Toast.showToast({title: title,duration: duration, image: '../../components/img/loading.gif'});
+}
+function hideLoading(){
+  $.Toast.hideToast();
+}
+//select2 
 $(document).ready(function(){
   $('.js-example-basic-single').select2();
 
@@ -263,15 +283,12 @@ $(document).ready(function(){
     format: 'mm/dd/yyyy'
   }).datepicker('setDate', new Date());
 
-  $('#date_retruned').datepicker({
-    format: 'mm/dd/yyyy'
-  }).datepicker('setDate', new Date());
 });
 //autofocus in code
 $(document).ready(function(){
   $('#code').focus();
 })
-//search the code in db when changed
+//search the T&E code in db when changed
 $('#code').change(function(){
   var code = $(this).val();
 
@@ -293,7 +310,7 @@ $('#code').change(function(){
         //clear input fields
         clearToolData();
       }else{
-         //initialize data
+        //initialize data
         var description = result[0];
         var brand = result[1];
         var serial = result[2];
@@ -308,11 +325,37 @@ $('#code').change(function(){
         $('#barcode').val(barcode);
         $('#model').val(model);
         $('#tool-id').val(id);
+        $('#status').val(status);
         //check the status of tools & equipment
         if(status == '1'){
-         $('#tool-status').html(' <label id="tool-status" style="font-size: 20px; color: green;">Returned</label>');
+         $('#tool-status').html('<label id="tool-status" style="font-size: 20px; color: green;">Returned</label>');
+         $('#date-returned').val('');
         }else{
-          $('#tool-status').html(' <label id="tool-status" style="font-size: 20px; color: red;">Borrowed</label>');
+          $('#tool-status').html('<label id="tool-status" style="font-size: 20px; color: red;">Borrowed</label>');  
+          //check the records table and get the id to update the status
+          var tool_id = result[6];
+          var myData = 'tool_id=' + tool_id + '&tool_code=' + code;
+          
+          $.ajax({
+            type: 'POST',
+            url: '../../controls/toolkeeper/check_record.php',
+            data: myData,
+            dataType: 'json',
+            cache: false,
+            success: function(result)
+            {
+              var id = result[0];
+              var date_borrowed = result[1];
+              var borrowers_code = result[2];
+              var borrowers_name = result[3];
+              $('#record-id').val(id);
+              $('#date_borrowed').val(date_borrowed);
+              //display the name of borrower
+              $('#borrowers-code').text(borrowers_code);  
+              $('#borrowers-name').text(borrowers_name);  
+              $('.borrowers-detail').show(300);
+            }
+          })
         }        
       }
     },
@@ -332,7 +375,6 @@ $('#borrow-code').change(function(){
     data: {emp_code: emp_code},
     dataType: 'json',
     cache: false,
-
     success: function(result)
     {
       if(result == ''){
@@ -349,6 +391,10 @@ $('#borrow-code').change(function(){
         //display data in the input box
         $('#emp-name').val(name);
         $('#emp-trade').val(trade);
+         //set the date returned
+         $('#date_returned').datepicker({
+          format: 'mm/dd/yyyy'
+        }).datepicker('setDate', new Date());
       }
     },
     error: function(xhr, ajaxOptions, thrownError)
@@ -358,18 +404,97 @@ $('#borrow-code').change(function(){
   })
 })
 //btnSubmit event handler
+$('#btnSubmit').on('click', function(e){
+  e.preventDefault();
+
+  var tool_id = $('#tool-id').val();
+  var tool_code = $('#code').val();
+  var description = $('#description').val();
+  var borrow_code = $('#borrow-code').val();
+  var name = $('#emp-name').val();
+  var date_borrow = $('#date_borrowed').val();
+  var date_return = $('#date_returned').val();
+  var record_id = $('#record-id').val();
+  var status = $('#status').val();
+  var myData = 'tool_id=' + tool_id + '&tool_code=' + tool_code + '&description=' + description + '&borrow_code=' + borrow_code + '&name=' + name + '&date_borrow=' + date_borrow + '&date_return=' + date_return + '&record_id=' + record_id;
+
+  if(status == 1)//if tools are in storage
+  {
+    $.ajax({
+      type: 'POST',
+      url: '../../controls/toolkeeper/borrow_tool.php',
+      data: myData,
+      beforeSend: function()
+      {
+        showToast();
+      },
+      success: function(response)
+      {
+        if(response > 0)
+        {
+          $('#borrow-success').html("<center><i class='fa fa-check menu-icon'></i> Transaction saved!.</center>");
+          $('#borrow-success').show();
+          setTimeout(function(){
+            $('#borrow-success').fadeOut();
+          }, 2000)
+        }
+        else
+        {
+          $('#borrow-warning').html("<center><i class='fa fa-warning menu-icon'></i> ERROR! Please contact the system administrator at local 124 for assistance.</center>");
+          $('#borrow-warning').show();
+          setTimeout(function(){
+            $('#borrow-warning').fadeOut();
+          }, 3000)
+        }
+      },
+      error: function(xhr, ajaxOptions, thrownError)
+      {
+        alert(thrownError);
+      }
+    })
+  }
+  else//if tools are BORROWED
+  {
+    $.ajax({
+      type: 'POST',
+      url: '../../controls/toolkeeper/return_tool.php',
+      data: myData,
+      beforeSend: function()
+      {
+        showToast();
+      },
+      success: function(response)
+      {
+        if(response > 0)
+        {
+          $('#borrow-success').html("<center><i class='fa fa-check menu-icon'></i> T&E Successfully mark as RETURNED!.</center>");
+          $('#borrow-success').show();
+          setTimeout(function(){
+            $('#borrow-success').fadeOut();
+          }, 2000)
+        }
+        else
+        {
+          $('#borrow-warning').html("<center><i class='fa fa-warning menu-icon'></i> ERROR! Please contact the system administrator at local 124 for assistance.</center>");
+          $('#borrow-warning').show();
+          setTimeout(function(){
+            $('#borrow-warning').fadeOut();
+          }, 3000)
+        }
+      },
+      error: function(xhr, ajaxOptions, thrownError)
+      {
+        alert(thrownError);
+      }
+    })
+  }
+})
+
 //clear functions
 function clearFields()
 {
-  $('#code').val('');
-  $('#description').val('');
-  $('#brand').val('');
-  $('#serial').val('');
-  $('#barcode').val('');
-  $('#model').val('');
-  $('#borrow-code').val('');
-  $('#emp-name').val('');
-  $('#emp-trade').val('');
+  $('input[type=text]').val('');
+  $('textarea').val('');
   $('#tool-status').html(' <label id="tool-status" style="font-size: 20px;"></label>');
 }
 //clear tools & equipment details except for barcode

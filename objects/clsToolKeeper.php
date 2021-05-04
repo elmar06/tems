@@ -2,7 +2,7 @@
 class ToolKeeper
 {
 	private $conn;
-	private $table_name = 'borrow_log';
+	private $table_name = 'records';
 
 	public $id;
 	public $tool_code;
@@ -42,14 +42,16 @@ class ToolKeeper
 
 	public function borrow_tool()
 	{
-		$query = 'INSERT INTO '.$this->table_name.' SET tool_code=?, borrower_code=?, date_borrow=?, status=?';
+		$query = 'INSERT INTO '.$this->table_name.' SET tool_id=?, tool_code=?, tool_desc=?, borrow_code=?, borrow_name=?, date_borrow=?, status=2';
 		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 		$ins = $this->conn->prepare($query);
 
-		$ins->bindParam(1, $this->tool_code);
-		$ins->bindParam(2, $this->borrower_code);
-		$ins->bindParam(3, $this->date_borrow);
-		$ins->bindParam(4, $this->status);
+		$ins->bindParam(1, $this->tool_id);
+		$ins->bindParam(2, $this->tool_code);
+		$ins->bindParam(3, $this->tool_desc);
+		$ins->bindParam(4, $this->borrow_code);
+		$ins->bindParam(5, $this->borrow_name);
+		$ins->bindParam(6, $this->date_borrow);
 
 		if($ins->execute())
 		{
@@ -63,14 +65,13 @@ class ToolKeeper
 
 	public function return_tool()
 	{
-		$query = 'UPDATE '.$this->table_name.' SET status = ? WHERE tool_code = ? AND borrower_code = ? AND date_borrow = ?';
+		$query = 'UPDATE '.$this->table_name.' SET returned_by=?, date_return=?, status=1 WHERE id=?';
 		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 		$upd = $this->conn->prepare($query);
 
-		$upd->bindParam(1, $this->status);
-		$upd->bindParam(2, $this->tool_code);
-		$upd->bindParam(3, $this->borrower_code);
-		$upd->bindParam(4, $this->date_borrow);
+		$upd->bindParam(1, $this->returned_by);
+		$upd->bindParam(2, $this->date_return);
+		$upd->bindParam(3, $this->id);
 
 		if($upd->execute())
 		{
@@ -81,5 +82,28 @@ class ToolKeeper
 			return false;
 		}
 	}	
+
+	public function check_record()
+	{
+		$query = 'SELECT * FROM '.$this->table_name.' WHERE tool_id=? AND tool_code=? AND date_return is null';
+		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+		$sel = $this->conn->prepare($query);
+
+		$sel->bindParam(1, $this->tool_id);
+		$sel->bindParam(2, $this->tool_code);
+
+		$sel->execute();
+		return $sel;
+	}
+
+	public function view_records()
+	{
+		$query = 'SELECT * FROM '.$this->table_name.' WHERE status != 0 ORDER BY date_borrow DESC';
+		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+		$sel = $this->conn->prepare($query);
+
+		$sel->execute();
+		return $sel;
+	}
 }
 ?>

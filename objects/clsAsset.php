@@ -121,7 +121,7 @@ class Asset
 
 	public function view_asset()
 	{
-		$query = "SELECT asset.id as 'asset_id', asset.description, asset.specs, asset.project, asset.category, asset.code, asset.trade, asset.brand, asset.assign, asset.tool_condition, type.id as 'cat_id', type.type as 'cat_name', type.description as 'cat_desc', location.id, location.location as 'loc_name', department.id, department.department as 'dept_name', personnel.id, CONCAT(personnel.firstname, ' ', personnel.lastname) as 'fullname' FROM asset, type, location, department, personnel WHERE asset.category = type.id AND asset.project = location.id AND asset.trade = department.id AND asset.assign = personnel.id AND asset.status != 0 ORDER BY asset.project DESC";
+		$query = "SELECT asset.id as 'asset_id', asset.description, asset.specs, asset.status, asset.category, asset.code, asset.trade, asset.brand, asset.assign, asset.tool_condition, type.id as 'cat_id', type.type as 'cat_name', type.description as 'cat_desc', location.id, location.location as 'loc_name', department.id, department.department as 'dept_name' FROM asset, type, location, department, personnel WHERE asset.category = type.id AND asset.project = location.id AND asset.trade = department.id AND asset.assign = personnel.id AND asset.status != 0 ORDER BY asset.project DESC";
 		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 		$sel = $this->conn->prepare($query);
 
@@ -259,6 +259,25 @@ class Asset
 
 		$sel->execute();
 		return $sel;
+	}
+
+	public function upd_tool_stat()
+	{
+		$query = 'UPDATE '.$this->table_name.' SET status=? WHERE id=?';
+		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+		$upd = $this->conn->prepare($query);
+
+		$upd->bindParam(1, $this->status);
+		$upd->bindParam(2, $this->id);
+
+		if($upd->execute())
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 }
 ?>

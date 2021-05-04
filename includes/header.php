@@ -15,7 +15,7 @@ session_start();
   include '../../objects/clsPersonnel.php';
   include '../../objects/clsUser.php';
   include '../../objects/clsType.php';
-  include '../../objects/clsRecord.php';
+  include '../../objects/clsTransfer.php';
 
   $database = new clsConnection();
   $db = $database->connect();

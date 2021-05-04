@@ -17,6 +17,8 @@ session_start();
   include '../../objects/clsType.php';
   include '../../objects/clsRecord.php';
   include '../../objects/clsWorker.php';
+  include '../../objects/clsToolKeeper.php';
+
 
   $database = new clsConnection();
   $db = $database->connect();
@@ -29,6 +31,7 @@ session_start();
   $type = new Type($db);
   $record = new TransferRecord($db);
   $worker = new Worker($db);
+  $tool = new ToolKeeper($db);
 ?>
 <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
   <div class="text-center navbar-brand-wrapper d-flex align-items-top justify-content-center">

@@ -51,12 +51,40 @@
                       <th>Description</th>
                       <th>Borrower's name</th>
                       <th><center>Date Borrowed</center></th>
+                      <th><center>Returned By</center></th>
                       <th><center>Date Returned</center></th>
                       <th><center>Status</center></th>
                     </tr>
                 </thead>
                 <tbody>
-                  
+                <?php
+                  $view = $tool->view_records();
+                  while($row = $view->fetch(PDO::FETCH_ASSOC))
+                  {
+                    $date_borrow = date('F j, Y', strtotime($row['date_borrow']));
+                    //check the status of T&E
+                    if($row['status'] == 1){
+                      $status = '<label style="color: green"> Returned </label>';
+                      $date_return = date('F j, Y', strtotime($row['date_return']));
+                      $return_by = $row['returned_by'];
+                    }else{
+                      $status = '<label style="color: red"> Borrowed </label>';
+                      $date_return = '<center> <label>- </label></center>';
+                      $return_by = '<center> <label>- </label></center>';
+
+                    }
+                    echo'
+                    <tr>
+                      <td>'.$row['tool_code'].'</td>
+                      <td>'.$row['tool_desc'].'</td>
+                      <td>'.$row['borrow_name'].'</td>
+                      <td>'.$date_borrow.'</td>
+                      <td>'.$return_by.'</td>
+                      <td>'.$date_return.'</td>
+                      <td>'.$status.'</td>
+                  </tr>';
+                  }
+                ?>                  
                 </tbody>
               </table>
             </div>

@@ -44,25 +44,14 @@
             <div class="col-lg-12">
               <div class="card">
                 <div class="card-body">
-                  <div>
-                    <a href="add_asset.php" class="btn btn-success btn-rounded"><span class="fa fa-plus"></span> New Tool/Equipment</a>
-                    <button id="btnEdit" class="btn btn-dark btn-rounded"><i class="fa fa-edit"></i>Edit Tool Details</button>
-                    <a id="viewAsset" href="home.php" class="btn btn-dark btn-rounded"><i class="fa fa-list"></i>View All Tools</a>
-                    <a id="btnTransfer" href="#" class="btn btn-primary btn-rounded"><i class="fa fa-share"></i>Transfer Tools</a>
-                    <button id="btnReport" class="btn btn-primary btn-rounded" data-toggle="modal" data-target="#reportModal"><i class="fa fa-print"></i>Reports</button>
-                  </div><br>
-                  <div id="table-content">
-                  <table id="asset_table" class="table table-bordered table-responsive table-hover asset_table" style="cursor:pointer">
+                  <table id="asset_table" class="table table-bordered table-hover" style="cursor:pointer">
                     <thead>
                         <tr>
-                            <th align="center"  style="max-width: 30px;"><input type="checkbox" id="checkboxall"/></th>
-                            <th align="center" style="max-width: 80px;">T&E Code</th>
-                            <th align="center" style="max-width: 200px;">Description</th>
-                            <th align="center" style="max-width: 150px;">Project</th>
-                            <th align="center" style="max-width: 150px;">Category</th>
-                            <th align="center" style="max-width: 100px;">Trade</th>
-                            <th align="center" style="width: 10%;">Assignee</th>
-                            <th align="center" style="width: 10%;">Condition</th>
+                            <th><center>T&E Code</center></th>
+                            <th><center>Description</center></th>
+                            <th><center>Category</center></th>
+                            <th><center>Trade</center></th>
+                            <th><center>Status</center></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -72,23 +61,23 @@
 
                         while($row = $view->fetch(PDO::FETCH_ASSOC))
                         {
-                          extract($row);
+                          if($row['status'] == 1){
+                            $status = '<label style="color: green"> Returned </label>';
+                          }else{
+                            $status = '<label style="color: red"> Borrowed </label>';
+                          }
                           echo '
                             <tr>
-                              <td><input type="checkbox" name="checklist" class="checklist" value="'.$row['asset_id'].'" style="max-width: 30px;"></td>
-                              <td class="barcode" style="max-width: 80px;">'.$row['code'].'</td>
-                              <td class="description" style="max-width: 200px;">'.$row['description'].'</td>
-                              <td class="asset_type" style="max-width: 150px;">'.$row['loc_name'].'</td>
-                              <td class="asset_loc" style="max-width: 150px;">'.$row['cat_name'].'</td>
-                              <td class="brand" style="max-width: 100px;">'.$row['dept_name'].'</td>
-                              <td class="condition" style="width: 10%;">'.$row['fullname'].'</td>
-                              <td class="asset_status" style="width: 10%;">'.$row['tool_condition'].'</td>
+                              <td>'.$row['code'].'</td>
+                              <td>'.$row['description'].'</td>
+                              <td>'.$row['cat_name'].'</td>
+                              <td>'.$row['dept_name'].'</td>
+                              <td><center>'.$status.'</center></td>
                             </tr>';
                         }
                       ?>
                     </tbody>
                   </table>
-                  </div><!-- end of table content div -->
                 </div>
               </div>
             </div><!-- end of column -->
@@ -471,182 +460,6 @@ $(document).ready(function(){
       }
     })
   })
-</script>
-
-<!-- SET Asset to TRANSFER Function -->
-<script>
-  $(document).ready(function(){
-    $('body').on('click', '#btnTransfer', function(e){
-      e.preventDefault();
-
-        if($('.asset_table td input:checked').length > 0)
-        {
-          $('.asset_table td input:checked').each(function(){
-            tr = $(this).parent().parent();
-            tr.append($('<td>', {
-              class: 'btnremove',
-              html: 'Remove',
-              style: 'text-decoration:underline;cursor:pointer;color:red'
-            }))
-            $('.transfer_table').append(tr.clone());
-            tr.find('input:checked').attr('disabled', true);
-            tr.remove();
-            $('#transferModal').modal('show');
-          });
-        }
-        else
-        {
-          $('#transferModal').modal('show');
-          $('#btnPrintTransfer').attr('disabled', true);
-          $('#btnPrintReceipt').attr('disabled', true);
-          $('#btnAssetTransfer').attr('disabled', true);
-          $('#transfer-warning').html("<center><i class='fa fa-warning menu-icon'></i> No Item selected for Transfer.</center>");
-          $('#transfer-warning').show().fadeOut(5000);
-        }
-    })
-    //Remove asset in the list when clicking the remove button
-    $('body').on('click', '.btnremove', function(e){
-      tr = $(this).parent();
-      tr.find('.btnRemove').remove();
-      $('#tbltransfer th:last-child, #tbltransfer td:last-child').remove();//Remove the action button
-      $('.asset_table').append(tr.clone());
-      tr.remove();
-    })
-
-    //enable button after closing the modal transfer asset
-    $('.close-asset').click(function(){
-      $('#btnPrintTransfer').attr('disabled', false);
-      $('#btnAssetTransfer').attr('disabled', false);
-    })
-  })
-</script>
-
-<!-- transfer the data after asset transfer is done -->
-<script>
-$('#btnPrintTransfer').click(function(e){
-  e.preventDefault();
-
-  //get the id of asset items
-  var id = [];
-  $('input:checkbox[name=checklist]:checked').each(function(){
-    id.push($(this).val());
-  });
-
-  //get the data from transfer table
-  var data = [];
-  $('.transfer_table td').each(function(){
-    data.push($(this).text());
-  });
-
-    var oldLocation = data[3];
-    var oldAssignee = data[6];
-    var oldDept = data[5];
-
-    var new_assignee = $('#newAssign').val();
-    var date_transfer = $('#date_transfer').val();
-    var reason = $('#reason').val();
-    var new_location = $('#new_location').val();
-    var quantity = $('#quantity').val();
-    var department = $('#new_department').val();
-    var myData = 'new_assignee=' + new_assignee + '&date_transfer=' + date_transfer + '&reason=' + reason + '&new_location=' + new_location + '&quantity=' + quantity + '&department=' + department + '&oldLocation=' + oldLocation + '&oldAssignee=' + oldAssignee + '&oldDept=' + oldDept + '&id=' + id;
-    //passing of data to tcpdf page
-    window.open('../../print/form/printARTF3.php?' + myData);
-})
-</script>
-
-<script>
-  $('#btnGenerate').click(function(){
-    var assignee = $('#reportAssignee').val();
-    var project = $('#reportDepartment').val();
-    var category = $('#reportType').val();
-
-    if(assignee != null)
-    {
-      window.open('../../print/form/printAssetByAssign.php?assignee=' + assignee);
-    }
-    
-    if(project != null)
-    {
-      window.open('../../print/form/printAssetByProject.php?project=' + project);
-    }
-    
-    if(category != null)
-    {
-      window.open('../../print/form/printAssetByCategory.php?category=' + category);
-    }
-
-    if(assignee == null && project == null && category == null)
-    {
-      $('#report-warning').html("<center><i class='fa fa-warning menu-icon'></i> Please choose a report to generate. </center>");
-      $('#report-warning').show().fadeOut(5000);
-    }
-  })
-</script>
-
-<!-- Transfer Asset Function -->
-<script>
-$('#btnAssetTransfer').click(function(){
-  var id = [];
-  $('input:checkbox[name=checklist]:checked').each(function(){
-    id.push($(this).val());
-  });
-
-  var assign = $('#newAssign').val();
-  var date_transfer = $('#date_transfer').val();
-  var reason = $('#reason').val();
-  var location = $('#new_location').val();
-  var quantity = $('#quantity').val();
-
-  $.each(id, function(key, value){
-    $.ajax({
-      type: 'POST',
-      url: '../../controls/transfer_asset.php',
-      data: {id: value, assign: assign, date_transfer: date_transfer, reason: reason, location: location, quantity: quantity},
-
-      success: function(response)
-      {
-        if(response > 0)
-        {
-          $('#transfer-success').html("<center><i class='fa fa-check menu-icon'></i> Asset Successfully transfer to new Assignee.</center>");
-          $('#transfer-success').show().fadeOut(5000);
-          $('#btnPrintTransfer').attr('disabled', false);
-          $('#btnPrintReceipt').attr('disabled', true);
-          $('#btnAssetTransfer').attr('disabled', true);
-        }
-        else
-        {
-          $('#transfer-warning').html("<center><i class='fa fa-warning menu-icon'></i> Transfer Failed. Please contact the administrator.</center>");
-          $('#transfer-warning').show().fadeOut(5000);
-        }
-      },
-      error: function(xhr, ajaxOptions, thrownError)
-      {
-        alert(thrownError);
-      }
-    })
-  })
-})
-</script>
-
-<!-- BTNEDIT ASSET FUNCTION -->
-<script>
-$('#btnEdit').click(function(e){
-  e.preventDefault();
-  var id = [];
-  $('input:checkbox[name=checklist]:checked').each(function(){
-    id.push($(this).val());
-  })
-  
-  //check if checkbox is null/empty
-  if($('input:checkbox[name=checklist]:checked').length > 0)
-  { 
-    window.location = 'update_asset.php?id=' + id;
-  }
-  else
-  {
-    alert('ERROR! Please select asset to update.');
-  }
-})
 </script>
 
 <!-- check if password match -->
