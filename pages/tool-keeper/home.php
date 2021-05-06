@@ -414,6 +414,7 @@ $('#borrow-code').change(function(){
 $('#btnSubmit').on('click', function(e){
   e.preventDefault();
 
+  var project = $('#proj-id').val();
   var tool_id = $('#tool-id').val();
   var tool_code = $('#code').val();
   var description = $('#description').val();
@@ -423,7 +424,8 @@ $('#btnSubmit').on('click', function(e){
   var date_return = $('#date_returned').val();
   var record_id = $('#record-id').val();
   var status = $('#status').val();
-  var myData = 'tool_id=' + tool_id + '&tool_code=' + tool_code + '&description=' + description + '&borrow_code=' + borrow_code + '&name=' + name + '&date_borrow=' + date_borrow + '&date_return=' + date_return + '&record_id=' + record_id;
+  var add_by = $('#acc_id').val();
+  var myData = 'project=' + project + '&tool_id=' + tool_id + '&tool_code=' + tool_code + '&description=' + description + '&borrow_code=' + borrow_code + '&name=' + name + '&date_borrow=' + date_borrow + '&date_return=' + date_return + '&record_id=' + record_id + '&add_by=' + add_by;
 
   if(status == 1)//if tools are in storage
   {

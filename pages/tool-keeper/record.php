@@ -141,7 +141,7 @@
                 <input type="text" class="form-control date" id="date-to"/>
               </div>
           </div>
-        </div>
+        </div><br>
         <div id="report-warning" class="alert alert-danger" role="alert" style="display: none"></div>
       </div>
       <div class="modal-footer">
@@ -191,7 +191,21 @@ $('#btnGenerate').on('click', function(e){
   e.preventDefault();
   var from = $('#date-from').val();
   var to = $('#date-to').val();
-  var myData = 'from=' + from + '&to=' + to;
+  var project = $('#proj-id').val();
+  var add_by = $('#acc_id').val();
+  var myData = 'from=' + from + '&to=' + to + '&project=' + project + '&add_by=' + add_by;
+  if(from != '' && to != '')
+  {
+    window.open('../../print/form/printRecords.php?'+myData);
+  }
+  else
+  {
+    $('#report-warning').html("<center><i class='fa fa-warning menu-icon'></i> ERROR! Please fill out the date needed.</center>");
+    $('#report-warning').show();
+    setTimeout(function(){
+      $('#report-warning').fadeOut();
+    }, 3000)
+  }
 })
 </script>
 </body>

@@ -44,16 +44,18 @@ class ToolKeeper
 
 	public function borrow_tool()
 	{
-		$query = 'INSERT INTO '.$this->table_name.' SET tool_id=?, tool_code=?, tool_desc=?, borrow_code=?, borrow_name=?, date_borrow=?, status=2';
+		$query = 'INSERT INTO '.$this->table_name.' SET project=?, tool_id=?, tool_code=?, tool_desc=?, borrow_code=?, borrow_name=?, date_borrow=?, add_by=?, status=2';
 		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 		$ins = $this->conn->prepare($query);
 
-		$ins->bindParam(1, $this->tool_id);
-		$ins->bindParam(2, $this->tool_code);
-		$ins->bindParam(3, $this->tool_desc);
-		$ins->bindParam(4, $this->borrow_code);
-		$ins->bindParam(5, $this->borrow_name);
-		$ins->bindParam(6, $this->date_borrow);
+		$ins->bindParam(1, $this->project);
+		$ins->bindParam(2, $this->tool_id);
+		$ins->bindParam(3, $this->tool_code);
+		$ins->bindParam(4, $this->tool_desc);
+		$ins->bindParam(5, $this->borrow_code);
+		$ins->bindParam(6, $this->borrow_name);
+		$ins->bindParam(7, $this->date_borrow);
+		$ins->bindParam(8, $this->add_by);
 
 		if($ins->execute())
 		{
