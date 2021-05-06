@@ -37,6 +37,7 @@
     <div class="content-wrapper">
       <div class="row">
         <div class="col-lg-12">
+          <h4><b>PROJECT: <u> <?php echo $_SESSION['proj-name']; ?></u></b></h4>
           <div class="card">
             <div class="card-body">
               <div>
@@ -118,64 +119,33 @@
       <div class="modal-body">
         <div class="row">
           <div class="col-sm-12">
-            <p><i>Generate report by:</i></p>
+            <h4>Generate report by:</h4>
           </div>
         </div>
         <div class="row">
-          <div class="col-sm-2">
-            <label for="exampleInputEmail1">Weekly</label><br>
-          </div>
-          <div class="col-sm-5">
-            <label for="exampleInputEmail1" style="font-size: 12px">From</label>
+          <div class="col-sm-6">
+            <b><label for="exampleInputEmail1" style="font-size: 14px">From</label></b>
               <div class="input-group">
                 <div class="input-group-prepend">
                   <span class="input-group-text fa fa-calendar"></span>
                 </div>
-                <input type="text" class="form-control date" id="date_from"/>
+                <input type="text" class="form-control date" id="date-from"/>
               </div>
           </div>
-          <div class="col-sm-5">
-            <label for="exampleInputEmail1" style="font-size: 12px">To</label>
+          <div class="col-sm-6">
+            <b><label for="exampleInputEmail1" style="font-size: 14px">To</label></b>
               <div class="input-group">
                 <div class="input-group-prepend">
                   <span class="input-group-text fa fa-calendar"></span>
                 </div>
-                <input type="text" class="form-control date" id="date_to"/>
+                <input type="text" class="form-control date" id="date-to"/>
               </div>
           </div>
         </div>
-        <div class="row">  
-          <div class="col-sm-1">
-            <button id="clear_assign" type="button" class="close clear-data" aria-label="Close" hidden>
-              <span style="color: red" class="fa fa-remove"></span>
-            </button>
-          </div>
-        </div><br><!-- end of row -->
-        <div class="row">
-          <div class="col-sm-2">
-            <label for="exampleInputEmail1">Monthly</label><br>
-          </div>
-          <div class="col-sm-8">
-            <select id="reportDepartment" type="text" class="form-control" style="width: 100%">
-              <option value="" selected disabled>Please select Project</option>
-                <?php
-                  $view = $loc->view_loc();
-                  while($row=$view->fetch(PDO::FETCH_ASSOC))
-                  {
-                    echo '<option value='.$row['id'].'>'.$row['location'].'</option>';
-                  }
-                ?>
-            </select>
-          </div>
-          <div class="col-sm-1"> 
-            <button id="clear_dept" type="button" class="close clear-data" aria-label="Close" hidden>
-              <span style="color: red" class="fa fa-remove"></span>
-            </button>
-          </div>
-        </div><br><!-- end of row -->
         <div id="report-warning" class="alert alert-danger" role="alert" style="display: none"></div>
       </div>
       <div class="modal-footer">
+        <button onclick="clearDate()" class="btn btn-default">Clear</button>
         <button id="btnGenerate" class="btn btn-primary">Generate</button>
       </div>
     </div>
@@ -207,13 +177,22 @@ $(document).ready(function(){
     format: 'mm/dd/yyyy'
   });
 })
-</script>
-
-<!-- BOOTSTRAP TABLE FUNCTION -->
-<script>
-  $(function(){
-    $('#record_table').DataTable();
-  });
+//Initialize bootstrap table
+$(function(){
+  $('#record_table').DataTable();
+});
+//clear fields
+function clearDate()
+{
+  $('.date').val('');
+}
+//Generate report 
+$('#btnGenerate').on('click', function(e){
+  e.preventDefault();
+  var from = $('#date-from').val();
+  var to = $('#date-to').val();
+  var myData = 'from=' + from + '&to=' + to;
+})
 </script>
 </body>
 </html>

@@ -8,6 +8,7 @@ $db = $database->connect();
 $tool = new ToolKeeper($db);
 
 $tool->code = $_POST['code'];
+$tool->project = $_POST['proj_id'];
 
 $get = $tool->get_tool_detail();
 if(!$get)

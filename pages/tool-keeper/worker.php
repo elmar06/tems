@@ -35,12 +35,13 @@
     <div class="content-wrapper">
       <div class="row">
         <div class="col-lg-12">
+          <h4><b>PROJECT: <u> <?php echo $_SESSION['proj-name']; ?></u></b></h4>
           <div class="card">
             <div class="card-body">
               <div>
                 <button type="button" class="btn btn-success btn-rounded" data-toggle="modal" data-target="#NewWorkerModal"><i class="fa fa-user-plus"></i>Add Worker</button>
                 <button type="button" class="btn btn-info btn-rounded" data-toggle="modal" data-target="#UploadModal"><i class="fa fa-upload"></i>Upload File</button>
-                <a href="user.php" class="btn btn-dark btn-rounded" ><span class ="fa fa-refresh"></span> Refresh Table</a>
+                <a href="worker.php" class="btn btn-dark btn-rounded" ><span class ="fa fa-refresh"></span> Refresh Table</a>
                 <button id="btndelete" type="button" class="btn btn-dark btn-rounded" style="display: none"><i class="fa fa-trash-o"></i>Delete</button>
               </div><br>
               <table id="worker_table" class="table table-bordered" style="width:100%">
@@ -56,6 +57,7 @@
                 </thead>
                 <tbody id="worker-body">
                   <?php
+                    $worker->project = $_SESSION['project-id'];
                     $view = $worker->view_worker();
                     while($row = $view->fetch(PDO::FETCH_ASSOC))
                     {
@@ -64,8 +66,8 @@
                         <td><input type="checkbox" name="checklist" class="checklist" value="'.$row['work-id'].'" style="max-width: 30px;"></td>
                         <td>'.$row['worker_id'].'</td>
                         <td>'.$row['fullname'].'</td>
-                        <td>'.$row['trade_name'].'</td>
-                        <td>'.$row['proj_name'].'</td>
+                        <td><center>'.$row['trade_name'].'</center></td>
+                        <td><center>'.$row['proj_name'].'</center></td>
                         <td style="width:20%"><center><a class="edit-worker" href="#" value="'.$row['work-id'].'" data-toggle="modal"><i class="fa fa-edit text-green"></i> Edit |</a> <a class="delete-worker" href="#" value="'.$row['work-id'].'" data-toggle="modal"><i class="fa fa-trash"></i> Delete</a></center></td>
                       </tr>';
                     }

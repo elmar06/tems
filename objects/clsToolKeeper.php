@@ -18,11 +18,12 @@ class ToolKeeper
 
 	public function get_tool_detail()
 	{
-		$query = 'SELECT * FROM asset WHERE code = ?';
+		$query = 'SELECT * FROM asset WHERE code = ? AND project = ?';
 		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 		$get = $this->conn->prepare($query);
 
 		$get->bindParam(1, $this->code);
+		$get->bindParam(2, $this->project);
 
 		$get->execute();
 		return $get;
@@ -30,11 +31,12 @@ class ToolKeeper
 
 	public function get_worker_detail()
 	{
-		$query = 'SELECT worker.fullname, department.department as "trade" FROM worker, department WHERE worker.trade=department.id AND worker_id = ?';
+		$query = 'SELECT worker.fullname, department.department as "trade" FROM worker, department WHERE worker.trade=department.id AND worker.worker_id = ? AND worker.project = ?';
 		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 		$get = $this->conn->prepare($query);
 
 		$get->bindParam(1, $this->worker_id);
+		$get->bindParam(2, $this->project);
 
 		$get->execute();
 		return $get;
@@ -104,6 +106,11 @@ class ToolKeeper
 
 		$sel->execute();
 		return $sel;
+	}
+
+	public function get_project_id()
+	{
+
 	}
 }
 ?>

@@ -43,9 +43,10 @@
           <div class="row">
             <!-- Tool Details -->
             <div class="form-group col-lg-6">
+              <h4><b>PROJECT: <u> <?php echo $_SESSION['proj-name']; ?></u></b></h4>
               <div class="card">
                 <div class="card-body">
-                  <h5><span class="fa fa-database"></span> Tool & Equipment Details</h5><br>
+                  <h5><span class="fa fa-database"></span> Tool & Equipment Details</h5>
                   <div class="row">
                     <div class="col-lg-8">
                       <label for="exampleInputEmail1" style="font-size: 16px">Tools & Equipment Code</label>&nbsp;<span style="color: red; font-size: 16px">*</span>
@@ -95,6 +96,7 @@
             </div><!-- end of form-group -->
             <!-- Worker Details -->
             <div class="form-group col-lg-6">
+            <h4>&nbsp;</h4>
               <div class="card">
                 <div class="card-body">
                   <h5><span class="fa fa-id-card"></span> Borrower's Details</h5><br>
@@ -288,14 +290,17 @@ $(document).ready(function(){
 $(document).ready(function(){
   $('#code').focus();
 })
+
 //search the T&E code in db when changed
 $('#code').change(function(){
   var code = $(this).val();
+  var proj_id = $('#proj-id').val();
+  var myData = 'code=' + code + '&proj_id=' + proj_id;
 
   $.ajax({
     type: 'POST',
     url: '../../controls/toolkeeper/get_tool_details.php',
-    data: {code: code},
+    data: myData,
     dataType: 'json',
     cache: false,
 
@@ -368,11 +373,13 @@ $('#code').change(function(){
 //search employee ID in db
 $('#borrow-code').change(function(){
   var emp_code = $(this).val();
+  var project = $('#proj-id').val();
+  var myData = 'emp_code=' + emp_code + '&project=' + project;
 
   $.ajax({
     type: 'POST',
     url: '../../controls/toolkeeper/get_emp_details.php',
-    data: {emp_code: emp_code},
+    data: myData,
     dataType: 'json',
     cache: false,
     success: function(result)
@@ -495,7 +502,7 @@ function clearFields()
 {
   $('input[type=text]').val('');
   $('textarea').val('');
-  $('#tool-status').html(' <label id="tool-status" style="font-size: 20px;"></label>');
+  $('#tool-status').html('<label id="tool-status" style="font-size: 20px;"></label>');
 }
 //clear tools & equipment details except for barcode
 function clearToolData()

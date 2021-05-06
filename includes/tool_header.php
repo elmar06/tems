@@ -70,6 +70,7 @@ session_start();
       <li class="nav-item dropdown d-none d-xl-inline-block">
         <a class="nav-link dropdown-toggle" id="UserDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
           <span class="profile-text">Hello, <?php echo $name;?></span>
+          <input type="text" class="form-control" name="proj-id" id="proj-id" placeholder="Enter Firstname" value="<?php echo $_SESSION['project-id']; ?>" hidden>
         </a>
         <div class="dropdown-menu navbar-dropdown" aria-labelledby="UserDropdown">
           <a class="dropdown-item p-0">
@@ -101,7 +102,7 @@ session_start();
               <div class="col-lg-6">
                 <label for="exampleInputEmail1">Firstname</label>
                 <input type="text" class="form-control" id="acc_fname" placeholder="Enter Firstname" value="<?php echo $_SESSION['firstname']; ?>">
-                 <input type="text" class="form-control" id="acc_id" placeholder="Enter Firstname" value="<?php echo $_SESSION['id']; ?>" hidden>
+                <input type="text" class="form-control" id="acc_id" placeholder="Enter Firstname" value="<?php echo $_SESSION['id']; ?>" hidden>
               </div>
               <div class="col-lg-6">
                 <label for="exampleInputEmail1">Lastname</label>

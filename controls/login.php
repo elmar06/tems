@@ -24,6 +24,8 @@ session_start();
 		$_SESSION['username'] = $row['username'];
 		$_SESSION['id'] = $row['id'];
 		$_SESSION['access_type'] = $row['access_type'];
+		$_SESSION['project-id'] = $row['proj_id'];
+		$_SESSION['proj-name'] = $row['proj_loc'];
 
 		echo 1;
 	}

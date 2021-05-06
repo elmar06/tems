@@ -90,7 +90,6 @@ $('#btnlogin').click(function(e){
 
   if(uname != "" && pword != "")
   {
-
     $.ajax({
       type: "POST",
       url: "controls/login.php",
@@ -98,6 +97,7 @@ $('#btnlogin').click(function(e){
 
       success: function(response)
       {
+        alert(response);
         if(response > 0)
         {
           window.location = "controls/checkaccess.php";

@@ -64,9 +64,11 @@ class Worker
 
 	public function view_worker()
 	{
-		$query = 'SELECT worker.id as "work-id", worker.fullname, worker.worker_id, worker.address, worker.trade as "trade_id", worker.project as "proj_id", department.id, department.department as "trade_name", location.id, location.location as "proj_name" FROM worker, department, location WHERE worker.trade = department.id AND worker.project = location.id AND worker.status != 0 ORDER BY fullname ASC';
+		$query = 'SELECT worker.id as "work-id", worker.fullname, worker.worker_id, worker.address, worker.trade as "trade_id", worker.project as "proj_id", department.id, department.department as "trade_name", location.id, location.location as "proj_name" FROM worker, department, location WHERE worker.trade = department.id AND worker.project = location.id AND worker.status != 0 AND worker.project = ? ORDER BY fullname ASC';
 		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 		$sel = $this->conn->prepare($query);
+
+		$sel->bindParam(1, $this->project);
 
 		$sel->execute();
 		return $sel;

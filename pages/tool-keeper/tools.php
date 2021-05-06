@@ -42,11 +42,13 @@
         <div class="content-wrapper">
           <div class="row">
             <div class="col-lg-12">
+              <h4><b>PROJECT: <u> <?php echo $_SESSION['proj-name']; ?></u></b></h4>  
               <div class="card">
                 <div class="card-body">
                   <table id="asset_table" class="table table-bordered table-hover" style="cursor:pointer">
                     <thead>
                         <tr>
+                            <th style="width: 10px;"><input type="checkbox" id="checkboxall"/></th>
                             <th><center>T&E Code</center></th>
                             <th><center>Description</center></th>
                             <th><center>Category</center></th>
@@ -56,7 +58,7 @@
                     </thead>
                     <tbody>
                       <?php
-                        //$asset->status = 0;
+                        $asset->project = $_SESSION['project-id'];
                         $view = $asset->view_asset();
 
                         while($row = $view->fetch(PDO::FETCH_ASSOC))
@@ -68,6 +70,7 @@
                           }
                           echo '
                             <tr>
+                              <td><input type="checkbox" name="checklist" class="checklist" value="'.$row['asset_id'].'" style="max-width: 50px;"></td>
                               <td>'.$row['code'].'</td>
                               <td>'.$row['description'].'</td>
                               <td>'.$row['cat_name'].'</td>
@@ -96,285 +99,6 @@
 </footer>
 
 <!-- MODALS SECTION -->
-<!-- transfer asset modal -->
-<div class="modal fade" id="transferModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel"><span class="fa fa-sign-in"></span> Transfer Asset</h5>
-        <button type="button" class="close close-asset" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div id="transfer-body" class="modal-body">
-        <div class="form-group">
-          <div class="row">
-              <div class="col-lg-4">
-                <label for="exampleInputEmail1">TRANSFER DETAILS</label>
-              </div>
-          </div>
-            <div class="row">
-                <div class="col-lg-4">
-                  <label for="exampleInputEmail1">New Assignee</label><br>
-                  <select id="newAssign" type="text" class="form-control" style="width: 100%">
-                    <?php
-                      $view_person = $person->view_person();
-                      while($person_row = $view_person->fetch(PDO::FETCH_ASSOC))
-                      {
-                        echo '<option value='.$person_row['person_id'].'>'.$person_row['fullname'].'</option>';
-                      }
-                    ?>
-                  </select>
-                </div>
-                <div class="col-lg-4">
-                  <label>Date Transfer </label><br>
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text fa fa-calendar"></span>
-                    </div>
-                    <input id="date_transfer" type="text" class="form-control transfer-date"/>
-                  </div>
-              </div>
-                <div class="col-lg-4"> 
-                  <label for="exampleInputEmail1">Reason</label>
-                  <select type="text" class="form-control" id="reason">
-                    <option>Transfer to Inventory</option>
-                    <option>Transfer from Inventory</option>
-                    <option>Resignee</option>
-                    <option>Transfer to Another Department</option>
-                    <option>Change of Assignee w/in Department</option>
-                    <option>Change of Location</option>
-                    <option>Temporary</option>
-                  </select>
-                </div>
-            </div><br>
-            <div class="row">
-                <div class="col-lg-4"> 
-                  <label for="exampleInputEmail1">New Project</label><br>
-                  <select id="new_location" type="text" class="form-control" style="width: 100%">
-                      <?php
-                        $view_loc = $loc->view_loc();
-                        while($loc_row=$view_loc->fetch(PDO::FETCH_ASSOC))
-                        {
-                          echo '<option value='.$loc_row['id'].'>'.$loc_row['location'].'</option>';
-                        }
-                      ?>
-                  </select>
-                </div>
-                <div class="col-lg-4"> 
-                  <label for="exampleInputEmail1">New Trade</label><br>
-                  <select id="new_department" type="text" class="form-control" style="width: 100%">
-                      <?php
-                        $view_dept = $dept->view_dept();
-                        while($dept_row=$view_dept->fetch(PDO::FETCH_ASSOC))
-                        {
-                          echo '<option value='.$dept_row['id'].'>'.$dept_row['department'].'</option>';
-                        }
-                      ?>
-                  </select>
-                </div>
-                <div class="col-lg-4">
-                  <label for="exampleInputEmail1">Quantity</label>
-                  <input type="text" class="form-control" id="quantity" placeholder="Enter Quantity" value="1">
-                </div>
-            </div><hr>
-            <div class="row" style="font-size: 13px;">
-                <div class="col-lg-12">
-                  <label for="exampleInputEmail1">LIST OF ITEM TO TRANSFER</label>
-                  <table id="tbltransfer" class="table-bordered transfer_table" style="width: 100%">
-                    <thead>
-                        <tr>
-                          <th></th>
-                            <th>T&E Code</th>
-                            <th>Description</th>
-                            <th>Project</th>
-                            <th>Category</th>
-                            <th>Trade</th>
-                            <th>Assignee</th>
-                            <th>Condition</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tbody-transfer">
-                      <!-- asset items must be placed here -->
-                    </tbody>
-                  </table>
-                </div>
-            </div>
-        </div><!-- end of form group -->
-        <!-- Alerts -->
-        <div id="transfer-warning" class="alert alert-danger" role="alert" style="display: none"></div>
-        <div id="transfer-success" class="alert alert-success" role="alert" style="display: none"></div>        
-      </div><!-- end of modal body -->
-      <div class="modal-footer">
-        <div class="row">
-          <div class="col-lg-12">
-            <button id="btnPrintTransfer" type="button" class="btn btn-success" disabled="">Print Fixed Asset Transfer</button>
-            <button id="btnPrintReceipt" type="button" class="btn btn-info" disabled>Print Pull-out Receipt</button>
-            <button id="btnClose" class="btn btn-secondary close-asset" data-dismiss="modal">Close</button>
-            <button id="btnAssetTransfer" type="button" class="btn btn-primary">Transfer</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- reports generation modal -->
-<div id="reportModal" class="modal" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-md" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel"><span class="fa fa-bar-chart"></span> Report Generation</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="row">
-          <div class="col-sm-12">
-            <p><i>Generate report by:</i></p>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-3">
-            <label for="exampleInputEmail1">Assignee:</label><br>
-          </div>
-          <div class="col-sm-8">
-            <select id="reportAssignee" type="text" class="form-control" style="width: 100%">
-              <option value="" selected disabled>Please select assignee</option>
-              <?php
-                $view_person = $person->view_person();
-                while($person_row = $view_person->fetch(PDO::FETCH_ASSOC))
-                {
-                  echo '<option value='.$person_row['person_id'].'>'.$person_row['fullname'].'</option>';
-                }
-              ?>
-            </select>
-          </div>
-          <div class="col-sm-1">
-            <button id="clear_assign" type="button" class="close clear-data" aria-label="Close" hidden>
-              <span style="color: red" class="fa fa-remove"></span>
-            </button>
-          </div>
-        </div><br><!-- end of row -->
-        <div class="row">
-          <div class="col-sm-3">
-            <label for="exampleInputEmail1">Project:</label><br>
-          </div>
-          <div class="col-sm-8">
-            <select id="reportDepartment" type="text" class="form-control" style="width: 100%">
-              <option value="" selected disabled>Please select Project</option>
-                <?php
-                  $view = $loc->view_loc();
-                  while($row=$view->fetch(PDO::FETCH_ASSOC))
-                  {
-                    echo '<option value='.$row['id'].'>'.$row['location'].'</option>';
-                  }
-                ?>
-            </select>
-          </div>
-          <div class="col-sm-1"> 
-            <button id="clear_dept" type="button" class="close clear-data" aria-label="Close" hidden>
-              <span style="color: red" class="fa fa-remove"></span>
-            </button>
-          </div>
-        </div><br><!-- end of row -->
-         <div class="row">
-          <div class="col-sm-3">
-            <label for="exampleInputEmail1">Category:</label><br>
-          </div>
-          <div class="col-sm-8">
-            <select id="reportType" type="text" class="form-control" style="width: 100%">
-              <option value="" selected disabled>Please select Trade</option>
-                <?php
-                  $viewType = $type->view_type();
-                  while($row = $viewType->fetch(PDO::FETCH_ASSOC))
-                  {
-                    echo '<option value='.$row['id'].'>'.$row['type'].'</option>';
-                  }
-                ?>
-            </select>
-          </div>
-          <div class="col-sm-1">
-            <button id="clear_type" type="button" class="close clear-data" aria-label="Close" hidden>
-              <span style="color: red" class="fa fa-remove"></span>
-            </button>
-          </div><!-- end of column -->
-        </div><br><!-- end of row -->
-        <div id="report-warning" class="alert alert-danger" role="alert" style="display: none"></div>
-      </div>
-      <div class="modal-footer">
-        <button id="btnGenerate" class="btn btn-primary">Generate</button>
-      </div>
-    </div>
-  </div>
-</div> 
-
-<!-- CHANGE PASSWORD MODAL IF LOGCOUNT = 0 -->
-<div id="changepass" class="modal" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-md" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title"><b>Account Settings</b></h4>
-      </div>
-      <div class="modal-body">
-        <div class="row">
-          <div class="alert alert-info" role="alert">
-            <b>First Time to log-in? You must changed the default password to secure your account before you proceed.</b>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-12">
-            <label>Username:</label>
-            <input type="text" class="form-control" value="<?php echo $_SESSION['username']; ?>" id="username" disabled>
-            <input type="hidden" class="form-control" value="<?php echo $_SESSION['id']; ?>" id="id" disabled>
-          </div>
-        </div><br>
-        <div class="row">
-          <div class="col-sm-12">
-            <label>Password</label>
-            <input type="password" class="form-control" id="new_pass">
-          </div>
-        </div><br>
-        <div class="row">
-          <div class="col-sm-12">
-            <label>Re-type Password:</label>
-            <input type="password" class="form-control" id="re_pass">
-          </div>
-        </div><br>        
-        <!-- alerts -->
-        <div class="col-lg-12">
-          <span id="pass_alert" class="alert"></span>
-          <!--ALERTS-->
-          <div class="alert alert-danger" id="error_msg" style="display:none"></div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button id="later_pass" type="button" class="btn btn-secondary" data-dismiss="modal">Change Later</button>
-        <button id="upd_pass" type="button" class="btn btn-success" disabled>Update</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- modal after successful change of password -->
-<div id="noticeModal" class="modal" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-md" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title"><b>NOTICE</b></h4>
-      </div>
-      <div class="modal-body">
-        <p>Congratulation, your password has been successfully updated. You need to login again to complete the process <a href="../../controls/logout.php"><b><u>Click here</b></u></a> to continue.</p>
-      </div>
-      <div class="modal-footer">
-        <a class="btn btn-primary" href="../../controls/logout.php">Logout</a>
-      </div>
-    </div>
-  </div>
-</div>
-
 <!-- View Asset Details -->
 <div id="viewAssetModal" class="modal" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-lg" role="document">
@@ -397,7 +121,6 @@
   
 <!-- data tables -->
 <script src="../../components/dataTables/js/jquery.dataTables.min.js"></script>
-
 <!-- plugins:js -->
 <script src="../../components/js/vendor.bundle.base.js"></script>
 <script src="../../components/js/vendor.bundle.addons.js"></script>

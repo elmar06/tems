@@ -169,7 +169,7 @@ class Users
 
 	public function login()
 	{
-		$query = "SELECT id , CONCAT(firstname, ' ', lastname) AS fullname, firstname, lastname, username, log_count, access_type, status FROM " . $this->table_name . " WHERE username = ?  AND password = ? AND status != ?";
+		$query = "SELECT users.id , CONCAT(users.firstname, ' ', users.lastname) AS fullname, users.firstname, users.lastname, users.username, users.log_count, users.access_type, users.proj_id, location.location as 'proj_loc', users.status FROM users, location WHERE users.username = ?  AND users.password = ? AND users.proj_id = location.id AND users.status != ?";
 		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 		$sel=$this->conn->prepare($query);
 
