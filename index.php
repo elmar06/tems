@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="css/style.css">
   <link rel="shortcut icon" href="images/innoland.png" /> 
 </head>
-<body background="images/green.jpg">
+<body background="images/login.jpg">
   <div class="container-scroller">
     <div class="container-fluid page-body-wrapper full-page-wrapper auth-page">
       <div class="content-wrapper d-flex align-items-center auth auth-bg-1 theme-one">
@@ -63,18 +63,17 @@
   </div>
   <!-- container-scroller -->
     <!-- jquery -->
-  <script src="components/jquery/jquery.min.js"></script>
+  <script src="components/jquery/jquery-3.4.1.min.js"></script>
   <!-- plugins:js -->
   <script src="components/js/vendor.bundle.base.js"></script>
   <script src="components/js/vendor.bundle.addons.js"></script>
   <!-- endinject -->
   <!-- inject:js -->
-  <script src="s/off-canvas.js"></script>
-  <script src="s/misc.js"></script>
+  <script src="js/off-canvas.js"></script>
+  <script src="js/misc.js"></script>
   <!-- endinject -->
 <script>
 $('.alert').hide();
-
 $('#pword').keyup(function(event){
   if(event.keycode === 13)
   {
@@ -97,7 +96,6 @@ $('#btnlogin').click(function(e){
 
       success: function(response)
       {
-        alert(response);
         if(response > 0)
         {
           window.location = "controls/checkaccess.php";

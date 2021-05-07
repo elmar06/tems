@@ -44,6 +44,7 @@
                 <thead>
                     <tr>
                       <th style="width:5%"><center><input type="checkbox" id="checkboxall"></center></th>
+                      <th style="width:8%">Category ID</th>
                       <th style="width:30%">Category Name</th>
                       <th style="width:70%">Description</th>
                       <th style="width:20%"><center>Action</center></th>
@@ -59,6 +60,7 @@
                       echo '
                         <tr>
                           <td style="width:5%"><center><input type="checkbox" name="checklist" class="checklist" value="'.$row['id'].'"/></center></td>
+                          <td style="width:8%"><center>'.$row['type_id'].'</center></td>
                           <td style="width:30%">'.$row['type'].'</td>
                           <td style="width:70%">'.$row['description'].'</td>
                           <td style="width:20%"><center><a class="edit_type" href="#" value="'.$row['id'].'" data-toggle="modal"><i class="fa fa-edit text-green"></i> Edit |</a> <a class="delete_type" href="#" value="'.$row['id'].'" data-toggle="modal"><i class="fa fa-trash"></i> Delete</a></center></td>

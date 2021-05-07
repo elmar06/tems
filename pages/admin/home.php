@@ -67,8 +67,8 @@
                     </thead>
                     <tbody>
                       <?php
-                        //$asset->status = 0;
-                        $view = $asset->view_asset();
+                        $asset->project = $_SESSION['project-id'];
+                        $view = $asset->get_asset_byProj();
 
                         while($row = $view->fetch(PDO::FETCH_ASSOC))
                         {

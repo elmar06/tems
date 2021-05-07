@@ -1,6 +1,5 @@
 <?php
 	session_start();
-
 	include '../config/clsConnection.php';
 	include '../objects/clsUser.php';
 
@@ -18,19 +17,19 @@
 		$access_type = $row['access_type'];
 		if($access_type == '1')
 		{
-			header('Location: ../pages/admin/home.php');
+			header('Location: ../pages/superadmin/home.php');
 		}
 		else if($access_type == '2')
 		{
-			header('Location: ../pages/staff/home.php');
+			header('Location: ../pages/admin/home.php');
 		}
 		else if($access_type == '3')
 		{
-			header('Location: ../pages/tool-keeper/home.php');
+			header('Location: ../pages/staff/home.php');
 		}
 		else
 		{
-			header('Location: ../pages/superadmin/home.php');
+			header('Location: ../pages/tool-keeper/home.php');
 		}
 		$id = $row['id'];
 	}

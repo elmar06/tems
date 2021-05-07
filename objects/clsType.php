@@ -94,7 +94,7 @@ class Type
 
 	public function view_type()
 	{
-		$query = "SELECT id, type_id, type, description, status FROM type WHERE type.status != 0 ORDER BY type.type ASC";
+		$query = "SELECT id, type_id, type, description, status FROM type WHERE type.status != 0 ORDER BY type_id ASC";
 		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 		$sel=$this->conn->prepare($query);
 

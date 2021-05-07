@@ -7,7 +7,6 @@ $db = $database->connect();
 
 $worker = new Worker($db);
 
-
 $filename = $_FILES['files']['tmp_name'];
 if($_FILES['files']['size'] > 0)
 {

@@ -21,7 +21,7 @@
   <!-- plugin css for this page -->
   <link rel="stylesheet" href="../../components/font-awesome/css/font-awesome.css">
   <!-- select2 plugin -->
-  <link rel="stylesheet" href="../../components/select2/select2.min.css">
+  <link rel="stylesheet" href="../../components/select2/select2.css">
   <!-- date picker -->
   <link rel="stylesheet" type="text/css" href="../../components/datetimepicker/css/datepicker.min.css">
 </head>

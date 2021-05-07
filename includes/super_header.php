@@ -1,6 +1,6 @@
 <?php
 session_start();
-  if($_SESSION['access_type'] != '3')
+  if($_SESSION['access_type'] != '1')
   {
     header('Location: ../../controls/logout.php');
   }
@@ -44,7 +44,7 @@ session_start();
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="type.php">
+        <a class="nav-link" href="category.php">
           <i class="menu-icon fa fa-list-alt"></i>
           <span class="menu-title">Category</span>
         </a>

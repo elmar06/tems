@@ -1,6 +1,6 @@
 <?php
 session_start();
-  if($_SESSION['access_type'] != '2')
+  if($_SESSION['access_type'] != '3')
   {
     header('Location: ../../controls/logout.php');
   }

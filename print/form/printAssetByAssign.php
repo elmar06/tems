@@ -56,7 +56,7 @@ if($_GET['assignee'] != null || $_GET['assignee'] != '')
 		$tbl .= '
 			<tr>
 				<td width="10%" align="center" style="border-right-style:2px;">'.$barcode.'</td>
-				<td width="25%" style="border-right-style:2px;">'.$description.'</td>
+				<td width="23%" style="border-right-style:2px;">'.$description.'</td>
 				<td width="7%" align="center" style="border-right-style:2px;">'.$quantity.'</td>
 				<td width="10%" style="border-right-style:2px;" align="center">'.$location.'</td>
 				<td width="10%" style="border-right-style:2px;" align="center">'.$date_transfer.'</td>
@@ -167,7 +167,7 @@ $html = <<<EOD
 	<thead>
 		<tr>
 			<td width="10%" align="center" style="border-top-style:2px; border-bottom-style:2px">T&E Code</td>
-			<td width="25%" align="center" style="border-top-style:2px; border-left-style:2px; border-bottom-style:2px">Description</td>
+			<td width="23%" align="center" style="border-top-style:2px; border-left-style:2px; border-bottom-style:2px">Description</td>
 			<td width="7%" align="center" style="border-top-style:2px; border-left-style:2px; border-bottom-style:2px">Quantity</td>
 			<td width="10%" align="center" style="border-top-style:2px; border-left-style:2px; border-bottom-style:2px">Location</td>
 			<td width="10%" align="center" style="border-top-style:2px; border-left-style:2px; border-bottom-style:2px">Date Transfer</td>

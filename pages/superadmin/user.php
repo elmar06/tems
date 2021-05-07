@@ -20,6 +20,8 @@
   <link rel="shortcut icon" href="../../images/innoland.png" /> 
   <!-- plugin css for this page -->
   <link rel="stylesheet" href="../../components/font-awesome/css/font-awesome.css">
+    <!-- select2 plugin -->
+    <link rel="stylesheet" href="../../components/select2/select2.css">
 </head>
 
 <body>
@@ -59,11 +61,19 @@
                     {
                       if($row['access_type'] == 1)
                       {
-                        $role = 'Administrator';
+                        $role = 'Super Admin';
+                      }
+                      elseif($row['access_type'] == 2)
+                      {
+                        $role = 'T&E Admin';
+                      }
+                      elseif($row['access_type'] == 3)
+                      {
+                        $role = 'PMO Officer';
                       }
                       else
                       {
-                        $role = 'Staff';
+                        $role = 'Tool Keeper';
                       }
                       echo'
                       <tr>
@@ -133,8 +143,29 @@
               <label>Role:</label><br>
               <select id="RoleType" type="text" class="form-control" style="width: 100%">
                 <option value="" selected disabled>Please select Role</option>
-                <option value="1">Administrator</option>
-                <option value="2">Staff</option>
+                <option value="2">Administrator</option>
+                <option value="3">PMO Officer</option>
+                <option value="4">Tool Keeper</option>
+              </select>
+            </div>
+            <div class="col-sm-6">
+              <label>Project Assign:</label><br>
+              <select id="project" type="text" class="form-control select2" style="width: 100%">
+                <?php
+                  $loc->status = 0;
+                  $view = $loc->view_loc();
+                  while($loc_row=$view->fetch(PDO::FETCH_ASSOC))
+                  {
+                    if($row['proj_id'] == $loc_row['id'])
+                    {
+                      echo '<option value='.$loc_row['id'].' selected>'.$loc_row['location'].'</option>';
+                    }
+                    else
+                    {
+                      echo '<option value='.$loc_row['id'].'>'.$loc_row['location'].'</option>';
+                    }
+                  }
+                ?>
               </select>
             </div>
           </div>
@@ -162,7 +193,6 @@
         </button>
       </div>
       <div id="edit-user-body" class="modal-body">
-      
         
       </div><!-- end of modal body -->
         <!-- ALERTS -->
@@ -187,6 +217,8 @@
   <!-- plugins:js -->
   <script src="../../components/js/vendor.bundle.base.js"></script>
   <script src="../../components/js/vendor.bundle.addons.js"></script>
+  <!-- select2 plugin -->
+  <script src="../../components/select2/select2.min.js"></script>
   <!-- endinject -->
   <!-- Plugin js for this page-->
   <!-- End plugin js for this page-->
@@ -200,6 +232,9 @@
 
 <!-- CHECK IF PASSWORD MATCH IN UPDATE USER DETAILS -->
 <script>
+$(document).ready(function(){
+  $('.select2').select2();
+})
 $('#upd_password2').keyup(function(){
   var pass = $('#upd_password').val();
   var pass2 = $(this).val();
@@ -239,7 +274,8 @@ $('#save_user').click(function(e){
   var username = $('#username').val();
   var password = $('#password').val();
   var role = $('#RoleType').val();
-  var myData = 'firstname=' + firstname + '&lastname=' + lastname + '&username=' + username + '&password=' + password + '&access_type=' + role;
+  var project = $('#project').val();
+  var myData = 'firstname=' + firstname + '&lastname=' + lastname + '&username=' + username + '&password=' + password + '&access_type=' + role + '&project=' + project;
 
   if(firstname != "" && lastname != "")
   {

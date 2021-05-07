@@ -197,15 +197,15 @@
         <div class="row">
           <div class="col-sm-12">
             <label for="exampleInputEmail1">Upload File</label><br>
-              <form name="form" method="post" action="" enctype="multipart/form-data">
-                <input type="file" id="filecover" name = "files[]" value="Browse" onchange="readURL(this);" accept=".csv" /><br>
+              <form name="form" method="post" enctype="multipart/form-data">
+                <input type="file" id="filecover" name="worker_file" value="Browse" onchange="readURL(this);" accept=".csv" /><br>
+                <label id="upload-success" style="color: green; display:none"></label>
+                <label id="upload-warning" style="color: red; display:none"></label>
               </form><br>
           </div>
         </div>
         <div id="loading" style="display: none"><center><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></center>
         </div>
-        <div id="upload-success" class="alert alert-success" role="alert" style="display: none"></div>
-        <div id="upload-warning" class="alert alert-danger" role="alert" style="display: none"></div>
       </div>
       <div class="modal-footer">
         <button id="btnUpload" class="btn btn-primary">Upload File</button>
@@ -343,7 +343,6 @@ $('#btnUpdWorker').click(function(e){
     $.ajax({
       type: 'POST',
       url: '../../controls/toolkeeper/upd_worker.php',
-      data: myData,
 
       success: function(response)
       {
@@ -354,6 +353,7 @@ $('#btnUpdWorker').click(function(e){
           $.ajax({
             type: 'POST',
             url: '../../controls/toolkeeper/view_worker.php',
+            data: {},
 
             success: function(html)
             {
@@ -393,44 +393,58 @@ $('#btnUpload').click(function(e){
   var form_data = new FormData();
   form_data.append('files', file_data);
 
-  $.ajax({
-    type: 'POST',
-    url: '../../controls/toolkeeper/upload_file.php',
-    data: form_data,
-    contentType: false,
-    cache: false,
-    processData: false,
-    beforeSend: function(){
-      $('#loading').show();
-    },
-    success: function(response)
-    {
-      if(response > 0)
-      {
-        $('#loading').hide();
-        $('#upload-success').html("<center><i class='fa fa-warning menu-icon'></i> Upload successfull.</center>");
-        $('#upload-success').show().fadeOut(5000);
+  if(file_data)
+  {
+    $.ajax({
+      type: 'POST',
+      url: '../../controls/toolkeeper/upload_file.php',
+      data: form_data,
+      contentType: false,
+      cache: false,
+      processData: false,
 
-        //get the new list of workers
-        $.ajax({
-          url: '../../controls/toolkeeper/view_worker.php',
-
-          success: function(html)
-          {
-            $('#worker-body').fadeOut();
-            $('#worker-body').fadeIn();
-            $('#worker-body').html(html);
-          }
-        })
-      }
-      else
+      success: function(response)
       {
-        $('#loading').hide();
-        $('#upload-warning').html("<center><i class='fa fa-warning menu-icon'></i> Updload Failed. Please contact the administrator.</center>");
-        $('#upload-warning').show().fadeOut(5000);
+        if(response > 0)
+        {
+          $('#loading').hide();
+          $('#upload-success').html("Worker Details successfully uploaded in database.");
+          $('#upload-success').show();
+          setTimeout(function(){
+            $('#upload-success').hide();
+          }, 3000);
+
+          //get the new list of workers
+          $.ajax({
+            url: '../../controls/toolkeeper/view_worker.php',
+
+            success: function(html)
+            {
+              $('#worker-body').fadeOut();
+              $('#worker-body').fadeIn();
+              $('#worker-body').html(html);
+            }
+          })
+        }
+        else
+        {
+          $('#upload-warning').html("Upload Failed. Please contact the system administrator at local 124 for assistance.");
+          $('#upload-warning').show();
+          setTimeout(function(){
+            $('#upload-warning').hide();
+          }, 5000);
+        }
       }
-    }
-  })
+    })
+  }
+  else
+  {
+    $('#upload-warning').html("Please select a CSV file to upload.");
+    $('#upload-warning').show();
+    setTimeout(function(){
+      $('#upload-warning').hide();
+    }, 3000);
+  }
 })
 </script>
 </body>
