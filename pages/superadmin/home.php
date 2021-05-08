@@ -58,13 +58,12 @@
                             <th align="center" style="max-width: 150px;">Category</th>
                             <th align="center" style="max-width: 100px;">Trade</th>
                             <th align="center" style="width: 10%;">Assignee</th>
-                            <th align="center" style="width: 10%;">Condition</th>
                         </tr>
                     </thead>
                     <tbody>
                       <?php
-                        $asset->project = $_SESSION['project-id'];
-                        $view = $asset->get_asset_byProj();
+                        //$asset->project = $_SESSION['project-id'];
+                        $view = $asset->view_asset();
 
                         while($row = $view->fetch(PDO::FETCH_ASSOC))
                         {
@@ -78,7 +77,6 @@
                               <td class="asset_loc" style="max-width: 150px;">'.$row['cat_name'].'</td>
                               <td class="brand" style="max-width: 100px;">'.$row['dept_name'].'</td>
                               <td class="condition" style="width: 10%;">'.$row['fullname'].'</td>
-                              <td class="asset_status" style="width: 10%;">'.$row['tool_condition'].'</td>
                             </tr>';
                         }
                       ?>

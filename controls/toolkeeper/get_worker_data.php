@@ -69,8 +69,8 @@ while($row = $get->fetch(PDO::FETCH_ASSOC))
                   }
 
             echo '</select>
-          </div><br>
-        	<div id="upd-warning" class="alert alert-danger" role="alert" style="display: none"></div>
-        </div>';
+          </div>
+        </div><br>
+        <div id="upd-warning" class="alert alert-danger" role="alert" style="display: none"></div>';
 }
 ?>

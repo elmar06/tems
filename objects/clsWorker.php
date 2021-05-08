@@ -85,5 +85,23 @@ class Worker
 		$sel->execute();
 		return $sel;
 	}
+
+	public function delete_worker()
+	{
+		$query = 'UPDATE '.$this->table_name.' SET status=0 WHERE id=?';
+		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+		$upd = $this->conn->prepare($query);
+
+		$upd->bindParam(1, $this->id);
+
+		if($upd->execute())
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 }
 ?>

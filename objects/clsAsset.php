@@ -121,11 +121,9 @@ class Asset
 
 	public function view_asset()
 	{
-		$query = "SELECT asset.id as 'asset_id', asset.description, asset.specs, asset.status, asset.category, asset.code, asset.trade, asset.brand, asset.assign, asset.tool_condition, type.id as 'cat_id', type.type as 'cat_name', type.description as 'cat_desc', location.id, location.location as 'loc_name', department.id, department.department as 'dept_name' FROM asset, type, location, department, personnel WHERE asset.category = type.id AND asset.project = location.id AND asset.trade = department.id AND asset.assign = personnel.id AND asset.status != 0 AND asset.project = ? ORDER BY asset.code DESC";
+		$query = "SELECT asset.id as 'asset_id', asset.description, asset.specs, asset.project, asset.category, asset.code, asset.trade, asset.brand, asset.barcode, asset.quantity, asset.price, asset.date_warranty, asset.serial, asset.model, asset.tool_condition, asset.assign, asset.date_transfer, asset.image, asset.notes, type.id as 'cat_id', type.type as 'cat_name', type.description as 'cat_desc', location.id, location.location as 'loc_name', department.id, department.department as 'dept_name', personnel.id, CONCAT(personnel.firstname, ' ', personnel.lastname) as 'fullname' FROM asset, type, location, department, personnel WHERE asset.category = type.id AND asset.project = location.id AND asset.trade = department.id AND asset.assign = personnel.id";
 		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 		$sel = $this->conn->prepare($query);
-
-		$sel->bindParam(1, $this->project);
 
 		$sel->execute();
 		return $sel;
@@ -178,7 +176,7 @@ class Asset
 
 	public function get_asset_byProj()
 	{
-		$query = "SELECT asset.id as 'asset_id', asset.description, asset.specs, asset.project, asset.category, asset.code, asset.trade, asset.brand, asset.barcode, asset.quantity, asset.price, asset.date_warranty, asset.serial, asset.model, asset.tool_condition, asset.assign, asset.date_transfer, asset.image, asset.notes, type.id as 'cat_id', type.type as 'cat_name', type.description as 'cat_desc', location.id, location.location as 'loc_name', department.id, department.department as 'dept_name', personnel.id, CONCAT(personnel.firstname, ' ', personnel.lastname) as 'fullname' FROM asset, type, location, department, personnel WHERE asset.category = type.id AND asset.project = location.id AND asset.trade = department.id AND asset.assign = personnel.id AND asset.project = ?";
+		$query = "SELECT asset.id as 'asset_id', asset.description, asset.specs, asset.project, asset.category, asset.code, asset.trade, asset.brand, asset.barcode, asset.quantity, asset.price, asset.date_warranty, asset.serial, asset.model, asset.tool_condition, asset.assign, asset.date_transfer, asset.image, asset.notes, asset.status, type.id as 'cat_id', type.type as 'cat_name', type.description as 'cat_desc', location.id, location.location as 'loc_name', department.id, department.department as 'dept_name', personnel.id, CONCAT(personnel.firstname, ' ', personnel.lastname) as 'fullname' FROM asset, type, location, department, personnel WHERE asset.category = type.id AND asset.project = location.id AND asset.trade = department.id AND asset.assign = personnel.id AND asset.project = ?";
 		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 		$sel = $this->conn->prepare($query);
 

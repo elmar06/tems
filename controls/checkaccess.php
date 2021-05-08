@@ -25,7 +25,11 @@
 		}
 		else if($access_type == '3')
 		{
-			header('Location: ../pages/staff/home.php');
+			header('Location: ../pages/pmo/home.php');
+		}
+		else if($access_type == '4')
+		{
+			header('Location: ../pages/kenzo/home.php');
 		}
 		else
 		{

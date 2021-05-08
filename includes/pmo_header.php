@@ -16,6 +16,7 @@ session_start();
   include '../../objects/clsUser.php';
   include '../../objects/clsType.php';
   include '../../objects/clsRecord.php';
+  include '../../objects/clsToolKeeper.php';
 
   $database = new clsConnection();
   $db = $database->connect();
@@ -27,6 +28,7 @@ session_start();
   $user = new Users($db);
   $type = new Type($db);
   $record = new TransferRecord($db);
+  $tool = new ToolKeeper($db);
 ?>
 <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
   <div class="text-center navbar-brand-wrapper d-flex align-items-top justify-content-center">
@@ -43,9 +45,15 @@ session_start();
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="personnel.php">
-          <i class="menu-icon fa fa-users"></i>
-          <span class="menu-title">Assignee</span>
+        <a class="nav-link" href="transaction.php">
+          <i class="menu-icon fa fa-folder-open"></i>
+          <span class="menu-title">Transaction</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="record.php">
+          <i class="menu-icon fa fa-folder"></i>
+          <span class="menu-title">Records</span>
         </a>
       </li>
     </ul>

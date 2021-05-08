@@ -30,7 +30,7 @@
 <div class="container-scroller">
   <!-- page navbar -->
   <?php 
-  include '../../includes/user_header.php'; 
+  include '../../includes/pmo_header.php'; 
     if(!$_SESSION['username'])
     {
       header("Location: index.php");
@@ -48,7 +48,7 @@
                     <a href="add_asset.php" class="btn btn-success btn-rounded"><span class="fa fa-plus"></span> New Asset</a>
                     <button id="btnEdit" class="btn btn-dark btn-rounded"><i class="fa fa-edit"></i>Edit Asset</button>
                     <a id="viewAsset" href="home.php" class="btn btn-dark btn-rounded"><i class="fa fa-list"></i>Refresh List</a>
-                    <a id="btnTransfer" href="#" class="btn btn-primary btn-rounded"><i class="fa fa-share"></i>Transfer Asset</a>
+                    <!-- <a id="btnTransfer" href="#" class="btn btn-primary btn-rounded"><i class="fa fa-share"></i>Transfer Asset</a> -->
                   </div><br>
                   <div id="table-content">
                   <table id="asset_table" class="table table-bordered table-responsive table-hover asset_table" style="cursor:pointer">
@@ -60,14 +60,13 @@
                             <th align="center" style="max-width: 150px;">Project</th>
                             <th align="center" style="max-width: 150px;">Category</th>
                             <th align="center" style="max-width: 100px;">Trade</th>
-                            <th align="center" style="width: 10%;">Assignee</th>
                             <th align="center" style="width: 10%;">Condition</th>
                         </tr>
                     </thead>
                     <tbody>
                       <?php
-                        //$asset->status = 0;
-                        $view = $asset->view_asset();
+                        $asset->project = $_SESSION['project-id'];
+                        $view = $asset->get_asset_byProj();
 
                         while($row = $view->fetch(PDO::FETCH_ASSOC))
                         {
@@ -80,7 +79,6 @@
                               <td class="asset_type" style="max-width: 150px;">'.$row['loc_name'].'</td>
                               <td class="asset_loc" style="max-width: 150px;">'.$row['cat_name'].'</td>
                               <td class="brand" style="max-width: 100px;">'.$row['dept_name'].'</td>
-                              <td class="condition" style="width: 10%;">'.$row['fullname'].'</td>
                               <td class="asset_status" style="width: 10%;">'.$row['tool_condition'].'</td>
                             </tr>';
                         }
