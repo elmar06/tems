@@ -30,7 +30,7 @@
 <div class="container-scroller">
   <!-- page navbar -->
   <?php 
-    include '../../includes/header.php'; 
+    include '../../includes/admin_header.php'; 
   ?>
   <!-- main panel -->
   <div class="container-fluid page-body-wrapper">

@@ -48,12 +48,12 @@ session_start();
           <span class="menu-title">Assignee</span>
         </a>
       </li>
-      <!-- <li class="nav-item">
+      <li class="nav-item">
         <a class="nav-link" href="user.php">
           <i class="menu-icon fa fa-user-o"></i>
           <span class="menu-title">Users</span>
         </a>
-      </li> -->
+      </li>
     </ul>
     <ul class="navbar-nav navbar-nav-right">
       <li class="nav-item dropdown d-none d-xl-inline-block">

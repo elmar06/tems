@@ -21,14 +21,14 @@
   <!-- plugin css for this page -->
   <link rel="stylesheet" href="../../components/font-awesome/css/font-awesome.css">
   <!-- select2 plugin -->
-  <link rel="stylesheet" href="../../components/select2/select2.min.css">
+  <link rel="stylesheet" href="../../components/select2/select2.css">
 </head>
 
 <body>
 <div class="container-scroller">
   <!-- page navbar -->
   <?php 
-    include '../../includes/header.php'; 
+    include '../../includes/admin_header.php'; 
   ?>
   <!-- main panel -->
   <div class="container-fluid page-body-wrapper">
@@ -55,17 +55,13 @@
                 </thead>
                 <tbody id="location-body">
                   <?php
-                    $view_user = $user->view_user();
+                    $view_user = $user->view_user_by_role();
 
                     while($row=$view_user->fetch(PDO::FETCH_ASSOC))
                     {
-                      if($row['access_type'] == 1)
+                      if($row['access_type'] == 4)
                       {
-                        $role = 'Administrator';
-                      }
-                      else if($row['access_type'] == 2)
-                      {
-                        $role = 'Staff';
+                        $role = 'Kenzo Staff';
                       }
                       else
                       {
@@ -138,18 +134,9 @@
             <div class="col-sm-6">
               <label>Role:</label><br>
               <select id="RoleType" type="text" class="form-control" style="width: 100%">
-                <option value="" selected disabled>Please select Role</option>
-                <option value="1">Administrator</option>
-                <option value="2">Staff</option>
-                <option value="3">Tool Keeper</option>
-              </select>
-            </div>
-            <div class="col-sm-6">
-              <label>Department:</label><br>
-              <select id="AccessCat" type="text" class="form-control" style="width: 100%">
-                <option value="" selected disabled>Please select Department</option>
-                <option value="1">Operations</option>
-                <option value="2">PMO</option>
+                <option value="0" selected disabled>Please select a User Role</option>
+                <option value="4">Kenzo Staff</option>
+                <option value="5">Tool Keeper</option>
               </select>
             </div>
           </div>
@@ -183,7 +170,7 @@
 </div>
 
 <!-- EDIT PERSONNEL/CLIENT MODAL -->
-<div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="editUserModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-md" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -268,9 +255,8 @@ $('#save_user').click(function(e){
   var username = $('#username').val();
   var password = $('#password').val();
   var role = $('#RoleType').val();
-  var cat = $('#AccessCat').val();
   var project = $('#project').val();
-  var myData = 'firstname=' + firstname + '&lastname=' + lastname + '&username=' + username + '&password=' + password + '&access_type=' + role + '&access_cat=' + cat + '&project=' + project;
+  var myData = 'firstname=' + firstname + '&lastname=' + lastname + '&username=' + username + '&password=' + password + '&access_type=' + role + '&project=' + project;
 
   if(firstname != "" && lastname != "")
   {

@@ -427,75 +427,86 @@ $('#btnSubmit').on('click', function(e){
   var add_by = $('#acc_id').val();
   var myData = 'project=' + project + '&tool_id=' + tool_id + '&tool_code=' + tool_code + '&description=' + description + '&borrow_code=' + borrow_code + '&name=' + name + '&date_borrow=' + date_borrow + '&date_return=' + date_return + '&record_id=' + record_id + '&add_by=' + add_by;
 
-  if(status == 1)//if tools are in storage
+  if(tool_code != '' & borrow_code != '')
   {
-    $.ajax({
-      type: 'POST',
-      url: '../../controls/toolkeeper/borrow_tool.php',
-      data: myData,
-      beforeSend: function()
-      {
-        showToast();
-      },
-      success: function(response)
-      {
-        if(response > 0)
+    if(status == 1)//if tools are in storage
+    {
+      $.ajax({
+        type: 'POST',
+        url: '../../controls/toolkeeper/borrow_tool.php',
+        data: myData,
+        beforeSend: function()
         {
-          $('#borrow-success').html("<center><i class='fa fa-check menu-icon'></i> Transaction saved!.</center>");
-          $('#borrow-success').show();
-          setTimeout(function(){
-            $('#borrow-success').fadeOut();
-          }, 2000)
-        }
-        else
+          showToast();
+        },
+        success: function(response)
         {
-          $('#borrow-warning').html("<center><i class='fa fa-warning menu-icon'></i> ERROR! Please contact the system administrator at local 124 for assistance.</center>");
-          $('#borrow-warning').show();
-          setTimeout(function(){
-            $('#borrow-warning').fadeOut();
-          }, 3000)
+          if(response > 0)
+          {
+            $('#borrow-success').html("<center><i class='fa fa-check menu-icon'></i> Transaction saved!.</center>");
+            $('#borrow-success').show();
+            setTimeout(function(){
+              $('#borrow-success').fadeOut();
+            }, 2000)
+          }
+          else
+          {
+            $('#borrow-warning').html("<center><i class='fa fa-warning menu-icon'></i> ERROR! Please contact the system administrator at local 124 for assistance.</center>");
+            $('#borrow-warning').show();
+            setTimeout(function(){
+              $('#borrow-warning').fadeOut();
+            }, 3000)
+          }
+        },
+        error: function(xhr, ajaxOptions, thrownError)
+        {
+          alert(thrownError);
         }
-      },
-      error: function(xhr, ajaxOptions, thrownError)
-      {
-        alert(thrownError);
-      }
-    })
+      })
+    }
+    else//if tools are BORROWED
+    {
+      $.ajax({
+        type: 'POST',
+        url: '../../controls/toolkeeper/return_tool.php',
+        data: myData,
+        beforeSend: function()
+        {
+          showToast();
+        },
+        success: function(response)
+        {
+          if(response > 0)
+          {
+            $('#borrow-success').html("<center><i class='fa fa-check menu-icon'></i> T&E Successfully mark as RETURNED!.</center>");
+            $('#borrow-success').show();
+            setTimeout(function(){
+              $('#borrow-success').fadeOut();
+            }, 2000)
+          }
+          else
+          {
+            $('#borrow-warning').html("<center><i class='fa fa-warning menu-icon'></i> ERROR! Please contact the system administrator at local 124 for assistance.</center>");
+            $('#borrow-warning').show();
+            setTimeout(function(){
+              $('#borrow-warning').fadeOut();
+            }, 3000)
+          }
+        },
+        error: function(xhr, ajaxOptions, thrownError)
+        {
+          alert(thrownError);
+        }
+      })
+    }
   }
-  else//if tools are BORROWED
+  else
   {
-    $.ajax({
-      type: 'POST',
-      url: '../../controls/toolkeeper/return_tool.php',
-      data: myData,
-      beforeSend: function()
-      {
-        showToast();
-      },
-      success: function(response)
-      {
-        if(response > 0)
-        {
-          $('#borrow-success').html("<center><i class='fa fa-check menu-icon'></i> T&E Successfully mark as RETURNED!.</center>");
-          $('#borrow-success').show();
-          setTimeout(function(){
-            $('#borrow-success').fadeOut();
-          }, 2000)
-        }
-        else
-        {
-          $('#borrow-warning').html("<center><i class='fa fa-warning menu-icon'></i> ERROR! Please contact the system administrator at local 124 for assistance.</center>");
-          $('#borrow-warning').show();
-          setTimeout(function(){
-            $('#borrow-warning').fadeOut();
-          }, 3000)
-        }
-      },
-      error: function(xhr, ajaxOptions, thrownError)
-      {
-        alert(thrownError);
-      }
-    })
+    $('#borrow-warning').html("<center><i class='fa fa-warning menu-icon'></i> ERROR! Please fill out all the data needed.</center>");
+    $('#borrow-warning').show();
+    setTimeout(function(){
+      $('#borrow-warning').fadeOut();
+    }, 3000)
   }
 })
 

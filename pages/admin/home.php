@@ -1,3 +1,10 @@
+<?php 
+  include '../../includes/admin_header.php';//include the header 
+    if(!$_SESSION['username'])
+    {
+      header("Location: index.php");
+    }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,22 +24,15 @@
   <link rel="shortcut icon" href="../../images/innoland.png" /> 
   <!-- plugin css for this page -->
   <link rel="stylesheet" href="../../components/font-awesome/css/font-awesome.css">
-  <!-- select2 plugin -->
-  <link rel="stylesheet" href="../../components/select2/select2.min.css">
    <!-- date picker -->
   <link rel="stylesheet" type="text/css" href="../../components/datetimepicker/css/datepicker.min.css">
+  <!-- select2 plugin -->
+  <link rel="stylesheet" href="../../components/select2/select2.css">
 </head>
 
 <body>
 <div class="container-scroller">
   <!-- page navbar -->
-  <?php 
-  include '../../includes/header.php';//include the header 
-    if(!$_SESSION['username'])
-    {
-      header("Location: index.php");
-    }
-  ?>
   <input style="display:none" id="log_count" value="<?php echo $_SESSION['log_count']; ?>">
   <!-- main panel -->
     <div class="container-fluid page-body-wrapper">
@@ -52,12 +52,13 @@
                   <table id="asset_table" class="table table-bordered table-responsive table-hover asset_table" style="cursor:pointer">
                     <thead>
                         <tr>
-                            <th align="center"  style="max-width: 30px;"><input type="checkbox" id="checkboxall"/></th>
+                            <th align="center"  style="max-width: 5%;"><input type="checkbox" id="checkboxall"/></th>
                             <th align="center" style="max-width: 80px;">T&E Code</th>
                             <th align="center" style="max-width: 200px;">Description</th>
                             <th align="center" style="max-width: 150px;">Project</th>
                             <th align="center" style="max-width: 150px;">Category</th>
                             <th align="center" style="max-width: 100px;">Trade</th>
+                            <th align="center" style="max-width: 100px;">Assignee</th>
                             <th align="center" style="width: 10%;">Condition</th>
                         </tr>
                     </thead>
@@ -71,12 +72,13 @@
                           extract($row);
                           echo '
                             <tr>
-                              <td><input type="checkbox" name="checklist" class="checklist" value="'.$row['asset_id'].'" style="max-width: 30px;"></td>
+                              <td><input type="checkbox" name="checklist" class="checklist" value="'.$row['asset_id'].'" style="max-width: 5%;"></td>
                               <td class="barcode" style="max-width: 80px;">'.$row['code'].'</td>
                               <td class="description" style="max-width: 200px;">'.$row['description'].'</td>
                               <td class="asset_type" style="max-width: 150px;">'.$row['loc_name'].'</td>
                               <td class="asset_loc" style="max-width: 150px;">'.$row['cat_name'].'</td>
                               <td class="brand" style="max-width: 100px;">'.$row['dept_name'].'</td>
+                              <td class="brand" style="max-width: 100px;">'.$row['fullname'].'</td>
                               <td class="asset_status" style="width: 10%;">'.$row['tool_condition'].'</td>
                             </tr>';
                         }
@@ -103,7 +105,7 @@
 
 <!-- MODALS SECTION -->
 <!-- transfer asset modal -->
-<div class="modal fade" id="transferModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="transferModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -122,7 +124,7 @@
             <div class="row">
                 <div class="col-lg-4">
                   <label for="exampleInputEmail1">New Assignee</label><br>
-                  <select id="newAssign" type="text" class="form-control" style="width: 100%">
+                  <select id="newAssign" type="text" class="form-control select2" style="width: 100%">
                     <?php
                       $view_person = $person->view_person();
                       while($person_row = $view_person->fetch(PDO::FETCH_ASSOC))
@@ -143,7 +145,7 @@
               </div>
                 <div class="col-lg-4"> 
                   <label for="exampleInputEmail1">Reason</label>
-                  <select type="text" class="form-control" id="reason">
+                  <select type="text" class="form-control select2" id="reason" style="width: 100%;">
                     <option>Transfer to Inventory</option>
                     <option>Transfer from Inventory</option>
                     <option>Resignee</option>
@@ -157,7 +159,7 @@
             <div class="row">
                 <div class="col-lg-4"> 
                   <label for="exampleInputEmail1">New Project</label><br>
-                  <select id="new_location" type="text" class="form-control" style="width: 100%">
+                  <select id="new_location" type="text" class="form-control select2" style="width: 100%">
                       <?php
                         $view_loc = $loc->view_loc();
                         while($loc_row=$view_loc->fetch(PDO::FETCH_ASSOC))
@@ -169,7 +171,7 @@
                 </div>
                 <div class="col-lg-4"> 
                   <label for="exampleInputEmail1">New Trade</label><br>
-                  <select id="new_department" type="text" class="form-control" style="width: 100%">
+                  <select id="new_department" type="text" class="form-control select2" style="width: 100%">
                       <?php
                         $view_dept = $dept->view_dept();
                         while($dept_row=$view_dept->fetch(PDO::FETCH_ASSOC))
@@ -407,25 +409,20 @@
 <!-- plugins:js -->
 <script src="../../components/js/vendor.bundle.base.js"></script>
 <script src="../../components/js/vendor.bundle.addons.js"></script>
-<!-- endinject -->
-<!-- Plugin js for this page-->
-<!-- End plugin js for this page-->
 <!-- inject:js -->
 <script src="../../js/off-canvas.js"></script>
 <script src="../../js/misc.js"></script>
-<!-- endinject -->
 <!-- Custom js for this page-->
 <script src="../../js/dashboard.js"></script>
 <!-- select2 plugin -->
 <script src="../../components/select2/select2.min.js"></script>
-<!-- End custom js for this page-->
 <!-- date picker -->
 <script src="../../components/datetimepicker/js/bootstrap-datepicker.js"></script>
 
 <!-- call the function of select2 plug-in -->
 <script>
 $(document).ready(function(){
-  $('.js-example-basic-single').select2();
+  $('.select2').select2();
 
   //SET THE CURRENT DATE IN EVERY DATETIMEPICKER
   $('.transfer-date').datepicker({

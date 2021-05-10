@@ -45,7 +45,7 @@ class Users
 
 	public function upd_user()
 	{
-		$query = "UPDATE ".$this->table_name." SET firstname=?, lastname=?, username=?, password=?, access_type=?, access_cat=? WHERE id=?";
+		$query = "UPDATE ".$this->table_name." SET firstname=?, lastname=?, username=?, password=?, access_type=? WHERE id=?";
 		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 		$upd = $this->conn->prepare($query);
 
@@ -54,8 +54,7 @@ class Users
 		$upd->bindParam(3, $this->username);
 		$upd->bindParam(4, $this->password);
 		$upd->bindParam(5, $this->access_type);
-		$upd->bindParam(6, $this->access_cat);
-		$upd->bindParam(7, $this->id);
+		$upd->bindParam(6, $this->id);
 
 		if($upd->execute())
 		{
@@ -125,6 +124,16 @@ class Users
 		$sel = $this->conn->prepare($query);
 
 		$sel->bindParam(1, $this->id);
+
+		$sel->execute();
+		return $sel;
+	}
+
+	public function view_user_by_role()
+	{
+		$query = "SELECT id, firstname, lastname, username, access_type FROM users WHERE access_type = 5 OR access_type = 4";
+		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+		$sel = $this->conn->prepare($query);
 
 		$sel->execute();
 		return $sel;

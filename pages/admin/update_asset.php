@@ -30,7 +30,7 @@
 <div class="container-scroller">
   <!-- page navbar -->
   <?php 
-    include '../../includes/header.php';
+    include '../../includes/admin_header.php';
     //get the asset details by ID 
     $id = $_GET['id'];
     $asset->id = $id;

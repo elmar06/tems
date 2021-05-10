@@ -61,19 +61,23 @@
                     {
                       if($row['access_type'] == 1)
                       {
-                        $role = 'Super Admin';
+                        $role = 'System Administrator';
                       }
                       elseif($row['access_type'] == 2)
                       {
-                        $role = 'T&E Admin';
+                        $role = 'T&E Administrator';
                       }
                       elseif($row['access_type'] == 3)
                       {
                         $role = 'PMO Officer';
                       }
-                      else
+                      elseif($row['access_type'] == 4)
                       {
                         $role = 'Tool Keeper';
+                      }
+                      else
+                      {
+                        $role = 'Kenzo Staff';
                       }
                       echo'
                       <tr>
@@ -142,10 +146,12 @@
             <div class="col-sm-6">
               <label>Role:</label><br>
               <select id="RoleType" type="text" class="form-control" style="width: 100%">
-                <option value="" selected disabled>Please select Role</option>
-                <option value="2">Administrator</option>
+                <option value="0" selected disabled>Please select Role</option>
+                <option value="1">System Administrator</option>
+                <option value="2">T&E Administrator</option>
                 <option value="3">PMO Officer</option>
                 <option value="4">Tool Keeper</option>
+                <option value="5">Kenzo Staff</option>
               </select>
             </div>
             <div class="col-sm-6">
@@ -213,7 +219,6 @@
 
   <!-- data tables -->
   <script src="../../components/dataTables/js/jquery.dataTables.min.js"></script>
-  <!--   <script src="../components/dataTables/js/dataTables.bootstrap.min.js"></script> -->
   <!-- plugins:js -->
   <script src="../../components/js/vendor.bundle.base.js"></script>
   <script src="../../components/js/vendor.bundle.addons.js"></script>
