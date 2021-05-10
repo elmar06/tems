@@ -45,6 +45,12 @@ session_start();
         </a>
       </li>
       <li class="nav-item">
+        <a class="nav-link" href="personnel.php">
+          <i class="menu-icon fa fa-users"></i>
+          <span class="menu-title">Assignee</span>
+        </a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link" href="transaction.php">
           <i class="menu-icon fa fa-folder-open"></i>
           <span class="menu-title">Transaction</span>

@@ -75,8 +75,6 @@ class Location
 		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 		$sel=$this->conn->prepare($query);
 
-		$sel->bindParam(1, $this->status);
-
 		$sel->execute();
 		return $sel;
 	}

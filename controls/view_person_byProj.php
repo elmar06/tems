@@ -38,25 +38,6 @@ $personnel = new Personnel($db);
 					<label for="exampleInputEmail1">Lastname</label>
 					<input type="text" class="form-control" id="upd_lname" value="'.$row['lastname'].'">
 				</div>
-			</div><br>
-			<div class="row">
-				<div class="col-lg-6">
-					<label for="exampleInputEmail1"><span class="fa fa-building"></span> Project</label>
-					<select id="upd_project" type="text" class="form-control select2" style="width: 100%">';
-						$view = $loc->view_loc();
-						while($loc_row=$view->fetch(PDO::FETCH_ASSOC))
-						{
-							if($row['project'] == $loc_row['id'])
-							{
-								echo '<option value='.$loc_row['id'].' selected>'.$loc_row['location'].'</option>';
-							}
-							else
-							{
-								echo '<option value='.$loc_row['id'].'>'.$loc_row['location'].'</option>';
-							}
-						}
-					echo'</select>
-				</div>
 			</div>
 			<br>
 			<div class="row">
@@ -69,9 +50,3 @@ $personnel = new Personnel($db);
 		</div>';
 	}
 ?>
-<script>
-//select2 
-$(document).ready(function(){
-  $('.select2').select2();
-})
-</script>

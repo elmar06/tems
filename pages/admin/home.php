@@ -11,9 +11,6 @@
   <link rel="stylesheet" href="../../components/css/vendor.bundle.base.css">
   <link rel="stylesheet" href="../../components/css/vendor.bundle.addons.css">
   <link rel="stylesheet" href="../../components/mdi/css/materialdesignicons.min.css">
-  <!-- endinject -->
-  <!-- plugin css for this page -->
-  <!-- End plugin css for this page -->
   <!-- inject:css -->
   <link rel="stylesheet" href="../../css/style.css">
   <!-- endinject -->
@@ -403,10 +400,10 @@
     </div>
   </div>
 </div>  
-  
+<!-- jquery -->
+<script src="../../components/jquery/jquery-3.4.1.min.js"></script>
 <!-- data tables -->
 <script src="../../components/dataTables/js/jquery.dataTables.min.js"></script>
-
 <!-- plugins:js -->
 <script src="../../components/js/vendor.bundle.base.js"></script>
 <script src="../../components/js/vendor.bundle.addons.js"></script>

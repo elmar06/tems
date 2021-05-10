@@ -20,7 +20,7 @@ class Personnel
 
 	public function save_person()
 	{
-		$query = "INSERT INTO ".$this->table_name." SET id=?, emp_no=?, firstname=?, lastname=?, contact_num=?, status=?";
+		$query = "INSERT INTO ".$this->table_name." SET id=?, emp_no=?, firstname=?, lastname=?, contact_num=?, project=?, status=1";
 		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 		$ins=$this->conn->prepare($query);
 
@@ -29,7 +29,7 @@ class Personnel
 		$ins->bindParam(3, $this->firstname);
 		$ins->bindParam(4, $this->lastname);
 		$ins->bindParam(5, $this->contact_num);
-		$ins->bindParam(6, $this->status);
+		$ins->bindParam(6, $this->project);
 
 		if($ins->execute())
 		{
@@ -43,7 +43,7 @@ class Personnel
 
 	public function upd_person()
 	{
-		$query = "UPDATE ".$this->table_name." SET emp_no=?, firstname=?, lastname=?, contact_num=? WHERE id=?";
+		$query = "UPDATE ".$this->table_name." SET emp_no=?, firstname=?, lastname=?, contact_num=?, project=? WHERE id=?";
 		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 		$upd = $this->conn->prepare($query);
 
@@ -51,7 +51,8 @@ class Personnel
 		$upd->bindParam(2, $this->firstname);
 		$upd->bindParam(3, $this->lastname);
 		$upd->bindParam(4, $this->contact_num);
-		$upd->bindParam(5, $this->id);
+		$upd->bindParam(5, $this->project);
+		$upd->bindParam(6, $this->id);
 
 		if($upd->execute())
 		{
@@ -84,7 +85,7 @@ class Personnel
 
 	public function view_person()
 	{
-		$query = "SELECT id as 'person_id', firstname, lastname, emp_no, CONCAT(firstname, ' ', lastname) as 'fullname', contact_num as 'contact' FROM personnel WHERE status != 0 ORDER BY firstname ASC";
+		$query = "SELECT personnel.id as 'person_id', personnel.firstname, personnel.lastname, personnel.emp_no, CONCAT(firstname, ' ', lastname) as 'fullname', contact_num as 'contact', location.location as 'project' FROM personnel, location WHERE personnel.status != 0 AND personnel.project = location.id ORDER BY personnel.firstname ASC";
 		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 		$sel = $this->conn->prepare($query);
 
@@ -92,9 +93,21 @@ class Personnel
 		return $sel;
 	}
 
+	public function view_person_by_proj()
+	{
+		$query = "SELECT personnel.id as 'person_id', personnel.firstname, personnel.lastname, personnel.emp_no, CONCAT(firstname, ' ', lastname) as 'fullname', contact_num as 'contact', location.location as 'project' FROM personnel, location WHERE personnel.status != 0 AND personnel.project = location.id AND personnel.project = ? ORDER BY personnel.firstname ASC";
+		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+		$sel = $this->conn->prepare($query);
+
+		$sel->bindParam(1, $this->project);
+
+		$sel->execute();
+		return $sel;
+	}
+
 	public function view_person_byID()
 	{
-		$query = "SELECT id, emp_no, firstname, lastname, contact_num FROM personnel WHERE id=?";
+		$query = "SELECT personnel.id, personnel.emp_no, personnel.firstname, personnel.lastname, personnel.contact_num, personnel.project, location.id as 'proj_id', location.location FROM personnel, location WHERE personnel.project=location.id AND personnel.id=?";
 		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 		$sel = $this->conn->prepare($query);
 

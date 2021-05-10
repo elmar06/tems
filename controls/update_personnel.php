@@ -12,6 +12,7 @@ $person->emp_no = $_POST['emp_no'];
 $person->firstname = $_POST['firstname'];
 $person->lastname = $_POST['lastname'];
 $person->contact_num = $_POST['contact_num'];
+$person->project = $_POST['project'];
 
 	$upd = $person->upd_person();
 

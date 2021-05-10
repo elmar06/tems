@@ -20,15 +20,13 @@
   <link rel="stylesheet" href="../../components/font-awesome/css/font-awesome.css">
   <!-- DataTables -->
   <link rel="stylesheet" href="../../components/dataTables/css/dataTables.bootstrap.min.css">
-  <!-- select2 plugin -->
-  <link rel="stylesheet" href="../../components/select2/select2.css">
 
 </head>
 
 <body>
 <div class="container-scroller">
   <!-- page navbar -->
-  <?php include '../../includes/header.php'; ?>
+  <?php include '../../includes/pmo_header.php'; ?>
   <!-- main panel -->
   <div class="container-fluid page-body-wrapper">
     <div class="content-wrapper">
@@ -44,29 +42,28 @@
               <table id="personnel_table" class="table table-bordered" style="width:100%">
                 <thead>
                     <tr>
-                      <th style="width:5%"><center><input type="checkbox" id="checkboxall"></center></th>
+                      <th style="width:10%"><center><input type="checkbox" id="checkboxall"></center></th>
                       <th>Employee No.</th>
                       <th>Firstname</th>
                       <th>Lastname</th>
                       <th>Contact No.</th>
-                      <th><center>Project</center></th>
                       <th style="width:20%"><center>Action</center></th>
                     </tr>
                 </thead>
                 <tbody id="location-body">
                   <?php
-                    $view_person = $person->view_person();
+                    $person->project = $_SESSION['project-id']; 
+                    $view_person = $person->view_person_by_proj();
 
                     while($row=$view_person->fetch(PDO::FETCH_ASSOC))
                     {
                       echo'
                       <tr>
-                        <td style="width:5%"><center><input type="checkbox" name="checklist" class="checklist" value="'.$row['person_id'].'"/></center></td>
+                        <td style="width:10%"><center><input type="checkbox" name="checklist" class="checklist" value="'.$row['person_id'].'"/></center></td>
                         <td>'.$row['emp_no'].'</td>
                         <td>'.$row['firstname'].'</td>
                         <td>'.$row['lastname'].'</td>
                         <td>'.$row['contact'].'</td>
-                        <td><center>'.$row['project'].'</center></td>
                         <td style="width:20%"><center><a class="edit-person" href="#" value="'.$row['person_id'].'" data-toggle="modal"><i class="fa fa-edit text-green"></i> Edit |</a> <a class="del-person" href="#" value="'.$row['person_id'].'" data-toggle="modal"><i class="fa fa-trash"></i> Delete</a></center></td>
                       </tr>';
                     }
@@ -92,7 +89,7 @@
 
 <!-- MODALS SECTION -->
 <!-- NEW PERSONNEL/CLIENT MODAL -->
-<div class="modal fade" id="newPersonnelModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="newPersonnelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-md" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -123,21 +120,6 @@
               <input type="text" class="form-control" id="lname" placeholder="Enter Lastname">
             </div>
           </div>          
-        </div>
-        <div class="row">
-          <div class="col-sm-6">
-            <label for="exampleInputEmail1"><span class="fa fa-building"></span> Project</label>
-            <select id="project" type="text" class="form-control js-example-basic-single" style="width: 100%">
-              <option selected disabled>Please select Project</option>
-                <?php
-                  $view = $loc->view_loc();
-                  while($row=$view->fetch(PDO::FETCH_ASSOC))
-                  {
-                    echo '<option value='.$row['id'].'>'.$row['location'].'</option>';
-                  }
-                ?>
-            </select>
-          </div>
         </div><!-- end of form-group -->
         <!-- ALERTS -->
         <div id="save-warning" class="alert alert-danger" role="alert" style="display: none"></div>
@@ -152,7 +134,7 @@
 </div>
 
 <!-- EDIT PERSONNEL/CLIENT MODAL -->
-<div class="modal fade" id="editPersonnelModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="editPersonnelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-md" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -171,28 +153,28 @@
     </div>
   </div>
 </div>
-<!-- jquery -->
-<script src="../../components/jquery/jquery-3.4.1.min.js"></script>
+
 <!-- data tables -->
 <script src="../../components/dataTables/js/jquery.dataTables.min.js"></script>
 <!-- plugins:js -->
 <script src="../../components/js/vendor.bundle.base.js"></script>
 <script src="../../components/js/vendor.bundle.addons.js"></script>
+<!-- endinject -->
+<!-- Plugin js for this page-->
+<!-- End plugin js for this page-->
 <!-- inject:js -->
 <script src="../../js/off-canvas.js"></script>
 <script src="../../js/misc.js"></script>
+<!-- endinject -->
 <!-- Custom js for this page-->
 <script src="../../js/dashboard.js"></script>
-<!-- select2 plugin -->
-<script src="../../components/select2/select2.min.js"></script>
+<!-- End custom js for this page-->
 
+<!-- BOOTSTRAP TABLE FUNCTION -->
 <script>
-$(document).ready(function(){
-  //select2
-  $('.js-example-basic-single').select2();
-  //DataTable
-  $('.table').DataTable();
-})
+  $(function(){
+    $('.table').DataTable();
+  });
 </script>
 
 <!-- SAVE PERSONNEL FUNCTION -->
@@ -202,12 +184,13 @@ $('#save-person').click(function(e){
 
   var firstname = $('#fname').val();
   var lastname = $('#lname').val();
+  // var location = $('#location').val();
+  // var department = $('#department').val();
   var emp_no = $('#emp_no').val();
   var contact_num = $('#contact_num').val();
-  var project = $('#project').val();
-  var myData = 'firstname=' + firstname + '&lastname=' + lastname + '&emp_no=' + emp_no + '&contact_num=' + contact_num + '&project=' + project;
+  var myData = 'firstname=' + firstname + '&lastname=' + lastname + /*'&location=' + location + '&department=' + department +*/ '&emp_no=' + emp_no + '&contact_num=' + contact_num;
 
-  if(firstname != "" && lastname != "")
+  if(firstname != "" && lastname != "" /*&& location != "" && department != ""*/)
   {
     $.ajax({
       type: "POST",
@@ -255,7 +238,7 @@ $('.edit-person').click(function(e){
 
   $.ajax({
     type: "POST",
-    url: "../../controls/view_person_byID.php",
+    url: "../../controls/view_person_byProj.php",
     data: {id: id},
 
     success: function(html)
@@ -279,8 +262,7 @@ $('#upd-person').click(function(e){
   var contact_num = $('#upd_contact_num').val();
   var firstname = $('#upd_fname').val();
   var lastname = $('#upd_lname').val();
-  var project = $('#upd_project').val();
-  var myData = 'id=' + id + '&emp_no=' + emp_no + '&contact_num=' + contact_num + '&firstname=' + firstname + '&lastname=' + lastname + '&project=' + project;
+  var myData = 'id=' + id + '&emp_no=' + emp_no + '&contact_num=' + contact_num + '&firstname=' + firstname + '&lastname=' + lastname;
 
   if(firstname != "" && lastname != "")
   {

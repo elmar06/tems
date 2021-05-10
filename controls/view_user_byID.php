@@ -75,7 +75,6 @@ $view = $user->view_user_byID();
 	            <div class="col-sm-6" id="upd_proj" style="display: none">
 	              <label>Project:</label><br>
 	              <select type="text" class="form-control js-example-basic-single" id="upd_project" style="width: 100%">';
-	              	$loc->status = 0;
                   	$view = $loc->view_loc();
                   	while($loc_row=$view->fetch(PDO::FETCH_ASSOC))
                   	{
