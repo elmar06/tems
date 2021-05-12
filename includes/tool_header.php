@@ -1,6 +1,6 @@
 <?php
 session_start();
-  if($_SESSION['access_type'] != '4')
+  if($_SESSION['access_type'] != '5')
   {
     header('Location: ../../controls/logout.php');
   }
