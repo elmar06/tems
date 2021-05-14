@@ -64,6 +64,9 @@
                         while($row = $view->fetch(PDO::FETCH_ASSOC))
                         {
                           if($row['status'] == 1){
+                            $status = '<label style="color: green"> In Storage </label>';
+                          }
+                          elseif($row['status'] == 2){
                             $status = '<label style="color: green"> Returned </label>';
                           }else{
                             $status = '<label style="color: red"> Borrowed </label>';

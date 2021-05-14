@@ -9,7 +9,7 @@ $worker = new Worker($db);
 
 $worker->worker_id = $_POST['id'];
 $worker->fullname = $_POST['fullname'];
-$worker->address = $_POST['address'];
+$worker->position = $_POST['position'];
 $worker->trade = $_POST['trade'];
 $worker->project = $_POST['project'];
 $worker->status = 1;

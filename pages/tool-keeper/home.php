@@ -332,11 +332,15 @@ $('#code').change(function(){
         $('#tool-id').val(id);
         $('#status').val(status);
         //check the status of tools & equipment
-        if(status == '1'){
+        if(result[5] == 1){
+         $('#tool-status').html('<label id="tool-status" style="font-size: 20px; color: green;">In Storage</label>');
+         $('#date-returned').val('');
+        }
+        else if(result[5] == 2){
          $('#tool-status').html('<label id="tool-status" style="font-size: 20px; color: green;">Returned</label>');
          $('#date-returned').val('');
         }else{
-          $('#tool-status').html('<label id="tool-status" style="font-size: 20px; color: red;">Borrowed</label>');  
+          $('#tool-status').html('<label id="tool-status" style="font-size: 20px; color: red;">For Returned</label>');  
           //check the records table and get the id to update the status
           var tool_id = result[6];
           var myData = 'tool_id=' + tool_id + '&tool_code=' + code;

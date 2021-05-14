@@ -29,8 +29,8 @@ while($row = $get->fetch(PDO::FETCH_ASSOC))
             <input type="text" class="form-control date-warranty" id="upd_fullname" placeholder="Fullname here" value="'.$row['fullname'].'"/>
           </div>
           <div class="col-sm-6">
-            <label for="exampleInputEmail1"><span class="fa fa-address-card-o"></span> Address</label>
-            <input type="text" class="form-control date-warranty" id="upd_address" placeholder="Address here" value="'.$row['address'].'"/>
+            <label for="exampleInputEmail1"><span class="fa fa-address-card-o"></span> Position</label>
+            <input type="text" class="form-control date-warranty" id="upd_position" placeholder="Address here" value="'.$row['position'].'"/>
           </div>
         </div><br>
         <div class="row">
@@ -71,6 +71,7 @@ while($row = $get->fetch(PDO::FETCH_ASSOC))
             echo '</select>
           </div>
         </div><br>
-        <div id="upd-warning" class="alert alert-danger" role="alert" style="display: none"></div>';
+        <div id="upd-warning" class="alert alert-danger" role="alert" style="display: none"></div>
+        <div id="upd-success" class="alert alert-success" role="alert" style="display: none"></div>';
 }
 ?>

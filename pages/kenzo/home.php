@@ -32,7 +32,7 @@
     <div class="content-wrapper">
       <div class="row">
         <div class="col-lg-12">
-          <h4><b>PROJECT: <u> <?php echo $_SESSION['proj-name']; ?></u></b></h4>
+        <h4><b>PROJECT: <u> <?php echo $_SESSION['proj-name']; ?></u></b></h4>
           <div class="card">
             <div class="card-body">
               <div>
@@ -45,9 +45,10 @@
               <table id="worker_table" class="table table-bordered" style="width:100%">
                 <thead>
                     <tr>
-                      <th align="center"  style="max-width: 30px;"><input type="checkbox" id="checkboxall"/></th>
+                      <th align="center"  style="max-width: 10px;"><input type="checkbox" id="checkboxall"/></th>
                       <th>Worker ID</th>
                       <th>Fullname</th>
+                      <th>Position</th>
                       <th><center>Trade</center></th>
                       <th><center>Project</center></th>
                       <th><center>Action</center></th>
@@ -61,9 +62,10 @@
                     {
                       echo '
                       <tr>
-                        <td><input type="checkbox" name="checklist" class="checklist" value="'.$row['work-id'].'" style="max-width: 30px;"></td>
+                        <td><input type="checkbox" name="checklist" class="checklist" value="'.$row['work-id'].'" style="max-width: 10px;"></td>
                         <td>'.$row['worker_id'].'</td>
                         <td>'.$row['fullname'].'</td>
+                        <td>'.$row['position'].'</td>
                         <td><center>'.$row['trade_name'].'</center></td>
                         <td><center>'.$row['proj_name'].'</center></td>
                         <td style="width:20%"><center><a class="edit-worker" href="#" value="'.$row['work-id'].'" data-toggle="modal"><i class="fa fa-edit text-green"></i> Edit |</a> <a class="delete-worker" href="#" value="'.$row['work-id'].'" data-toggle="modal"><i class="fa fa-trash"></i> Delete</a></center></td>
@@ -113,8 +115,8 @@
             <input type="text" class="form-control date-warranty" id="fullname" placeholder="Fullname here" />
           </div>
           <div class="col-sm-6">
-            <label for="exampleInputEmail1"><span class="fa fa-address-card-o"></span> Address</label>
-            <input type="text" class="form-control date-warranty" id="address" placeholder="Address here" />
+            <label for="exampleInputEmail1"><span class="fa fa-address-card-o"></span> Position</label>
+            <input type="text" class="form-control date-warranty" id="position" placeholder="Position here" />
           </div>
         </div><br>
         <div class="row">
@@ -145,6 +147,7 @@
             </select>
           </div>
         </div><br><!-- end of row -->
+        <div id="add-success" class="alert alert-success" role="alert" style="display: none"></div>
         <div id="add-warning" class="alert alert-danger" role="alert" style="display: none"></div>
       </div>
       <div class="modal-footer">
@@ -249,12 +252,12 @@ $('#addWorker').click(function(e){
 
   var id = $('#worker-id').val();
   var fullname = $('#fullname').val();
-  var address = $('#address').val();
+  var position = $('#position').val();
   var trade = $('#trade').val();
   var project = $('#project').val();
-  var myData = 'id=' + id + '&fullname=' + fullname + '&address=' + address + '&trade=' + trade + '&project=' + project;
+  var myData = 'id=' + id + '&fullname=' + fullname + '&position=' + position + '&trade=' + trade + '&project=' + project;
 
-  if(id != '' && fullname != '' && address != '' && trade != null && project != null)
+  if(id != '' && fullname != '' && position != '' && trade != null && project != null)
   {
     $.ajax({
       type: 'POST',
@@ -267,10 +270,15 @@ $('#addWorker').click(function(e){
         {
           $('#worker-id').val('');
           $('#fullname').val('');
-          $('#address').val('');
+          $('#position').val('');
           $('#trade option:eq(0)').prop('selected', true);
           $('#project option:eq(0)').prop('selected', true);
-          $('#NewWorkerModal').modal('hide');
+          //$('#NewWorkerModal').modal('hide');
+          $('#add-success').html("Worker Details successfully updated.");
+          $('#add-success').show();
+          setTimeout(function(){
+            $('#add-success').hide();
+          }, 3000);
 
           //get the new list of worker
           $.ajax({
@@ -410,12 +418,12 @@ $('#btnUpdWorker').click(function(e){
   var id = $('#upd_id').val();
   var worker_id = $('#upd_worker-id').val();
   var fullname = $('#upd_fullname').val();
-  var address = $('#upd_address').val();
+  var position = $('#upd_position').val();
   var trade = $('#upd_trade').val();
   var project = $('#upd_project').val();
-  var myData = 'id=' + id + '&worker_id=' + worker_id + '&fullname=' + fullname + '&address=' + address + '&trade=' + trade + '&project=' + project;
+  var myData = 'id=' + id + '&worker_id=' + worker_id + '&fullname=' + fullname + '&position=' + position + '&trade=' + trade + '&project=' + project;
 
-  if(worker_id != '' && fullname != '' && address != '' && trade != null && project != null)
+  if(worker_id != '' && fullname != '' && position != '' && trade != null && project != null)
   {
     $.ajax({
       type: 'POST',
@@ -427,13 +435,15 @@ $('#btnUpdWorker').click(function(e){
         if(response > 0)
         {
           $('#UpdWorkerModal').modal('hide');
-          //get the new list of worker
-          var project = $('#project-id').val();
+          $('#upd-success').html("Worker Details successfully updated.");
+          $('#upd-success').show();
+          setTimeout(function(){
+            $('#upd-success').hide();
+          }, 3000);
+          //get the updated list
           $.ajax({
             type: 'POST',
             url: '../../controls/toolkeeper/view_worker.php',
-            data: {},
-
             success: function(html)
             {
               $('#worker-body').fadeOut();
@@ -481,7 +491,10 @@ $('#btnUpload').click(function(e){
       contentType: false,
       cache: false,
       processData: false,
-
+      beforeSend: function()
+      {
+        $('#loading').show();
+      },
       success: function(response)
       {
         if(response > 0)
@@ -491,19 +504,8 @@ $('#btnUpload').click(function(e){
           $('#upload-success').show();
           setTimeout(function(){
             $('#upload-success').hide();
+            window.location = 'home.php';
           }, 3000);
-
-          //get the new list of workers
-          $.ajax({
-            url: '../../controls/toolkeeper/view_worker.php',
-
-            success: function(html)
-            {
-              $('#worker-body').fadeOut();
-              $('#worker-body').fadeIn();
-              $('#worker-body').html(html);
-            }
-          })
         }
         else
         {

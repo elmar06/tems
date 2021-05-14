@@ -17,7 +17,7 @@ $tool->borrow_code = $_POST['borrow_code'];
 $tool->borrow_name = $_POST['name'];
 $tool->date_borrow = date("Y-m-d", strtotime($_POST['date_borrow']));
 $tool->add_by = $_POST['add_by'];
-$asset->status = 2;
+$asset->status = 3;
 $asset->id = $_POST['tool_id'];
 
 //update the asset tb

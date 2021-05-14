@@ -6,7 +6,7 @@ class Worker
 
 	public $id;
 	public $fullname;
-	public $address;
+	public $position;
 	public $trade;
 	public $project;
 	public $status;
@@ -18,13 +18,13 @@ class Worker
 
 	public function save_worker()
 	{
-		$query = 'INSERT INTO '.$this->table_name.' SET worker_id=?, fullname=?, address=?, trade=?, project=?, status=?';
+		$query = 'INSERT INTO '.$this->table_name.' SET worker_id=?, fullname=?, position=?, trade=?, project=?, status=?';
 		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 		$ins = $this->conn->prepare($query);
 
 		$ins->bindParam(1, $this->worker_id);
 		$ins->bindParam(2, $this->fullname);
-		$ins->bindParam(3, $this->address);
+		$ins->bindParam(3, $this->position);
 		$ins->bindParam(4, $this->trade);
 		$ins->bindParam(5, $this->project);
 		$ins->bindParam(6, $this->status);
@@ -41,13 +41,13 @@ class Worker
 
 	public function update_worker()
 	{
-		$query = 'UPDATE '.$this->table_name.' SET worker_id=?, fullname=?, address=?, trade=?, project=? WHERE id=?';
+		$query = 'UPDATE '.$this->table_name.' SET worker_id=?, fullname=?, position=?, trade=?, project=? WHERE id=?';
 		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 		$ins = $this->conn->prepare($query);
 
 		$ins->bindParam(1, $this->worker_id);
 		$ins->bindParam(2, $this->fullname);
-		$ins->bindParam(3, $this->address);
+		$ins->bindParam(3, $this->position);
 		$ins->bindParam(4, $this->trade);
 		$ins->bindParam(5, $this->project);
 		$ins->bindParam(6, $this->id);
@@ -64,7 +64,7 @@ class Worker
 
 	public function view_worker()
 	{
-		$query = 'SELECT worker.id as "work-id", worker.fullname, worker.worker_id, worker.address, worker.trade as "trade_id", worker.project as "proj_id", department.id, department.department as "trade_name", location.id, location.location as "proj_name" FROM worker, department, location WHERE worker.trade = department.id AND worker.project = location.id AND worker.status != 0 AND worker.project = ? ORDER BY worker.worker_id ASC';
+		$query = 'SELECT worker.id as "work-id", worker.fullname, worker.worker_id, worker.position, worker.trade as "trade_id", worker.project as "proj_id", department.id, department.department as "trade_name", location.id, location.location as "proj_name" FROM worker, department, location WHERE worker.trade = department.id AND worker.project = location.id AND worker.status != 0 AND worker.project = ? ORDER BY worker.worker_id ASC';
 		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 		$sel = $this->conn->prepare($query);
 
@@ -76,7 +76,7 @@ class Worker
 
 	public function get_worker_data()
 	{
-		$query = 'SELECT worker.id as "work-id", worker.fullname, worker.worker_id, worker.address, worker.trade as "trade_id", worker.project as "proj_id", department.id, department.department as "trade_name", location.id, location.location as "proj_name" FROM worker, department, location WHERE worker.trade = department.id AND worker.project = location.id AND worker.status != 0 AND worker.id = ?';
+		$query = 'SELECT worker.id as "work-id", worker.fullname, worker.worker_id, worker.position, worker.trade as "trade_id", worker.project as "proj_id", department.id, department.department as "trade_name", location.id, location.location as "proj_name" FROM worker, department, location WHERE worker.trade = department.id AND worker.project = location.id AND worker.status != 0 AND worker.id = ?';
 		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 		$sel = $this->conn->prepare($query);
 

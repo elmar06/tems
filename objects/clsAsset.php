@@ -121,7 +121,7 @@ class Asset
 
 	public function view_asset()
 	{
-		$query = "SELECT asset.id as 'asset_id', asset.description, asset.specs, asset.project, asset.category, asset.code, asset.trade, asset.brand, asset.barcode, asset.quantity, asset.price, asset.date_warranty, asset.serial, asset.model, asset.tool_condition, asset.assign, asset.date_transfer, asset.image, asset.notes, type.id as 'cat_id', type.type as 'cat_name', type.description as 'cat_desc', location.id, location.location as 'loc_name', department.id, department.department as 'dept_name', personnel.id, CONCAT(personnel.firstname, ' ', personnel.lastname) as 'fullname' FROM asset, type, location, department, personnel WHERE asset.category = type.id AND asset.project = location.id AND asset.trade = department.id AND asset.assign = personnel.id";
+		$query = "SELECT asset.id as 'asset_id', asset.description, asset.specs, asset.project, asset.category, asset.code, asset.trade, asset.brand, asset.barcode, asset.quantity, asset.price, asset.date_warranty, asset.serial, asset.model, asset.tool_condition, asset.assign, asset.date_transfer, asset.image, asset.notes, type.id as 'cat_id', type.type as 'cat_name', type.description as 'cat_desc', location.id, location.location as 'loc_name', department.id, department.department as 'dept_name', personnel.id, CONCAT(personnel.firstname, ' ', personnel.lastname) as 'fullname' FROM asset, type, location, department, personnel WHERE asset.category = type.type_id AND asset.project = location.id AND asset.trade = department.id AND asset.assign = personnel.id";
 		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 		$sel = $this->conn->prepare($query);
 
@@ -131,7 +131,7 @@ class Asset
 
 	public function get_asset_byID()
 	{
-		$query = "SELECT asset.id as 'asset_id', asset.description, asset.specs, asset.project, asset.category, asset.code, asset.trade, asset.brand, asset.barcode, asset.quantity, asset.price, asset.date_warranty, asset.serial, asset.model, asset.tool_condition, asset.assign, asset.date_transfer, asset.image, asset.notes, type.id as 'cat_id', type.type as 'cat_name', type.description as 'cat_desc', location.id, location.location as 'loc_name', department.id, department.department as 'dept_name', personnel.id, CONCAT(personnel.firstname, ' ', personnel.lastname) as 'fullname' FROM asset, type, location, department, personnel WHERE asset.category = type.id AND asset.project = location.id AND asset.trade = department.id AND asset.assign = personnel.id AND asset.id = ?";
+		$query = "SELECT asset.id as 'asset_id', asset.description, asset.specs, asset.project, asset.category, asset.code, asset.trade, asset.brand, asset.barcode, asset.quantity, asset.price, asset.date_warranty, asset.serial, asset.model, asset.tool_condition, asset.assign, asset.date_transfer, asset.image, asset.notes, type.id as 'cat_id', type.type as 'cat_name', type.description as 'cat_desc', location.id, location.location as 'loc_name', department.id, department.department as 'dept_name', personnel.id, CONCAT(personnel.firstname, ' ', personnel.lastname) as 'fullname' FROM asset, type, location, department, personnel WHERE asset.category = type.type_id AND asset.project = location.id AND asset.trade = department.id AND asset.assign = personnel.id AND asset.id = ?";
 		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 		$sel = $this->conn->prepare($query);
 
@@ -164,7 +164,7 @@ class Asset
 
 	public function get_asset_byPerson()
 	{
-		$query = "SELECT asset.id as 'asset_id', asset.description, asset.specs, asset.project, asset.category, asset.code, asset.trade, asset.brand, asset.barcode, asset.quantity, asset.price, asset.date_warranty, asset.serial, asset.model, asset.tool_condition, asset.assign, asset.date_transfer, asset.image, asset.notes, type.id as 'cat_id', type.type as 'cat_name', type.description as 'cat_desc', location.id, location.location as 'loc_name', department.id, department.department as 'dept_name', personnel.id, CONCAT(personnel.firstname, ' ', personnel.lastname) as 'fullname' FROM asset, type, location, department, personnel WHERE asset.category = type.id AND asset.project = location.id AND asset.trade = department.id AND asset.assign = personnel.id AND asset.assign = ?";
+		$query = "SELECT asset.id as 'asset_id', asset.description, asset.specs, asset.project, asset.category, asset.code, asset.trade, asset.brand, asset.barcode, asset.quantity, asset.price, asset.date_warranty, asset.serial, asset.model, asset.tool_condition, asset.assign, asset.date_transfer, asset.image, asset.notes, type.id as 'cat_id', type.type as 'cat_name', type.description as 'cat_desc', location.id, location.location as 'loc_name', department.id, department.department as 'dept_name', personnel.id, CONCAT(personnel.firstname, ' ', personnel.lastname) as 'fullname' FROM asset, type, location, department, personnel WHERE asset.category = type.type_id AND asset.project = location.id AND asset.trade = department.id AND asset.assign = personnel.id AND asset.assign = ?";
 		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 		$sel = $this->conn->prepare($query);
 
@@ -176,7 +176,7 @@ class Asset
 
 	public function get_asset_byProj()
 	{
-		$query = "SELECT asset.id as 'asset_id', asset.description, asset.specs, asset.project, asset.category, asset.code, asset.trade, asset.brand, asset.barcode, asset.quantity, asset.price, asset.date_warranty, asset.serial, asset.model, asset.tool_condition, asset.assign, asset.date_transfer, asset.image, asset.notes, asset.status, type.id as 'cat_id', type.type as 'cat_name', type.description as 'cat_desc', location.id, location.location as 'loc_name', department.id, department.department as 'dept_name', personnel.id, CONCAT(personnel.firstname, ' ', personnel.lastname) as 'fullname' FROM asset, type, location, department, personnel WHERE asset.category = type.id AND asset.project = location.id AND asset.trade = department.id AND asset.assign = personnel.id AND asset.project = ?";
+		$query = "SELECT asset.id as 'asset_id', asset.description, asset.specs, asset.project, asset.category, asset.code, asset.trade, asset.brand, asset.barcode, asset.quantity, asset.price, asset.date_warranty, asset.serial, asset.model, asset.tool_condition, asset.assign, asset.date_transfer, asset.image, asset.notes, asset.status, type.id as 'cat_id', type.type as 'cat_name', type.description as 'cat_desc', location.id, location.location as 'loc_name', department.id, department.department as 'dept_name', personnel.id, CONCAT(personnel.firstname, ' ', personnel.lastname) as 'fullname' FROM asset, type, location, department, personnel WHERE asset.category = type.type_id AND asset.project = location.id AND asset.trade = department.id AND asset.assign = personnel.id AND asset.project = ?";
 		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 		$sel = $this->conn->prepare($query);
 
@@ -188,7 +188,7 @@ class Asset
 
 	public function get_asset_byType()
 	{
-		$query = "SELECT asset.id as 'asset_id', asset.description, asset.specs, asset.project, asset.category, asset.code, asset.trade, asset.brand, asset.barcode, asset.quantity, asset.price, asset.date_warranty, asset.serial, asset.model, asset.tool_condition, asset.assign, asset.date_transfer, asset.image, asset.notes, type.id as 'cat_id', type.type as 'cat_name', type.description as 'cat_desc', location.id, location.location as 'loc_name', department.id, department.department as 'dept_name', personnel.id, CONCAT(personnel.firstname, ' ', personnel.lastname) as 'fullname' FROM asset, type, location, department, personnel WHERE asset.category = type.id AND asset.project = location.id AND asset.trade = department.id AND asset.assign = personnel.id AND asset.category = ?";
+		$query = "SELECT asset.id as 'asset_id', asset.description, asset.specs, asset.project, asset.category, asset.code, asset.trade, asset.brand, asset.barcode, asset.quantity, asset.price, asset.date_warranty, asset.serial, asset.model, asset.tool_condition, asset.assign, asset.date_transfer, asset.image, asset.notes, type.id as 'cat_id', type.type as 'cat_name', type.description as 'cat_desc', location.id, location.location as 'loc_name', department.id, department.department as 'dept_name', personnel.id, CONCAT(personnel.firstname, ' ', personnel.lastname) as 'fullname' FROM asset, type, location, department, personnel WHERE asset.category = type.type_id AND asset.project = location.id AND asset.trade = department.id AND asset.assign = personnel.id AND asset.category = ?";
 		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 		$sel = $this->conn->prepare($query);
 
@@ -251,7 +251,7 @@ class Asset
 
   	public function view_asset_by_user()
 	{
-		$query = "SELECT asset.id as 'asset_id', asset.barcode, asset.description, asset.type_id, type.id, type.type as 'asset_type', type.created_by, asset.location_id, location.id, location.location as 'asset_loc', asset.manufacturer, asset.brand, asset.model, asset.price, asset.quantity, asset.date_warranty, asset.serial, asset.price, asset.quantity, asset.asset_status, asset.date_transfer, asset.asset_condition, asset.assign, asset.asset_status, asset.dept_id, asset.notes, asset.image, personnel.id as 'person_id', personnel.firstname, personnel.lastname, personnel.contact_num, department.id, department.department FROM asset, type, location, personnel, department WHERE asset.type_id=type.id AND asset.assign=personnel.id AND asset.location_id=location.id AND asset.dept_id=department.id AND asset.status != 0 AND type.created_by = ? ORDER BY asset.id DESC";
+		$query = "SELECT asset.id as 'asset_id', asset.barcode, asset.description, asset.type_id, type.id, type.type as 'asset_type', type.created_by, asset.location_id, location.id, location.location as 'asset_loc', asset.manufacturer, asset.brand, asset.model, asset.price, asset.quantity, asset.date_warranty, asset.serial, asset.price, asset.quantity, asset.asset_status, asset.date_transfer, asset.asset_condition, asset.assign, asset.asset_status, asset.dept_id, asset.notes, asset.image, personnel.id as 'person_id', personnel.firstname, personnel.lastname, personnel.contact_num, department.id, department.department FROM asset, type, location, personnel, department WHERE asset.type_id=type.type_id AND asset.assign=personnel.id AND asset.location_id=location.id AND asset.dept_id=department.id AND asset.status != 0 AND type.created_by = ? ORDER BY asset.id DESC";
 		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 		$sel = $this->conn->prepare($query);
 

@@ -20,7 +20,7 @@ if($_FILES['files']['size'] > 0)
 		{
 			$worker->worker_id = $data[0];
 			$worker->fullname = $data[1];
-			$worker->address = $data[2];
+			$worker->position = $data[2];
 			$worker->trade = $data[3];
 			$worker->project = $data[4];
 			$worker->status = 1;
