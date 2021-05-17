@@ -17,7 +17,7 @@ if(!$check){
     $array = "";
     while($row = $check->fetch(PDO::FETCH_ASSOC))
     {
-        $date_barrowed = date("m/d/Y", strtotime($row['date_borrow']));
+        $date_barrowed = date("m/d/Y, g:i a", strtotime($row['date_borrow']));
         $array = array($row['id'], $date_barrowed, $row['borrow_code'], $row['borrow_name']);
     }
     echo json_encode($array);

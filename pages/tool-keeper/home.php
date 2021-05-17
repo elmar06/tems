@@ -23,7 +23,7 @@
   <!-- select2 plugin -->
   <link rel="stylesheet" href="../../components/select2/select2.min.css">
    <!-- date picker -->
-  <link rel="stylesheet" type="text/css" href="../../components/datetimepicker/css/datepicker.min.css">
+  <link rel="stylesheet" type="text/css" href="../../components/datetimepicker/css/bootstrap-datetimepicker.min.css">
 </head>
 
 <body>
@@ -123,7 +123,7 @@
                           <div class="input-group-prepend">
                             <span class="input-group-text fa fa-calendar"></span>
                           </div>
-                          <input type="text" class="form-control date-warranty" id="date_borrowed" disabled>
+                          <input type="text" class="form-control" id="date_borrowed" disabled>
                         </div>
                     </div>
                      <div class="col-sm-6">
@@ -132,7 +132,7 @@
                           <div class="input-group-prepend">
                             <span class="input-group-text fa fa-calendar"></span>
                           </div>
-                          <input type="text" class="form-control date-warranty" id="date_returned" disabled/>
+                          <input type="text" class="form-control" id="date_returned" disabled/>
                         </div>
                     </div>
                   </div>
@@ -261,7 +261,7 @@
 <script src="../../components/select2/select2.min.js"></script>
 <!-- End custom js for this page-->
 <!-- date picker -->
-<script src="../../components/datetimepicker/js/bootstrap-datepicker.js"></script>
+<script src="../../components/datetimepicker/js/bootstrap-datetimepicker.js"></script>
 <!-- toast js -->
 <script src="../../components/js/jquery.toast.js"></script>
 
@@ -403,8 +403,8 @@ $('#borrow-code').change(function(){
         $('#emp-name').val(name);
         $('#emp-trade').val(trade);
          //set the date returned
-         $('#date_returned').datepicker({
-          format: 'mm/dd/yyyy'
+         $('#date_returned').datetimepicker({
+          format: 'mm/dd/yyyy hh:mm',
         }).datepicker('setDate', new Date());
       }
     },
@@ -433,7 +433,7 @@ $('#btnSubmit').on('click', function(e){
 
   if(tool_code != '' & borrow_code != '')
   {
-    if(status == 1)//if tools are in storage
+    if(status == 1 || status == 2)//if tools are in storage
     {
       $.ajax({
         type: 'POST',

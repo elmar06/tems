@@ -62,11 +62,11 @@
                   $view = $tool->view_records();
                   while($row = $view->fetch(PDO::FETCH_ASSOC))
                   {
-                    $date_borrow = date('F j, Y', strtotime($row['date_borrow']));
+                    $date_borrow = date('m/d/y (g:i a)', strtotime($row['date_borrow']));
                     //check the status of T&E
                     if($row['status'] == 1){
                       $status = '<label style="color: green"> Returned </label>';
-                      $date_return = date('F j, Y', strtotime($row['date_return']));
+                      $date_return = date('m/d/y (g:i a)', strtotime($row['date_return']));
                       $return_by = $row['returned_by'];
                     }else{
                       $status = '<label style="color: red"> Borrowed </label>';
