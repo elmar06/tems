@@ -49,10 +49,10 @@
                     <thead>
                         <tr>
                             <th style="width: 10px;"><input type="checkbox" id="checkboxall"/></th>
-                            <th><center>T&E Code</center></th>
-                            <th><center>Description</center></th>
-                            <th><center>Category</center></th>
-                            <th><center>Trade</center></th>
+                            <th>T&E Code</th>
+                            <th>Description</th>
+                            <th>Category</th>
+                            <th>Trade</th>
                             <th><center>Status</center></th>
                         </tr>
                     </thead>

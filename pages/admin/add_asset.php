@@ -84,7 +84,7 @@
                         <div class="input-group-prepend">
                           <span class="input-group-text fa fa-barcode"></span>
                         </div>
-                        <input type="text" class="form-control" id="code" disabled required="required">
+                        <input type="text" class="form-control" id="code" required="required">
                       </div>
                     </div>                    
                   </div><br>
@@ -106,18 +106,18 @@
                       <input type="text" class="form-control" id="brand" placeholder="Enter Brand" required="required">
                     </div>
                     <div class="col-lg-4">
+                      <label for="exampleInputEmail1">Price</label>
+                      <input type="text" class="form-control" id="price" placeholder="Enter Price" value="0.00">
+                    </div>
+                    <div class="col-lg-4" hidden>
                       <label for="exampleInputEmail1">Barcode</label>
-                      <input type="text" class="form-control" id="barcode" placeholder="Enter Model">
+                      <input type="text" class="form-control" id="barcode" placeholder="Enter Model" value="0000-0000">
                     </div>
                   </div><br>
                   <div class="row">
                     <div class="col-lg-4" hidden>
                       <label for="exampleInputEmail1">Quantity</label>
                       <input type="text" class="form-control" id="quantity" placeholder="Enter Quantity" value="1">
-                    </div>
-                     <div class="col-lg-4">
-                      <label for="exampleInputEmail1">Price</label>
-                      <input type="text" class="form-control" id="price" placeholder="Enter Price" value="0.00">
                     </div>
                     <div class="col-lg-4">
                       <label for="exampleInputEmail1">End of Warranty</label>
