@@ -26,7 +26,7 @@ if($_GET['from'] != null && $_GET['to'] != '' && $_GET['project'])
 	while($row = $get->fetch(PDO::FETCH_ASSOC))
 	{
 		$proj_name = $row['project'];
-		$date_borrow = date('F j, Y', strtotime($row['date_borrow']));
+		$date_borrow = date('m/d/y (g:i a)', strtotime($row['date_borrow']));
 		$toolkeeper = $row['fullname'];
 		if($row['status'] == 1){
 			$status = 'Returned';
@@ -35,7 +35,7 @@ if($_GET['from'] != null && $_GET['to'] != '' && $_GET['project'])
 		}
 		//format date return
 		if($row['date_return'] != ''){
-			$date_return = date('F j, Y', strtotime($row['date_return']));
+			$date_return = date('m/d/y (g:i a)', strtotime($row['date_return']));
 		}else{
 			$date_return = ' - ';
 		}

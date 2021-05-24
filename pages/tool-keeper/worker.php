@@ -52,7 +52,7 @@
                       <th>Fullname</th>
                       <th><center>Trade</center></th>
                       <th><center>Project</center></th>
-                      <th><center>Action</center></th>
+                      <!-- <th><center>Action</center></th> -->
                     </tr>
                 </thead>
                 <tbody id="worker-body">
@@ -68,7 +68,6 @@
                         <td>'.$row['fullname'].'</td>
                         <td><center>'.$row['trade_name'].'</center></td>
                         <td><center>'.$row['proj_name'].'</center></td>
-                        <td style="width:20%"><center><a class="edit-worker" href="#" value="'.$row['work-id'].'" data-toggle="modal"><i class="fa fa-edit text-green"></i> Edit |</a> <a class="delete-worker" href="#" value="'.$row['work-id'].'" data-toggle="modal"><i class="fa fa-trash"></i> Delete</a></center></td>
                       </tr>';
                     }
                   ?>

@@ -315,6 +315,7 @@ $(document).ready(function(){
   $('.date-transfer').datepicker({
     format: 'mm/dd/yyyy'
   }).datepicker('setDate', new Date());
+  $('#save_asset').prop("disabled", true);
 })
 </script>
 <!-- MARK NOT APPLICABLE OF DATE WARRANTY-->
@@ -421,8 +422,50 @@ $('#project').on('change', function(){
 })
 </script>
 
-<!-- SAVE ASSET -->
 <script>
+//This function will validate image before uploading
+var a = 0;
+//bind to onchange event of your input field
+$('#filecover').bind('change', function(){
+  if($('input:submit').attr('disabled',false))
+  {
+    $('input:submit').attr('disabled', false);
+  }
+  //check the extension of the image if valid
+  var ext = $('#filecover').val().split('.').pop().toLowerCase();
+  if($.inArray(ext, ['gif','png','jpg','jpeg']) == -1)
+  {
+    $('#save_asset').prop("disabled", true);
+    $('#error1').slideDown("slow");
+    $('#error2').slideUp("slow");
+    a = 0;
+  }
+  else
+  {
+    var size = (this.files[0].size);
+    if(size > 1048576)
+    {
+      $('#save_asset').prop("disabled", true);
+      $('#error2').show();
+      a = 0;
+    }
+    else
+    {
+      a = 1;
+      $('#error2').slideUp("slow");
+      $('#save_asset').attr('disabled',false);
+    }
+  }
+
+  //check if true
+  if(a == 1)
+  {
+    alert('ok na');
+    $('#save_asset').attr('disabled',false);
+    $('#error1').slideUp("slow");
+  }
+});
+//SAVE ASSET 
 $('#save_asset').click(function(e){
   e.preventDefault();
 
@@ -479,7 +522,6 @@ $('#save_asset').click(function(e){
             {
               //if image does not exist proceed for saving
               $('#error3').slideUp('slow');
-
               $.ajax({
               type: "POST",
               url: "../../controls/save_asset.php",
@@ -572,16 +614,16 @@ $('#save_asset').click(function(e){
                   if(response > 0)
                   {
                     $('#asset-success').html("<center><i class='fa fa-check menu-icon'></i> Asset Successfully added.</center>");
-                    $('#asset-success').show().fadeOut(5000);
-                    //reload page after 1 second
-                    /*setTimeout(function(){
-                      location.reload();
-                    }, 1000)*/
+                    setTimeout(function(){
+                      $('#asset-sucess').fadeOut();
+                    }, 3000)
                   }
                   else
                   {
                     $('#asset-warning').html("<center><i class='fa fa-warning menu-icon'></i> Logs Update Failed. Please contact the administrator.</center>");
-                    $('#asset-warning').show().fadeOut(5000);
+                    setTimeout(function(){
+                      $('#asset-warning').fadeOut();
+                    }, 5000)
                   }
                 }
               })              
@@ -589,7 +631,9 @@ $('#save_asset').click(function(e){
             else
             {
               $('#asset-warning').html("<center><i class='fa fa-warning menu-icon'></i> Adding Failed. Please contact the administrator.</center>");
-              $('#asset-warning').show().fadeOut(5000);
+              setTimeout(function(){
+                $('#asset-warning').fadeOut();
+              }, 5000)
             }
           }
         })
@@ -598,57 +642,24 @@ $('#save_asset').click(function(e){
   else
   {
     $('#asset-warning').html("<center><i class='fa fa-warning menu-icon'></i> Please fill-out all the data needed to proceed.</center>");
-    $('#asset-warning').show().fadeOut(5000);
+    setTimeout(function(){
+      $('#asset-warning').fadeOut();
+    }, 5000)
   }
-})
-</script>
-
-<!-- UPLOAD RESTRICTIONS -->
-<script>
-$('#filecover').bind('change', function(){
-    var ext = $('#filecover').val().split('.').pop().toLowerCase();
-    if($.inArray(ext, ['gif','png','jpg','jpeg','bmp']) == -1)
-    {
-      $('#error1').slideDown("slow");
-      $('#error2').slideUp("slow");
-      $('#error3').slideUp("slow");
-      $('#save_asset').attr('disabled', true);
-    }
-    else
-    {
-      var size = (this.files[0].size);
-      if(size > 2097152)
-      {
-        $('#error2').slideDown("slow");
-        $('#error1').slideUp("slow");
-        $('#error3').slideUp("slow");
-        $('#save_asset').attr('disabled', true);
-      }
-      else
-      {
-        $('#error2').slideUp("slow");
-      }
-
-      $('#error1').slideUp("slow");
-      $('#error2').slideUp("slow");
-      $('#error3').slideUp("slow");
-      $('#save_asset').attr('disabled', false);
-    }
 })
 </script>
 
 <!-- PREVIEW image before uploading -->
 <script type="text/javascript">
 function readURL(input) {
-      if (input.files && input.files[0]) {
-          var reader = new FileReader();
-
-          reader.onload = function (e) {
-              $('#preview_image').attr('src', e.target.result);
-          }
-          reader.readAsDataURL(input.files[0]);
-      }
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      $('#preview_image').attr('src', e.target.result);
+    }
+    reader.readAsDataURL(input.files[0]);
   }
+}
 </script>
 
 <!-- SAVE NEW PERSON FUNCTION -->
@@ -680,7 +691,9 @@ $('#save-person').click(function(e){
         if(response > 0)
         {
           $('#person-success').html("<center><i class='fa fa-check menu-icon'></i> Adding Successfull.</center>");
-          $('#person-success').show().fadeOut(5000);
+          setTimeout(function(){
+            $('#person-success').fadeOut();
+          }, 3000)
 
           var id = response;
           var fullname = firstname + ' ' + lastname;
@@ -690,7 +703,9 @@ $('#save-person').click(function(e){
         else
         {
           $('#person-warning').html("<center><i class='fa fa-warning menu-icon'></i> Adding failed. Please contact the administrator</center>");
-          $('#person-warning').show().fadeOut(5000); 
+          setTimeout(function(){
+            $('#person-warning').fadeOut();
+          }, 5000)
         }
       },
       error: function(xhr, ajaxOptions, thrownError)

@@ -150,10 +150,10 @@
                   </div>
                   <div class="row">
                     <div class="col-lg-10">                      
-                      <button id="clear" type="button" class="btn btn-default pull-right" onclick="clearFields()">Clear</button>
+                      <button id="btnSubmit" type="button" class="btn btn-primary pull-right">Submit</button> 
                     </div>
                     <div class="col-lg-2">                      
-                      <button id="btnSubmit" type="button" class="btn btn-primary pull-right">Submit</button> 
+                      <button id="clear" type="button" class="btn btn-default pull-right" onclick="clearFields()">Clear</button>
                     </div>
                     <div class="col-lg-12 borrowers-detail" style="display: none;">
                       <label for="exampleInputEmail1" style="font-size: 16px">Borrower Details</label><br>
@@ -332,15 +332,11 @@ $('#code').change(function(){
         $('#tool-id').val(id);
         $('#status').val(status);
         //check the status of tools & equipment
-        if(result[5] == 1){
+        if(result[5] == 1 || result[5] == 2){
          $('#tool-status').html('<label id="tool-status" style="font-size: 20px; color: green;">In Storage</label>');
          $('#date-returned').val('');
-        }
-        else if(result[5] == 2){
-         $('#tool-status').html('<label id="tool-status" style="font-size: 20px; color: green;">Returned</label>');
-         $('#date-returned').val('');
         }else{
-          $('#tool-status').html('<label id="tool-status" style="font-size: 20px; color: red;">For Returned</label>');  
+          $('#tool-status').html('<label id="tool-status" style="font-size: 20px; color: red;">Borrowed</label>');  
           //check the records table and get the id to update the status
           var tool_id = result[6];
           var myData = 'tool_id=' + tool_id + '&tool_code=' + code;
@@ -363,6 +359,10 @@ $('#code').change(function(){
               $('#borrowers-code').text(borrowers_code);  
               $('#borrowers-name').text(borrowers_name);  
               $('.borrowers-detail').show(300);
+              //set the date returned
+              $('#date_returned').datetimepicker({
+                format: 'mm/dd/yyyy hh:mm',
+              }).datepicker('setDate', new Date());
             }
           })
         }        
@@ -402,10 +402,6 @@ $('#borrow-code').change(function(){
         //display data in the input box
         $('#emp-name').val(name);
         $('#emp-trade').val(trade);
-         //set the date returned
-         $('#date_returned').datetimepicker({
-          format: 'mm/dd/yyyy hh:mm',
-        }).datepicker('setDate', new Date());
       }
     },
     error: function(xhr, ajaxOptions, thrownError)
@@ -431,86 +427,110 @@ $('#btnSubmit').on('click', function(e){
   var add_by = $('#acc_id').val();
   var myData = 'project=' + project + '&tool_id=' + tool_id + '&tool_code=' + tool_code + '&description=' + description + '&borrow_code=' + borrow_code + '&name=' + name + '&date_borrow=' + date_borrow + '&date_return=' + date_return + '&record_id=' + record_id + '&add_by=' + add_by;
 
-  if(tool_code != '' & borrow_code != '')
+  if(status != '')//check if tool code is valid
   {
-    if(status == 1 || status == 2)//if tools are in storage
+    if(name != '')//check if employee is valid
     {
-      $.ajax({
-        type: 'POST',
-        url: '../../controls/toolkeeper/borrow_tool.php',
-        data: myData,
-        beforeSend: function()
+      if(tool_code != '' && borrow_code != '')
+      {
+        if(status == 1 || status == 2)//if tools are in storage
         {
-          showToast();
-        },
-        success: function(response)
-        {
-          if(response > 0)
-          {
-            $('#borrow-success').html("<center><i class='fa fa-check menu-icon'></i> Transaction saved!.</center>");
-            $('#borrow-success').show();
-            setTimeout(function(){
-              $('#borrow-success').fadeOut();
-            }, 2000)
-          }
-          else
-          {
-            $('#borrow-warning').html("<center><i class='fa fa-warning menu-icon'></i> ERROR! Please contact the system administrator at local 124 for assistance.</center>");
-            $('#borrow-warning').show();
-            setTimeout(function(){
-              $('#borrow-warning').fadeOut();
-            }, 3000)
-          }
-        },
-        error: function(xhr, ajaxOptions, thrownError)
-        {
-          alert(thrownError);
+          $.ajax({
+            type: 'POST',
+            url: '../../controls/toolkeeper/borrow_tool.php',
+            data: myData,
+            beforeSend: function()
+            {
+              showToast();
+            },
+            success: function(response)
+            {
+              if(response > 0)
+              {
+                $('#borrow-success').html("<center><i class='fa fa-check menu-icon'></i> Transaction saved!.</center>");
+                $('#borrow-success').show();
+                setTimeout(function(){
+                  $('#borrow-success').fadeOut();
+                }, 2000)
+                clearAll();
+              }
+              else
+              {
+                $('#borrow-warning').html("<center><i class='fa fa-warning menu-icon'></i> ERROR! Please contact the system administrator at local 124 for assistance.</center>");
+                $('#borrow-warning').show();
+                setTimeout(function(){
+                  $('#borrow-warning').fadeOut();
+                }, 3000)
+              }
+            },
+            error: function(xhr, ajaxOptions, thrownError)
+            {
+              alert(thrownError);
+            }
+          })
         }
-      })
+        else//if tools are BORROWED
+        {
+          $.ajax({
+            type: 'POST',
+            url: '../../controls/toolkeeper/return_tool.php',
+            data: myData,
+            beforeSend: function()
+            {
+              showToast();
+            },
+            success: function(response)
+            {
+              if(response > 0)
+              {
+                $('#borrow-success').html("<center><i class='fa fa-check menu-icon'></i> T&E Successfully mark as RETURNED!.</center>");
+                $('#borrow-success').show();
+                setTimeout(function(){
+                  $('#borrow-success').fadeOut();
+                }, 2000)
+                clearAll();
+              }
+              else
+              {
+                $('#borrow-warning').html("<center><i class='fa fa-warning menu-icon'></i> ERROR! Please contact the system administrator at local 124 for assistance.</center>");
+                $('#borrow-warning').show();
+                setTimeout(function(){
+                  $('#borrow-warning').fadeOut();
+                }, 3000)
+              }
+            },
+            error: function(xhr, ajaxOptions, thrownError)
+            {
+              alert(thrownError);
+            }
+          })
+        }
+      }
+      else
+      {
+        $('#borrow-warning').html("<center><i class='fa fa-warning menu-icon'></i> ERROR! Please fill out all the data needed.</center>");
+        $('#borrow-warning').show();
+        setTimeout(function(){
+          $('#borrow-warning').fadeOut();
+        }, 3000)
+      }
     }
-    else//if tools are BORROWED
+    else
     {
-      $.ajax({
-        type: 'POST',
-        url: '../../controls/toolkeeper/return_tool.php',
-        data: myData,
-        beforeSend: function()
-        {
-          showToast();
-        },
-        success: function(response)
-        {
-          if(response > 0)
-          {
-            $('#borrow-success').html("<center><i class='fa fa-check menu-icon'></i> T&E Successfully mark as RETURNED!.</center>");
-            $('#borrow-success').show();
-            setTimeout(function(){
-              $('#borrow-success').fadeOut();
-            }, 2000)
-          }
-          else
-          {
-            $('#borrow-warning').html("<center><i class='fa fa-warning menu-icon'></i> ERROR! Please contact the system administrator at local 124 for assistance.</center>");
-            $('#borrow-warning').show();
-            setTimeout(function(){
-              $('#borrow-warning').fadeOut();
-            }, 3000)
-          }
-        },
-        error: function(xhr, ajaxOptions, thrownError)
-        {
-          alert(thrownError);
-        }
-      })
+      $('#borrow-warning').html("<center><i class='fa fa-warning menu-icon'></i> ERROR! Worker ID number is not valid. Please try again.</center>");
+        $('#borrow-warning').show();
+        setTimeout(function(){
+          $('#borrow-warning').fadeOut();
+        }, 3000)
     }
   }
   else
   {
-    $('#borrow-warning').html("<center><i class='fa fa-warning menu-icon'></i> ERROR! Please fill out all the data needed.</center>");
-    $('#borrow-warning').show();
-    setTimeout(function(){
-      $('#borrow-warning').fadeOut();
-    }, 3000)
+    $('#borrow-warning').html("<center><i class='fa fa-warning menu-icon'></i> ERROR! T&E Code not valid. Please try again.</center>");
+      $('#borrow-warning').show();
+      setTimeout(function(){
+        $('#borrow-warning').fadeOut();
+      }, 3000)
   }
 })
 
@@ -535,6 +555,19 @@ function clearWorkerData()
 {
   $('#emp-name').val('');
   $('#emp-trade').val('');
+}
+//clear all input box
+function clearAll()
+{
+  $("input[type=text]").val("");
+  $("textarea").val("");
+  $('#tool-status').html('');
+  $('#date_released').datepicker({
+    format: 'yyyy/mm/dd'
+  }).datepicker('setDate', new Date());
+
+  $('#date_returned').val('');
+  $('.borrowers-detail').hide();
 }
 </script>
 

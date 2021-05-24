@@ -43,8 +43,8 @@ session_start();
     <ul class="navbar-nav navbar-nav-left header-links d-none d-md-flex">
       <li class="nav-item">
         <a class="nav-link" href="home.php">
-          <i class="menu-icon fa fa-home"></i>
-          <span class="menu-title">Home</span>
+          <i class="menu-icon fa fa-folder-open"></i>
+          <span class="menu-title">Transaction</span>
         </a>
       </li>
       <li class="nav-item">

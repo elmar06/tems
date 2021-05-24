@@ -24,3 +24,83 @@ while($row = $view->fetch(PDO::FETCH_ASSOC))
   </tr>';
 }
 ?>
+<script>
+//delete Worker
+$('.delete-worker').on('click', function(e){
+  e.preventDefault();
+   var id = $(this).attr('value');
+
+  if(confirm('WARNING! Are you sure you want to remove this user in the list?'))
+  {
+    $.ajax({
+      type: 'POST',
+      url: '../../controls/toolkeeper/delete_worker.php',
+      data: {id: id},
+      success: function(response)
+      { 
+        if(response > 0)
+        {
+        //get the new list of worker
+        $.ajax({
+            type: 'POST',
+            url: '../../controls/toolkeeper/view_worker.php',
+
+            success: function(html)
+            {
+              $('#worker-body').fadeOut();
+              $('#worker-body').fadeIn();
+              $('#worker-body').html(html);
+            }
+          })
+        }
+        else
+        {
+          alert('Delete Failed. Please contact the system administrator at local 124 for assistance.');
+        }
+      }
+    })
+  }
+})
+
+//Delete multiple Worker 
+$('#btndelete').on('click', function(e){
+  e.preventDefault();
+
+  var id = [];
+  $('input:checkbox[name=checklist]:checked').each(function(){
+    id.push($(this).val())
+  });
+
+  if(confirm('WARNING! Are you sure you want to remove this user in the list?'))
+  {
+    $.each(id, function(key, value){
+      $.ajax({
+        type: 'POST',
+        url: '../../controls/toolkeeper/delete_worker.php',
+        data: {id: value},
+        success: function(response)
+        { 
+          if(response > 0)
+          {
+          //get the new list of worker
+          $.ajax({
+              type: 'POST',
+              url: '../../controls/toolkeeper/view_worker.php',
+              success: function(html)
+              {
+                $('#worker-body').fadeOut();
+                $('#worker-body').fadeIn();
+                $('#worker-body').html(html);
+              }
+            })
+          }
+          else
+          {
+            alert('Delete Failed. Please contact the system administrator at local 124 for assistance.');
+          }
+        }
+      })
+    })
+  }
+})
+</script>

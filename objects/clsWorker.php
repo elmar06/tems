@@ -69,7 +69,7 @@ class Worker
 		$sel = $this->conn->prepare($query);
 
 		$sel->bindParam(1, $this->project);
-
+		
 		$sel->execute();
 		return $sel;
 	}
