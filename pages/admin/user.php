@@ -347,7 +347,6 @@ $('#upd_user').click(function(e){
 
       success: function(response)
       {
-
         if(response > 0)
         {
           $('#upd-success').html("<center><i class='fa fa-check menu-icon'></i> User details successfully updated.</center>");

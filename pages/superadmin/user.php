@@ -354,11 +354,11 @@ $('#upd_user').click(function(e){
   var id = $('#upd_id').val();
   var firstname = $('#upd_fname').val();
   var lastname = $('#upd_lname').val();
-  var access = $('#access_type').val();
+  var access_type = $('#upd_access').val();
   var username = $('#upd_username').val();
   var password = $('#upd_password').val();
   var password2 = $('#upd_password2').val();
-  var myData = 'id=' + id + '&firstname=' + firstname + '&lastname=' + lastname + '&username=' + username + '&access_type=' + access +'&password=' + password;
+  var myData = 'id=' + id + '&firstname=' + firstname + '&lastname=' + lastname + '&username=' + username + '&access_type=' + access_type +'&password=' + password;
 
   if(password == password2)
   {
@@ -369,11 +369,11 @@ $('#upd_user').click(function(e){
 
       success: function(response)
       {
-
+        alert(response);
         if(response > 0)
         {
           $('#upd-success').html("<center><i class='fa fa-check menu-icon'></i> User details successfully updated.</center>");
-          $('#upd-success').show().fadeOut(5000);
+          $('#upd-success').show().fadeOut(3000);
 
           setTimeout(function(){
             location.reload();
@@ -382,7 +382,7 @@ $('#upd_user').click(function(e){
         else
         {
           $('#upd-warning').html("<center><i class='fa fa-warning menu-icon'></i> Update Failed. Please contact the system administrator.</center>");
-          $('#upd-warning').show().fadeout(5000);
+          $('#upd-warning').show().fadeout(3000);
         }
       },
       error: function(xhr, ajaxOptions, thrownError)

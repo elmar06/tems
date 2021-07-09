@@ -460,7 +460,6 @@ $('#filecover').bind('change', function(){
   //check if true
   if(a == 1)
   {
-    alert('ok na');
     $('#save_asset').attr('disabled',false);
     $('#error1').slideUp("slow");
   }
@@ -529,6 +528,7 @@ $('#save_asset').click(function(e){
 
               success: function(response)
               {
+                alert(response);
                   if(response > 0)
                   {
                     //upload the image after saving the details in asset
@@ -556,10 +556,10 @@ $('#save_asset').click(function(e){
                               {
                                 $('#asset-success').html("<center><i class='fa fa-check menu-icon'></i> Asset Successfully added.</center>");
                                 $('#asset-success').show().fadeOut(5000);
-                                //reload page after 1 second
-                                setTimeout(function(){
-                                  location.reload();
-                                }, 1000)
+                                // //reload page after 1 second
+                                // setTimeout(function(){
+                                //   location.reload();
+                                // }, 1000)
                               }
                               else
                               {

@@ -34,22 +34,60 @@ $view = $user->view_user_byID();
 	            </div>
 	            <div class="col-sm-6">
 	              <label>Role:</label><br>
-	              <select id="access_type" type="text" class="form-control" style="width: 100%">';
-	              if($row['access_type'] == 4)
+	              <select id="upd_access" type="text" class="form-control" style="width: 100%">';
+	              if($row['access_type'] == 1)
 	              {
-	              	echo '<option value="4" selected>Kenzo Staff</option>
-	              		  <option value="5">Tool Keeper</option>';
+	              	echo '<option value="0" selected disabled>Please select Role</option>
+					  	  <option value="1">System Administrator</option>
+					  	  <option value="2">T&E Administrator</option>
+					  	  <option value="3">PMO Officer</option>
+					  	  <option value="4">Tool Keeper</option>
+					  	  <option value="5">Kenzo Staff</option>';
 	              }
-	              else if($row['access_type'] == 5)
+	              else if($row['access_type'] == 2)
 	              {
-					echo '<option value="4">Kenzo Staff</option>
-						  <option value="5" selected>Tool Keeper</option>';
+					echo '<option value="0" disabled>Please select Role</option>
+						  <option value="1">System Administrator</option>
+						  <option value="2" selected>T&E Administrator</option>
+						  <option value="3">PMO Officer</option>
+						  <option value="4">Tool Keeper</option>
+						  <option value="5">Kenzo Staff</option>';
+	              }
+				  else if($row['access_type'] == 3)
+	              {
+					echo '<option value="0" disabled>Please select Role</option>
+						  <option value="1">System Administrator</option>
+						  <option value="2">T&E Administrator</option>
+						  <option value="3" selected>PMO Officer</option>
+						  <option value="4">Tool Keeper</option>
+						  <option value="5">Kenzo Staff</option>';
+	              }
+				  else if($row['access_type'] == 4)
+	              {
+					echo '<option value="0" disabled>Please select Role</option>
+						  <option value="1">System Administrator</option>
+						  <option value="2">T&E Administrator</option>
+						  <option value="3">PMO Officer</option>
+						  <option value="4" selected>Tool Keeper</option>
+						  <option value="5">Kenzo Staff</option>';
+	              }
+				  else if($row['access_type'] == 5)
+	              {
+					echo '<option value="0" disabled>Please select Role</option>
+						  <option value="1">System Administrator</option>
+						  <option value="2">T&E Administrator</option>
+						  <option value="3">PMO Officer</option>
+						  <option value="4">Tool Keeper</option>
+						  <option value="5" selected>Kenzo Staff</option>';
 	              }
 	              else
 	              {
-	              	echo '<option value="0" selected disabled>Please select a User Role</option>
-	              		  <option value="4">Kenzo Staff</option>
-	              		  <option value="5">Tool Keeper</option>';
+	              	echo '<option value="0" selected disabled>Please select Role</option>
+						  <option value="1">System Administrator</option>
+						  <option value="2">T&E Administrator</option>
+						  <option value="3">PMO Officer</option>
+						  <option value="4">Tool Keeper</option>
+						  <option value="5">Kenzo Staff</option>';
 	              }
 	              echo' </select>
 	            </div>

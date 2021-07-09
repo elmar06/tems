@@ -19,6 +19,7 @@ class ToolKeeper
 	public function get_tool_detail()
 	{
 		$query = 'SELECT * FROM asset WHERE code = ? AND project = ?';
+		//SELECT * FROM asset WHERE (find_in_set('', code) || find_in_set('GCASH 3031334', serial)) AND project = 13
 		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 		$get = $this->conn->prepare($query);
 
