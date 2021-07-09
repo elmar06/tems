@@ -555,10 +555,6 @@ $('#save_asset').click(function(e){
                               {
                                 $('#asset-success').html("<center><i class='fa fa-check menu-icon'></i> Asset Successfully added.</center>");
                                 $('#asset-success').show().fadeOut(5000);
-                                // //reload page after 1 second
-                                // setTimeout(function(){
-                                //   location.reload();
-                                // }, 1000)
                               }
                               else
                               {
