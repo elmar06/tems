@@ -528,7 +528,6 @@ $('#save_asset').click(function(e){
 
               success: function(response)
               {
-                alert(response);
                   if(response > 0)
                   {
                     //upload the image after saving the details in asset
