@@ -559,7 +559,7 @@ $('#save_asset').click(function(e){
                               else
                               {
                                 $('#asset-warning').html("<center><i class='fa fa-warning menu-icon'></i> Logs Update Failed. Please contact the administrator.</center>");
-                                $('#asset-warning').show().fadeOut(5000);//test
+                                $('#asset-warning').show().fadeOut(5000);
                               }
                             }
                           })                         
