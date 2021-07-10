@@ -48,12 +48,18 @@ session_start();
           <span class="menu-title">Assignee</span>
         </a>
       </li>
-      <!-- <li class="nav-item">
-        <a class="nav-link" href="user.php">
-          <i class="menu-icon fa fa-user-o"></i>
-          <span class="menu-title">Users</span>
+      <li class="nav-item">
+        <a class="nav-link" href="transfer.php">
+          <i class="menu-icon fa fa-exchange"></i>
+          <span class="menu-title">Transfer Record</span>
         </a>
-      </li> -->
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="repair.php">
+          <i class="menu-icon fa fa-wrench"></i>
+          <span class="menu-title">Repair History</span>
+        </a>
+      </li>
     </ul>
     <ul class="navbar-nav navbar-nav-right">
       <li class="nav-item dropdown d-none d-xl-inline-block">

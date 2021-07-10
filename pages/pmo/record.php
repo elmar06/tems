@@ -17,7 +17,7 @@
   <!-- inject:css -->
   <link rel="stylesheet" href="../../css/style.css">
   <!-- endinject -->
-  <link rel="shortcut icon" href="../../images/innoland.png" /> 
+  <link rel="shortcut icon" href="../../images/Innoland.png" />  
   <!-- plugin css for this page -->
   <link rel="stylesheet" href="../../components/font-awesome/css/font-awesome.css">
   <!-- select2 plugin -->
@@ -49,7 +49,7 @@
                 <thead>
                     <tr>
                       <th>Tool Code</th>
-                      <th>Description</th>
+                      <th style="max-width: 150px;">Description</th>
                       <th>Borrower's name</th>
                       <th><center>Date Borrowed</center></th>
                       <th><center>Returned By</center></th>
@@ -77,7 +77,7 @@
                     echo'
                     <tr>
                       <td>'.$row['tool_code'].'</td>
-                      <td>'.$row['tool_desc'].'</td>
+                      <td style="max-width: 150px;">'.$row['tool_desc'].'</td>
                       <td>'.$row['borrow_name'].'</td>
                       <td>'.$date_borrow.'</td>
                       <td>'.$return_by.'</td>

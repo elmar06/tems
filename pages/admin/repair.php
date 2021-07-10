@@ -46,37 +46,37 @@
                 <thead>
                     <tr>
                       <th style="width:10%"><center><input type="checkbox" id="checkboxall"></center></th>
-                      <th>Firstname</th>
-                      <th>Lastname</th>
-                      <th>Username</th>
-                      <th><center>Role</center></th>
-                      <th style="width:20%"><center>Action</center></th>
+                      <th>Tool Code</th>
+                      <th>Description</th>
+                      <th>Date Repair</th>
+                      <th>Date Returned</th>
+                      <th style="width:20%"><center>Status</center></th>
                     </tr>
                 </thead>
-                <tbody id="location-body">
+                <tbody id="repair-body">
                   <?php
-                    $view_user = $user->view_user_by_role();
+                    // $view_user = $user->view_user_by_role();
 
-                    while($row=$view_user->fetch(PDO::FETCH_ASSOC))
-                    {
-                      if($row['access_type'] == 4)
-                      {
-                        $role = 'Kenzo Staff';
-                      }
-                      else
-                      {
-                        $role = 'Tool Keeper';
-                      }
-                      echo'
-                      <tr>
-                        <td style="width:10%"><center><input type="checkbox" name="checklist" class="checklist" value="'.$row['id'].'"/></center></td>
-                        <td>'.$row['firstname'].'</td>
-                        <td>'.$row['lastname'].'</td>
-                        <td>'.$row['username'].'</td>
-                        <td><center>'.$role.'</center></td>
-                        <td style="width:20%"><center><a class="edit-user" href="#" value="'.$row['id'].'" data-toggle="modal"><i class="fa fa-edit text-green"></i> Edit |</a> <a class="delete-user" href="#" value="'.$row['id'].'" data-toggle="modal"><i class="fa fa-trash"></i> Delete</a></center></td>
-                      </tr>';
-                    }
+                    // while($row=$view_user->fetch(PDO::FETCH_ASSOC))
+                    // {
+                    //   if($row['access_type'] == 4)
+                    //   {
+                    //     $role = 'Kenzo Staff';
+                    //   }
+                    //   else
+                    //   {
+                    //     $role = 'Tool Keeper';
+                    //   }
+                    //   echo'
+                    //   <tr>
+                    //     <td style="width:10%"><center><input type="checkbox" name="checklist" class="checklist" value="'.$row['id'].'"/></center></td>
+                    //     <td>'.$row['firstname'].'</td>
+                    //     <td>'.$row['lastname'].'</td>
+                    //     <td>'.$row['username'].'</td>
+                    //     <td><center>'.$role.'</center></td>
+                    //     <td style="width:20%"><center><a class="edit-user" href="#" value="'.$row['id'].'" data-toggle="modal"><i class="fa fa-edit text-green"></i> Edit |</a> <a class="delete-user" href="#" value="'.$row['id'].'" data-toggle="modal"><i class="fa fa-trash"></i> Delete</a></center></td>
+                    //   </tr>';
+                    // }
                   ?>
                 </tbody>
               </table>

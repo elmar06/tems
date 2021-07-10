@@ -17,7 +17,7 @@
   <!-- inject:css -->
   <link rel="stylesheet" href="../../css/style.css">
   <!-- endinject -->
-  <link rel="shortcut icon" href="../../images/innoland.png" /> 
+  <link rel="shortcut icon" href="../../images/Innoland.png" /> 
   <!-- plugin css for this page -->
   <link rel="stylesheet" href="../../components/font-awesome/css/font-awesome.css">
     <!-- select2 plugin -->
@@ -369,7 +369,6 @@ $('#upd_user').click(function(e){
 
       success: function(response)
       {
-        alert(response);
         if(response > 0)
         {
           $('#upd-success').html("<center><i class='fa fa-check menu-icon'></i> User details successfully updated.</center>");

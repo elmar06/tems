@@ -15,7 +15,7 @@
   <!-- inject:css -->
   <link rel="stylesheet" href="../../css/style.css">
   <!-- endinject -->
-  <link rel="shortcut icon" href="../../images/innoland.png" /> 
+  <link rel="shortcut icon" href="../../images/Innoland.png" /> 
   <!-- plugin css for this page -->
   <link rel="stylesheet" href="../../components/font-awesome/css/font-awesome.css">
   <!-- DataTables -->

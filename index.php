@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="components/font-awesome/css/font-awesome.css">
   <!-- inject:css -->
   <link rel="stylesheet" href="css/style.css">
-  <link rel="shortcut icon" href="images/innoland.png" /> 
+  <link rel="shortcut icon" href="images/Innoland.png"/> 
 </head>
 <body background="images/login.jpg">
   <div class="container-scroller">
