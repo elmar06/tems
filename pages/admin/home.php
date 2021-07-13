@@ -44,7 +44,7 @@
                   <div>
                     <a href="add_asset.php" class="btn btn-success btn-rounded"><span class="fa fa-plus"></span> New Tool/Equipment</a>
                     <button id="btnEdit" class="btn btn-dark btn-rounded"><i class="fa fa-edit"></i>Edit Asset</button>
-                    <a id="viewAsset" href="home.php" class="btn btn-dark btn-rounded"><i class="fa fa-list"></i>View All Assets</a>
+                    <!-- <a id="viewAsset" href="home.php" class="btn btn-dark btn-rounded"><i class="fa fa-list"></i>View All Assets</a> -->
                     <a id="btnTransfer" href="#" class="btn btn-primary btn-rounded"><i class="fa fa-share"></i>Transfer Asset</a>
                     <button id="btnReport" class="btn btn-primary btn-rounded" data-toggle="modal" data-target="#reportModal"><i class="fa fa-print"></i>Reports</button>
                   </div><br>
@@ -149,9 +149,7 @@
                     <option>Transfer to Inventory</option>
                     <option>Transfer from Inventory</option>
                     <option>Resignee</option>
-                    <option>Transfer to Another Department</option>
-                    <option>Change of Assignee w/in Department</option>
-                    <option>Change of Location</option>
+                    <option>Transfer to another Location</option>
                     <option>Temporary</option>
                   </select>
                 </div>
@@ -218,7 +216,7 @@
         <div class="row">
           <div class="col-lg-12">
             <button id="btnPrintTransfer" type="button" class="btn btn-success" disabled="">Print Fixed Asset Transfer</button>
-            <button id="btnPrintReceipt" type="button" class="btn btn-info" disabled>Print Pull-out Receipt</button>
+            <!-- <button id="btnPrintReceipt" type="button" class="btn btn-info" disabled>Print Pull-out Receipt</button> -->
             <button id="btnClose" class="btn btn-secondary close-asset" data-dismiss="modal">Close</button>
             <button id="btnAssetTransfer" type="button" class="btn btn-primary">Transfer</button>
           </div>
@@ -523,7 +521,6 @@ $('#btnPrintTransfer').click(function(e){
   $('input:checkbox[name=checklist]:checked').each(function(){
     id.push($(this).val());
   });
-
   //get the data from transfer table
   var data = [];
   $('.transfer_table td').each(function(){
@@ -735,7 +732,6 @@ $('#later_pass').click(function(e){
 
     success: function(response)
     {
-      //alert(response);
       if(response > 0)
       {
         $('#changepass').fadeOut('slow');

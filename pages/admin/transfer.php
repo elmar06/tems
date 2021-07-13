@@ -38,46 +38,82 @@
           <div class="card">
             <div class="card-body">
               <div>
-                <button type="button" class="btn btn-success btn-rounded" data-toggle="modal" data-target="#newPersonnelModal"><i class="fa fa-plus"></i>New User</button>
-                <a href="user.php" class="btn btn-dark btn-rounded" ><span class ="fa fa-refresh"></span> Refresh Table</a>
-                <button id="btndelete" type="button" class="btn btn-dark btn-rounded" style="display: none"><i class="fa fa-trash-o"></i>Delete</button>
+                <button type="button" class="btn btn-primary btn-rounded" data-toggle="modal" data-target="#newPersonnelModal"><i class="fa fa-print"></i>Generate Report</button>
               </div><br>
               <table id="personnel_table" class="table table-bordered" style="width:100%">
                 <thead>
                     <tr>
-                      <th style="width:10%"><center><input type="checkbox" id="checkboxall"></center></th>
-                      <th>Tool Code</th>
-                      <th>Description</th>
-                      <th>From</th>
+                      <th><center>Tool Code</center></th>
+                      <th style="max-width: 150px;"><center>Description</center></th>
+                      <th><center>From</th>
                       <th><center>To</center></th>
-                      <th style="width:20%"><center>Location/Project</center></th>
-                      <th>Date</th>
+                      <th><center>Current Project</center></th>
+                      <th><center>New Project</center></th>
+                      <th><center>Date</center></th>
                     </tr>
                 </thead>
                 <tbody id="transfer-body">
                   <?php
-                    // $view_user = $user->view_user_by_role();
+                    $get_record = $records->view_transfer_records();
+                    while($row1 = $get_record->fetch(PDO::FETCH_ASSOC))
+                    {
+                      $transfer_reason = $row1['reason'];
+                      $transfer_date = $row1['transfer_date'];
+                      $date = date('m/d/Y', strtotime($transfer_date));
+                      $code = '';
+                      $desc = '';
+                      $from = '';
+                      $to = '';
+                      $cur_proj = '';
+                      $new_proj = '';
+                      //get the tool details
+                      $asset->id = $row1['asset_id'];
+                      $get = $asset->get_asset_byID();
+                      while($tool = $get->fetch(PDO::FETCH_ASSOC))
+                      {
+                        $code = $tool['code'];
+                        $desc = $tool['description'];
+                      }
+                      //get the old assignee name
+                      $person->id = $row1['from_id'];
+                      $view = $person->get_person_name();
+                      while($from_row = $view->fetch(PDO::FETCH_ASSOC))
+                      {
+                        $from = $from_row['firstname'].' '.$from_row['lastname'];
+                      }
+                      //get the new assignee name
+                      $person->id = $row1['to_id'];
+                      $view = $person->get_person_name();
+                      while($to_row = $view->fetch(PDO::FETCH_ASSOC))
+                      {
+                        $to = $to_row['firstname'].' '.$to_row['lastname'];
+                      }
+                      //get the current location
+                      $loc->id = $row1['cur_proj'];
+                      $curProj = $loc->view_loc_byID();
+                      while($curRow = $curProj->fetch(PDO::FETCH_ASSOC))
+                      {
+                        $cur_proj = $curRow['location'];
+                      }
+                      //get the new location
+                      $loc->id = $row1['new_proj'];
+                      $newProj = $loc->view_loc_byID();
+                      while($newRow = $newProj->fetch(PDO::FETCH_ASSOC))
+                      {
+                        $new_proj = $newRow['location'];
+                      }
 
-                    // while($row=$view_user->fetch(PDO::FETCH_ASSOC))
-                    // {
-                    //   if($row['access_type'] == 4)
-                    //   {
-                    //     $role = 'Kenzo Staff';
-                    //   }
-                    //   else
-                    //   {
-                    //     $role = 'Tool Keeper';
-                    //   }
-                    //   echo'
-                    //   <tr>
-                    //     <td style="width:10%"><center><input type="checkbox" name="checklist" class="checklist" value="'.$row['id'].'"/></center></td>
-                    //     <td>'.$row['firstname'].'</td>
-                    //     <td>'.$row['lastname'].'</td>
-                    //     <td>'.$row['username'].'</td>
-                    //     <td><center>'.$role.'</center></td>
-                    //     <td style="width:20%"><center><a class="edit-user" href="#" value="'.$row['id'].'" data-toggle="modal"><i class="fa fa-edit text-green"></i> Edit |</a> <a class="delete-user" href="#" value="'.$row['id'].'" data-toggle="modal"><i class="fa fa-trash"></i> Delete</a></center></td>
-                    //   </tr>';
-                    // }
+                       echo 
+                        '<tr>
+                          <td>'.$code.'</td>
+                          <td style="max-width: 150px;">'.$desc.'</td>
+                          <td>'.$from.'</td>
+                          <td>'.$to.'</td>
+                          <td>'.$cur_proj.'</td>
+                          <td>'.$new_proj.'</td>
+                          <td>'.$date.'</td>
+                        </tr>';
+                    }
                   ?>
                 </tbody>
               </table>

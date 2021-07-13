@@ -143,12 +143,10 @@
                 <div class="col-lg-4"> 
                   <label for="exampleInputEmail1">Reason</label>
                   <select type="text" class="form-control" id="reason">
-                    <option>Transfer to Inventory</option>
+                  <option>Transfer to Inventory</option>
                     <option>Transfer from Inventory</option>
                     <option>Resignee</option>
-                    <option>Transfer to Another Department</option>
-                    <option>Change of Assignee w/in Department</option>
-                    <option>Change of Location</option>
+                    <option>Transfer to another Location</option>
                     <option>Temporary</option>
                   </select>
                 </div>

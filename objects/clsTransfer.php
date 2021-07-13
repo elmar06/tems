@@ -21,7 +21,7 @@ class TransferRecord
 
 	public function save_transfer_record()
 	{
-		$query = "INSERT INTO ".$this->table_name." SET transfer_id=?, to_id=?, from_id=?, asset_id=?, quantity=?, price=?, reason=?, transfer_date=?";
+		$query = "INSERT INTO ".$this->table_name." SET transfer_id=?, to_id=?, from_id=?, asset_id=?, quantity=?, price=?, reason=?, cur_proj=?, new_proj=?, transfer_date=?";
 		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 		$ins = $this->conn->prepare($query);
 
@@ -32,7 +32,9 @@ class TransferRecord
 		$ins->bindParam(5, $this->quantity);
 		$ins->bindParam(6, $this->price);
 		$ins->bindParam(7, $this->reason);
-		$ins->bindParam(8, $this->transfer_date);
+		$ins->bindParam(8, $this->cur_proj);
+		$ins->bindParam(9, $this->new_proj);
+		$ins->bindParam(10, $this->transfer_date);
 
 		if($ins->execute())
 		{

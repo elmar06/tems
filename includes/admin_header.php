@@ -16,6 +16,7 @@ session_start();
   include '../../objects/clsUser.php';
   include '../../objects/clsType.php';
   include '../../objects/clsTransfer.php';
+  include '../../objects/clsRecord.php';
 
   $database = new clsConnection();
   $db = $database->connect();
@@ -27,6 +28,7 @@ session_start();
   $user = new Users($db);
   $type = new Type($db);
   $record = new TransferRecord($db);
+  $records = new Records($db);
 ?>
 <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
   <div class="text-center navbar-brand-wrapper d-flex align-items-top justify-content-center">
