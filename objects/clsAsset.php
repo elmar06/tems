@@ -131,7 +131,7 @@ class Asset
 
 	public function get_asset_byID()
 	{
-		$query = "SELECT asset.id as 'asset_id', asset.description, asset.specs, asset.project, asset.category, asset.code, asset.trade, asset.brand, asset.barcode, asset.quantity, asset.price, asset.date_warranty, asset.serial, asset.model, asset.tool_condition, asset.assign, asset.date_transfer, asset.image, asset.notes, type.id as 'cat_id', type.type as 'cat_name', type.description as 'cat_desc', location.id, location.location as 'loc_name', department.id, department.department as 'dept_name', personnel.id, CONCAT(personnel.firstname, ' ', personnel.lastname) as 'fullname' FROM asset, type, location, department, personnel WHERE asset.category = type.type_id AND asset.project = location.id AND asset.trade = department.id AND asset.assign = personnel.id AND asset.id = ?";
+		$query = "SELECT asset.id as 'asset_id', asset.description, asset.specs, asset.project, asset.category, asset.code, asset.trade, asset.brand, asset.barcode, asset.quantity, asset.price, asset.date_warranty, asset.serial, asset.model, asset.tool_condition, asset.repair_remark, asset.repair_remark, asset.assign, asset.date_transfer, asset.image, asset.notes, type.id as 'cat_id', type.type as 'cat_name', type.description as 'cat_desc', location.id, location.location as 'loc_name', department.id, department.department as 'dept_name', personnel.id, CONCAT(personnel.firstname, ' ', personnel.lastname) as 'fullname' FROM asset, type, location, department, personnel WHERE asset.category = type.type_id AND asset.project = location.id AND asset.trade = department.id AND asset.assign = personnel.id AND asset.id = ?";
 		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 		$sel = $this->conn->prepare($query);
 
@@ -139,6 +139,65 @@ class Asset
 
 		$sel->execute();
 		return $sel;
+	}
+
+	public function get_asset_for_repair()
+	{
+		$query = 'SELECT asset.id as "asset_id", asset.project, asset.code, asset.description, asset.tool_condition, asset.date_repair, asset.date_return, asset.repair_remark, location.location FROM asset, location WHERE asset.tool_condition="For Repair" AND asset.project = location.id AND asset.project != 40 AND asset.project != 41 ORDER BY tool_condition DESC';
+		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+		$sel = $this->conn->prepare($query);
+
+		$sel->execute();
+		return $sel;
+	}
+
+	public function get_asset_under_repair()
+	{
+		$query = 'SELECT asset.id as "asset_id", asset.project, asset.code, asset.description, asset.tool_condition, asset.date_repair, asset.date_return, asset.repair_remark, location.location FROM asset, location WHERE asset.tool_condition="Under Repair" AND asset.project = location.id AND asset.project != 40 AND asset.project != 41 ORDER BY tool_condition DESC';
+		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+		$sel = $this->conn->prepare($query);
+
+		$sel->execute();
+		return $sel;
+	}
+
+	public function mark_tool_under_repair()
+    {
+        $query = 'UPDATE '.$this->table_name.' SET tool_condition=?, date_repair=?, repair_remark=? WHERE id=?';
+        $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+        $ins = $this->conn->prepare($query);
+
+		$ins->bindParam(1, $this->tool_condition);
+        $ins->bindParam(2, $this->date_repair);
+        $ins->bindParam(3, $this->repair_remark);
+		$ins->bindParam(4, $this->id);
+
+        if($ins->execute())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+	public function mark_tool_functional()
+	{
+		$query = 'UPDATE '.$this->table_name.' SET tool_condition=?, date_return=?, repair_remark=? WHERE id=?';
+		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+		$upd = $this->conn->prepare($query);
+
+		$upd->bindParam(1, $this->tool_condition);
+		$upd->bindParam(2, $this->date_return);
+		$upd->bindParam(3, $this->repair_remark);
+		$upd->bindParam(4, $this->id);
+
+		if($upd){
+			return true;
+		}else{
+			return false;
+		}
 	}
 
 	public function transfer_asset()

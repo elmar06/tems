@@ -28,7 +28,7 @@ while($row1 = $get_details->fetch(PDO::FETCH_ASSOC))
 {
 	$oldAssignee = $row1['assign'];
 	$price = $row1['price'];
-	$project = $row1['project'];
+	$cur_proj = $row1['project'];
 }
 
 //update the asset with the new assignee
@@ -46,7 +46,7 @@ $transfer->asset_id = $_POST['id'];
 $transfer->quantity = $_POST['quantity'];
 $transfer->price = $price;
 $transfer->reason = $_POST['reason'];
-$transfer->cur_proj = $project;
+$transfer->cur_proj = $cur_proj;
 $transfer->new_proj = $_POST['location'];
 $transfer->transfer_date = date("Y-m-d H:i:s", strtotime($_POST['date_transfer']));
 

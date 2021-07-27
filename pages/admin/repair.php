@@ -35,52 +35,172 @@
     <div class="content-wrapper">
       <div class="row">
         <div class="col-lg-12">
+          <div>
+            <button type="button" id="btnMark" class="btn btn-success btn-rounded" data-toggle="modal" data-target="#updConditionModal"><i class="fa fa-plus"></i>Change T&E Status</button>
+            <button type="button" class="btn btn-primary btn-rounded" data-toggle="modal" data-target="#newPersonnelModal"><i class="fa fa-print"></i>Generate Report</button>
+          </div><br>
           <div class="card">
             <div class="card-body">
-              <div>
-                <button type="button" class="btn btn-success btn-rounded" data-toggle="modal" data-target="#newPersonnelModal"><i class="fa fa-plus"></i>New User</button>
-                <a href="user.php" class="btn btn-dark btn-rounded" ><span class ="fa fa-refresh"></span> Refresh Table</a>
-                <button id="btndelete" type="button" class="btn btn-dark btn-rounded" style="display: none"><i class="fa fa-trash-o"></i>Delete</button>
-              </div><br>
-              <table id="personnel_table" class="table table-bordered" style="width:100%">
-                <thead>
-                    <tr>
-                      <th style="width:10%"><center><input type="checkbox" id="checkboxall"></center></th>
-                      <th>Tool Code</th>
-                      <th>Description</th>
-                      <th>Date Repair</th>
-                      <th>Date Returned</th>
-                      <th style="width:20%"><center>Status</center></th>
-                    </tr>
-                </thead>
-                <tbody id="repair-body">
-                  <?php
-                    // $view_user = $user->view_user_by_role();
+              <!-- tab pane navigation -->
+              <ul class="nav nav-tabs" role="tablist">
+                  <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#forRepairTabPanel" role="tab"><span class="mdi mdi-format-list-numbers"></span> Tools For Repair</a> </li>
+                  <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#underRepairTabPanel" role="tab"><span class="mdi mdi-autorenew"></span> Under Repair</a> </li>
+                  <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#repairHistoryTabPanel" role="tab"><span class="mdi mdi-checkbox-multiple-marked-circle"></span> Repair History</a> </li>
+              </ul>
+              <!-- Tools for Repair -->
+              <div class="tab-content tabcontent-border">
+                <div class="tab-pane active" id="forRepairTabPanel" role="tabpanel"><br>
+                <div><h4 class="page-title" style="color: Red">&nbsp; List of Tools for Repair</h4></div><br>
+                  <div class="table-responsive">
+                    <table id="personnel_table" class="table table-bordered" style="width:100%">
+                    <thead>
+                        <tr>
+                          <th style="width:5%"><center><input type="checkbox" id="checkboxall"></center></th>
+                          <th style="max-width: 200px;">Tool Code</th>
+                          <th>Description</th>
+                          <th>Project</th>
+                          <th>Date Repair</th>
+                          <th>Date Returned</th>
+                          <th style="max-width: 200px;">Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listForRepairs">
+                      <?php
+                        $get = $asset->get_asset_for_repair();
+                        while($row = $get->fetch(PDO::FETCH_ASSOC))
+                        {
+                          //check the date if null
+                          $date1 = $row['date_repair'];
+                          $date2 = $row['date_return'];
+                          if($date1 == ''){
+                            $date1 = '-';
+                          }else{
+                            $date1 = date('F j, Y', strtotime($row['date_repair']));
+                          }
+                          if($date2 == ''){
+                            $date2 = '-';
+                          }else{
+                            $date2 = date('F j, Y', strtotime($row['date_return']));
+                          } 
 
-                    // while($row=$view_user->fetch(PDO::FETCH_ASSOC))
-                    // {
-                    //   if($row['access_type'] == 4)
-                    //   {
-                    //     $role = 'Kenzo Staff';
-                    //   }
-                    //   else
-                    //   {
-                    //     $role = 'Tool Keeper';
-                    //   }
-                    //   echo'
-                    //   <tr>
-                    //     <td style="width:10%"><center><input type="checkbox" name="checklist" class="checklist" value="'.$row['id'].'"/></center></td>
-                    //     <td>'.$row['firstname'].'</td>
-                    //     <td>'.$row['lastname'].'</td>
-                    //     <td>'.$row['username'].'</td>
-                    //     <td><center>'.$role.'</center></td>
-                    //     <td style="width:20%"><center><a class="edit-user" href="#" value="'.$row['id'].'" data-toggle="modal"><i class="fa fa-edit text-green"></i> Edit |</a> <a class="delete-user" href="#" value="'.$row['id'].'" data-toggle="modal"><i class="fa fa-trash"></i> Delete</a></center></td>
-                    //   </tr>';
-                    // }
-                  ?>
-                </tbody>
-              </table>
-            </div>
+                          echo '
+                            <tr>
+                                <td><input type="checkbox" name="checklist" class="checklist" value="'.$row['asset_id'].'"></td>
+                                <td>'.$row['code'].'</td>
+                                <td style="max-width: 200px;">'.$row['description'].'</td>
+                                <td><center>'.$row['location'].'</center></td>
+                                <td><center>'.$date1.'</center></td>
+                                <td><center>'.$date2.'</center></td>
+                                <td style="max-width: 200px;">'.$row['repair_remark'].'</td>
+                              </tr>';
+                        }
+                      ?>
+                    </tbody>
+                    </table>
+                  </div>
+                </div>
+                <!-- Tools Under Repair -->
+              <div class="tab-pane" id="underRepairTabPanel" role="tabpanel"><br>
+                <div><h4 class="page-title" style="color: Orange">&nbsp; List of Tools Under Repair</h4></div><br>
+                  <div class="table-responsive">
+                    <table id="personnel_table" class="table table-bordered" style="width:100%">
+                    <thead>
+                        <tr>
+                          <th style="width:5%"><center><input type="checkbox" id="checkboxall"></center></th>
+                          <th style="max-width: 200px;">Tool Code</th>
+                          <th>Description</th>
+                          <th>Project</th>
+                          <th>Date Repair</th>
+                          <th>Date Returned</th>
+                          <th style="max-width: 200px;">Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listUnderRepair">
+                      <?php
+                        $get = $asset->get_asset_under_repair();
+                        while($row = $get->fetch(PDO::FETCH_ASSOC))
+                        {
+                          //check the date if null
+                          $date1 = $row['date_repair'];
+                          $date2 = $row['date_return'];
+                          if($date1 == ''){
+                            $date1 = '-';
+                          }else{
+                            $date1 = date('F j, Y', strtotime($row['date_repair']));
+                          }
+                          if($date2 == ''){
+                            $date2 = '-';
+                          }else{
+                            $date2 = date('F j, Y', strtotime($row['date_return']));
+                          } 
+                          
+                          echo '
+                          <tr>
+                              <td><input type="checkbox" name="checklist" class="checklist" value="'.$row['asset_id'].'"></td>
+                              <td>'.$row['code'].'</td>
+                              <td style="max-width: 200px;">'.$row['description'].'</td>
+                              <td><center>'.$row['location'].'</center></td>
+                              <td><center>'.$date1.'</center></td>
+                              <td><center>'.$date2.'</center></td>
+                              <td style="max-width: 200px;">'.$row['repair_remark'].'</td>
+                            </tr>';
+                        }
+                      ?>
+                    </tbody>
+                    </table>
+                  </div>
+                </div>
+                <!-- Tools Repair History -->
+                <div class="tab-pane" id="repairHistoryTabPanel" role="tabpanel"><br>
+                  <div><h4 class="page-title" style="color: green">&nbsp; List of Tools Repair History</h4></div><br>
+                    <div class="table-responsive">
+                      <table id="personnel_table" class="table table-bordered" style="width:100%">
+                      <thead>
+                          <tr>
+                            <th style="max-width: 200px;">Tool Code</th>
+                            <th>Description</th>
+                            <th>Project</th>
+                            <th>Date Repair</th>
+                            <th>Date Returned</th>
+                            <th style="max-width: 200px;">Remarks</th>
+                          </tr>
+                      </thead>
+                      <tbody id="listRepaired">
+                        <?php
+                          $get = $repair->view_repair_history();
+                          while($row = $get->fetch(PDO::FETCH_ASSOC))
+                          {
+                            //check the date if null
+                            $date1 = $row['date_repair'];
+                            $date2 = $row['date_returned'];
+                            if($date1 == ''){
+                              $date1 = '-';
+                            }else{
+                              $date1 = date('F j, Y', strtotime($row['date_repair']));
+                            }
+                            if($date2 == ''){
+                              $date2 = '-';
+                            }else{
+                              $date2 = date('F j, Y', strtotime($row['date_returned']));
+                            } 
+                            
+                            echo '
+                            <tr>
+                                <td>'.$row['code'].'</td>
+                                <td style="max-width: 200px;">'.$row['description'].'</td>
+                                <td><center>'.$row['location'].'</center></td>
+                                <td><center>'.$date1.'</center></td>
+                                <td><center>'.$date2.'</center></td>
+                                <td style="max-width: 200px;">'.$row['remarks'].'</td>
+                              </tr>';
+                          }
+                        ?>
+                      </tbody>
+                      </table>
+                    </div>
+                  </div>          
+              </div> <!-- end of tab-pane -->
+            </div> <!-- end of card-body -->
           </div>
         </div>
       </div><!-- end of row -->
@@ -99,101 +219,21 @@
 
 <!-- MODALS SECTION -->
 <!-- NEW PERSONNEL/CLIENT MODAL -->
-<div class="modal fade" id="newPersonnelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="updConditionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-md" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel"><span class="fa fa-plus-square"></span> Add New User</h5>
+        <h5 class="modal-title" id="exampleModalLabel"><span class="fa fa-plus-square"></span> Mark T&E Condition</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
-        <div class="form-group">
-          <div class="row">
-            <div class="col-lg-6">
-              <label for="exampleInputEmail1">Firstname</label>
-              <input type="text" class="form-control" id="fname" placeholder="Enter Firstname">
-            </div>
-            <div class="col-lg-6">
-              <label for="exampleInputEmail1">Lastname</label>
-              <input type="text" class="form-control" id="lname" placeholder="Enter Lastname">
-            </div>
-          </div><br>
-          <div class="row">
-            <div class="col-lg-6">
-              <label for="exampleInputEmail1">Username</label>
-              <input type="text" class="form-control" id="username" placeholder="Enter Firstname" disabled>
-            </div>
-            <div class="col-lg-6">
-              <label for="exampleInputEmail1">Password</label>
-              <input type="password" class="form-control" id="password" placeholder="Enter Lastname" value="123456" disabled>
-            </div>
-          </div><br>
-          <div class="row">
-            <div class="col-sm-6">
-              <label>Role:</label><br>
-              <select id="RoleType" type="text" class="form-control" style="width: 100%">
-                <option value="0" selected disabled>Please select a User Role</option>
-                <option value="4">Kenzo Staff</option>
-                <option value="5">Tool Keeper</option>
-              </select>
-            </div>
-          </div>
-           <div class="row" style="display: none" id="proj_div">
-            <div class="col-sm-6"><br>
-              <label>Project/Building:</label><br>
-              <select type="text" class="form-control js-example-basic-single" id="project" style="width: 100%">
-                <option value="0" selected disabled>Please select Project</option>
-                <?php
-                  $loc->status = 0;
-                  $view = $loc->view_loc();
-                  while($row=$view->fetch(PDO::FETCH_ASSOC))
-                  {
-                    echo '<option value='.$row['id'].'>'.$row['location'].'</option>';
-                  }
-                ?>
-              </select>
-            </div>
-          </div>
-        </div><!-- end of form-group -->
-        <!-- ALERTS -->
-        <div id="save-warning" class="alert alert-danger" role="alert" style="display: none"></div>
-        <div id="save-success" class="alert alert-success" role="alert" style="display: none"></div>
-      </div><!-- end of modal body -->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button id="save_user" type="button" class="btn btn-primary">Save</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- EDIT PERSONNEL/CLIENT MODAL -->
-<div class="modal fade" id="editUserModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-md" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel"><span class="fa fa-edit"></span> Edit User Details</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div id="edit-user-body" class="modal-body">
-      
-        
-      </div><!-- end of modal body -->
-        <!-- ALERTS -->
-      <div class="row">
-        <div class="col-lg-12">
-          <span id="pass_alert" class="alert"></span>
-          <div id="upd-warning" class="alert alert-danger" role="alert" style="display: none"></div>
-          <div id="upd-success" class="alert alert-success" role="alert" style="display: none"></div>
-        </div>
+      <div id="tool-condition" class="modal-body">
+        <!-- body goes here -->
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button id="upd_user" type="button" class="btn btn-primary">Save changes</button>
+        <button id="btnSave" type="button" class="btn btn-primary">Save</button>
       </div>
     </div>
   </div>
@@ -213,17 +253,123 @@
   <script src="../../components/select2/select2.min.js"></script>
   <!-- End custom js for this page-->
 
-<!-- show the project option if tool keeper is selected -->
+  <!-- call the functions of plugin  -->
 <script>
-$('#RoleType').change(function(){
-  var role = $(this).val(); 
-  if(role == 3)
+$(document).ready(function(){
+  $('.js-example-basic-single').select2();
+})
+</script>
+
+<!-- Mark the T&E Condition -->
+<script>
+$('#btnMark').click(function(e){
+  e.preventDefault();
+  var id = [];
+  $('input:checkbox[name=checklist]:checked').each(function(){
+    id.push($(this).val());
+  })
+  var myData = 'id=' + id;
+  if(id == '')
   {
-    $('#proj_div').show();
+    $('#updConditionModal').modal('show');
+    $('#tool-condition').html('<center><label style="color:red">Please select a tool to proceed.</label></center>');
+    $('#btnSave').attr('disabled', true);
   }
   else
   {
-    $('#proj_div').hide();
+    $.ajax({
+      type: 'POST',
+      url: '../../controls/view_condition.php',
+      data: myData,
+      success: function(html)
+      {
+        $('#updConditionModal').modal('show');
+        $('#tool-condition').html(html);
+        $('#btnSave').attr('disabled', false);
+      },
+      error: function(xhr, ajaxOptions, thrownError)
+      {
+        alert(thrownError);
+      }
+    })
+  }  
+})
+
+// save tool condition
+$('#btnSave').on('click', function(e){
+  e.preventDefault();
+
+  var id = $('#id').val();
+  var condition = $('#condition').val();
+  var remarks = $('#remarks').val();
+  var myData = 'id=' + id + '&condition=' + condition + '&remarks=' + remarks;
+
+  if(condition != null)
+  {
+    $.ajax({
+      type: 'POST',
+      url: '../../controls/save_condition.php',
+      data: myData,
+      success: function(response)
+      {
+        if(response > 0)
+        {
+          $('#upd-success').html("<center><i class='fa fa-check menu-icon'></i> T&E condition successfully updated.</center>");
+          $('#upd-success').show();
+            //get the latest list for repair
+            $.ajax({
+              url: '../../controls/view_repair_list.php',
+              success: function(html)
+              {
+                $('#listForRepairs').fadeOut();
+                $('#listForRepairs').fadeIn();
+                $('#listForRepairs').html(html);
+              }
+            })
+            //get the latest list under repair
+            $.ajax({
+              url: '../../controls/view_under_repair.php',
+              success: function(html)
+              {
+                $('#listUnderRepair').fadeOut();
+                $('#listUnderRepair').fadeIn();
+                $('#listUnderRepair').html(html);
+              }
+            })
+            //get the latest list for repair
+            $.ajax({
+              url: '../../controls/view_repair_tools.php',
+              success: function(html)
+              {
+                $('#listRepaired').fadeOut();
+                $('#listRepaired').fadeIn();
+                $('#listRepaired').html(html);
+              }
+            })
+
+          setTimeout(function(){
+            $('#upd-success').fadeOut();
+          }, 3000)
+        }
+        else
+        {
+          $('#upd-warning').html("<center><i class='fa fa-warning menu-icon'></i> Update Failed. Please contact the system administrator.</center>");
+          $('#upd-warning').show();
+
+          setTimeout(function(){
+            $('#upd-warning').fadeOut();
+          }, 3000)
+        }
+      }
+    })
+  }
+  else
+  {
+    $('#upd-warning').html("<center><i class='fa fa-warning menu-icon'></i> Update Failed. Please fill out the data needed.</center>");
+    $('#upd-warning').show();
+    setTimeout(function(){
+      $('#upd-warning').fadeOut();
+    }, 3000)
   }
 })
 </script>
@@ -245,173 +391,6 @@ $('#upd_password2').keyup(function(){
 })
 </script>
 
-<!-- SAVE USER FUNCTION -->
-<script>
-$('#save_user').click(function(e){
-  e.preventDefault();
-
-  var firstname = $('#fname').val();
-  var lastname = $('#lname').val();
-  var username = $('#username').val();
-  var password = $('#password').val();
-  var role = $('#RoleType').val();
-  var project = $('#project').val();
-  var myData = 'firstname=' + firstname + '&lastname=' + lastname + '&username=' + username + '&password=' + password + '&access_type=' + role + '&project=' + project;
-
-  if(firstname != "" && lastname != "")
-  {
-    $.ajax({
-      type: "POST",
-      url: "../../controls/save_user.php",
-      data: myData,
-
-      success: function(response)
-      {
-        //alert(response);
-        if(response > 0)
-        {
-          $('#save-success').html("<center><i class='fa fa-check menu-icon'></i> User successfully added.</center>");
-          $('#save-success').show().fadeOut(5000);
-
-          //page will reload after 2 seconds if success
-          setTimeout(function(){
-            location.reload();
-          }, 1000)
-        }
-        else
-        {
-          $('#save-warning').html("<center><i class='fa fa-warning menu-icon'></i> Adding failed. Please contact the system administrator.</center>");
-          $('#save-warning').show().fadeOut(5000);
-        }
-      },
-      error: function(xhr, ajaxOptions, thrownError)
-      {
-        alert(thrownError);
-      }
-    })
-  }
-  else
-  {
-    $('#save-warning').html("<center><i class='fa fa-warning menu-icon'></i> Please fill-out all the field needed.</center>");
-    $('#save-warning').show().fadeOut(5000);
-  }
-})
-</script>
-
-<!-- UPDATE USERS FUNCTION -->
-<!-- GET THE DATA OF USERS BY ID -->
-<script>
-$('.edit-user').click(function(e){
-  e.preventDefault();
-
-  var id = $(this).attr('value');
-
-  $.ajax({
-    type: "POST",
-    url: "../../controls/view_user_byID.php",
-    data: {id: id},
-
-    success: function(html)
-    {
-      $('#editUserModal').modal('show');
-      $('#edit-user-body').html(html);
-    },
-    error: function(xhr, ajaxOptions, thrownError)
-    {
-      alert(thrownError);
-    }
-  })
-})
-
-//SAVE USER UPDATE FUNCTION
-$('#upd_user').click(function(e){
-  e.preventDefault();
-
-  var id = $('#upd_id').val();
-  var firstname = $('#upd_fname').val();
-  var lastname = $('#upd_lname').val();
-  var access = $('#access_type').val();
-  var cat = $('#access_cat').val();
-  var project = $('#upd_project').val();
-  var username = $('#upd_username').val();
-  var password = $('#upd_password').val();
-  var password2 = $('#upd_password2').val();
-  var myData = 'id=' + id + '&firstname=' + firstname + '&lastname=' + lastname + '&username=' + username + '&access_type=' + access + 'access_cat='+ cat + '&project=' + project + '&password=' + password;
-
-  if(password == password2)
-  {
-    $.ajax({
-      type: "POST",
-      url: "../../controls/update_user.php", 
-      data: myData,
-
-      success: function(response)
-      {
-        if(response > 0)
-        {
-          $('#upd-success').html("<center><i class='fa fa-check menu-icon'></i> User details successfully updated.</center>");
-          $('#upd-success').show().fadeOut(5000);
-
-          setTimeout(function(){
-            location.reload();
-          }, 1000)
-        }
-        else
-        {
-          $('#upd-warning').html("<center><i class='fa fa-warning menu-icon'></i> Update Failed. Please contact the system administrator.</center>");
-          $('#upd-warning').show().fadeout(5000);
-        }
-      },
-      error: function(xhr, ajaxOptions, thrownError)
-      {
-        alert(thrownError);
-      }
-    })
-  }
-  else
-  {
-    $('#upd-warning').html("<center><i class='fa fa-warning menu-icon'></i> Password not match. Please try again.</center>");
-    $('#upd-warning').show().fadeOut(5000);
-    return false;
-  }
-}) 
-</script>
-
-<!-- DELETE USER FUNCTION -->
-<script>
-$('.delete-user').click(function(e){
-  e.preventDefault();
-
-  var id = $(this).attr('value');
-
-  if(confirm('WARNING! Are you sure you want to remove this user in the list?'))
-  {
-    $.ajax({
-      type: "POST",
-      url: "../../controls/delete_user.php",
-      data: {id: id},
-
-      success: function(response)
-      {
-        alert(response);
-        if(response > 0)
-        {
-          alert('User successfully removed!');
-          location.reload();
-        }
-        else
-        {
-          alert('ERROR! Remove Failed. Please contact the system administrator for assistance.');
-        }
-      },
-      error: function(xhr, ajaxOptions, thrownError)
-      {
-        alert(thrownError);
-      }
-    })
-  }
-})
-</script>
 
 <!--ADD-USER Auto Generate username based in input details -->
 <script>
@@ -478,28 +457,9 @@ $('#checkboxall').change(function(){
 
 //checklist functions
 $(document).on('change', '.checklist', function(){
-  var selected = $.map($('input[name="checklist"]:checked'), function(c){return c.value;});
-  if(selected.length > 1)
-  {
-    //$('.delete_type').show();
-    $('#btndelete').show();
-    $('.delete-user').hide();
-    $('.edit-user').hide();
-  }
-  else
-  {
-    $('#btndelete').hide();
-    $('.delete-user').show();
-    $('.edit-user').show();
-  }
+  $('.checklist:checkbox').prop('checked', false);
+  $(this).prop('checked', true);
 });
-</script>
-
-<!-- call the functions of plugin  -->
-<script>
-$(document).ready(function(){
-  $('.js-example-basic-single').select2();
-})
 </script>
 
 <!-- BOOTSTRAP TABLE FUNCTION -->

@@ -12,9 +12,6 @@
   <link rel="stylesheet" href="../../components/css/vendor.bundle.addons.css">
   <link rel="stylesheet" href="../../components/mdi/css/materialdesignicons.min.css">
   <!-- endinject -->
-  <!-- plugin css for this page -->
-  <!-- End plugin css for this page -->
-  <!-- inject:css -->
   <link rel="stylesheet" href="../../css/style.css">
   <!-- endinject -->
   <link rel="shortcut icon" href="../../images/Innoland.png" /> 
@@ -22,6 +19,8 @@
   <link rel="stylesheet" href="../../components/font-awesome/css/font-awesome.css">
   <!-- select2 plugin -->
   <link rel="stylesheet" href="../../components/select2/select2.css">
+  <!-- date picker -->
+  <link rel="stylesheet" type="text/css" href="../../components/datetimepicker/css/datepicker.min.css">
 </head>
 
 <body>
@@ -38,7 +37,7 @@
           <div class="card">
             <div class="card-body">
               <div>
-                <button type="button" class="btn btn-primary btn-rounded" data-toggle="modal" data-target="#newPersonnelModal"><i class="fa fa-print"></i>Generate Report</button>
+                <button type="button" class="btn btn-primary btn-rounded" data-toggle="modal" data-target="#reportModal"><i class="fa fa-print"></i>Generate Report</button>
               </div><br>
               <table id="personnel_table" class="table table-bordered" style="width:100%">
                 <thead>
@@ -102,7 +101,6 @@
                       {
                         $new_proj = $newRow['location'];
                       }
-
                        echo 
                         '<tr>
                           <td>'.$code.'</td>
@@ -135,106 +133,46 @@
 </footer>
 
 <!-- MODALS SECTION -->
-<!-- NEW PERSONNEL/CLIENT MODAL -->
-<div class="modal fade" id="newPersonnelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- reports generation modal -->
+<div id="reportModal" class="modal" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-md" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel"><span class="fa fa-plus-square"></span> Add New User</h5>
+        <h5 class="modal-title" id="exampleModalLabel"><span class="fa fa-bar-chart"></span> Report Generation</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <div class="form-group">
-          <div class="row">
-            <div class="col-lg-6">
-              <label for="exampleInputEmail1">Firstname</label>
-              <input type="text" class="form-control" id="fname" placeholder="Enter Firstname">
-            </div>
-            <div class="col-lg-6">
-              <label for="exampleInputEmail1">Lastname</label>
-              <input type="text" class="form-control" id="lname" placeholder="Enter Lastname">
-            </div>
-          </div><br>
-          <div class="row">
-            <div class="col-lg-6">
-              <label for="exampleInputEmail1">Username</label>
-              <input type="text" class="form-control" id="username" placeholder="Enter Firstname" disabled>
-            </div>
-            <div class="col-lg-6">
-              <label for="exampleInputEmail1">Password</label>
-              <input type="password" class="form-control" id="password" placeholder="Enter Lastname" value="123456" disabled>
-            </div>
-          </div><br>
-          <div class="row">
-            <div class="col-sm-6">
-              <label>Role:</label><br>
-              <select id="RoleType" type="text" class="form-control" style="width: 100%">
-                <option value="0" selected disabled>Please select a User Role</option>
-                <option value="4">Kenzo Staff</option>
-                <option value="5">Tool Keeper</option>
-              </select>
+        <div class="row">
+          <div class="col-sm-2">
+            <label for="exampleInputEmail1">Date:</label><br>
+          </div>
+          <div class="col-sm-5">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text fa fa-calendar"></span>
+              </div>
+              <input type="text" class="form-control datepicker" id="date-from" placeholder="Date From"/>
             </div>
           </div>
-           <div class="row" style="display: none" id="proj_div">
-            <div class="col-sm-6"><br>
-              <label>Project/Building:</label><br>
-              <select type="text" class="form-control js-example-basic-single" id="project" style="width: 100%">
-                <option value="0" selected disabled>Please select Project</option>
-                <?php
-                  $loc->status = 0;
-                  $view = $loc->view_loc();
-                  while($row=$view->fetch(PDO::FETCH_ASSOC))
-                  {
-                    echo '<option value='.$row['id'].'>'.$row['location'].'</option>';
-                  }
-                ?>
-              </select>
+          <div class="col-sm-5">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text fa fa-calendar"></span>
+              </div>
+              <input type="text" class="form-control datepicker" id="date-to" placeholder="Date to"/>
             </div>
           </div>
-        </div><!-- end of form-group -->
-        <!-- ALERTS -->
-        <div id="save-warning" class="alert alert-danger" role="alert" style="display: none"></div>
-        <div id="save-success" class="alert alert-success" role="alert" style="display: none"></div>
-      </div><!-- end of modal body -->
+        </div><br><!-- end of row -->
+        <div id="report-warning" class="alert alert-danger" role="alert" style="display: none"></div>
+      </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button id="save_user" type="button" class="btn btn-primary">Save</button>
+        <button id="btnGenerate" class="btn btn-primary">Generate</button>
       </div>
     </div>
   </div>
-</div>
-
-<!-- EDIT PERSONNEL/CLIENT MODAL -->
-<div class="modal fade" id="editUserModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-md" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel"><span class="fa fa-edit"></span> Edit User Details</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div id="edit-user-body" class="modal-body">
-      
-        
-      </div><!-- end of modal body -->
-        <!-- ALERTS -->
-      <div class="row">
-        <div class="col-lg-12">
-          <span id="pass_alert" class="alert"></span>
-          <div id="upd-warning" class="alert alert-danger" role="alert" style="display: none"></div>
-          <div id="upd-success" class="alert alert-success" role="alert" style="display: none"></div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button id="upd_user" type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
+</div> 
 
   <!-- data tables -->
   <script src="../../components/dataTables/js/jquery.dataTables.min.js"></script>
@@ -248,8 +186,21 @@
   <script src="../../js/dashboard.js"></script>
   <!-- select2 plugin -->
   <script src="../../components/select2/select2.min.js"></script>
-  <!-- End custom js for this page-->
+  <!-- date picker -->
+  <script src="../../components/datetimepicker/js/bootstrap-datepicker.js"></script>
 
+  <!-- BOOTSTRAP TABLE FUNCTION -->
+<script>
+  $(function(){
+    $('.table').DataTable();
+
+    $('.datepicker').datepicker({
+     format: 'mm/dd/yyyy'
+    }).datepicker();
+
+    $('.js-example-basic-single').select2();
+  });
+</script>
 <!-- show the project option if tool keeper is selected -->
 <script>
 $('#RoleType').change(function(){
@@ -335,222 +286,76 @@ $('#save_user').click(function(e){
 })
 </script>
 
-<!-- UPDATE USERS FUNCTION -->
-<!-- GET THE DATA OF USERS BY ID -->
+<!-- Report Generation functions -->
 <script>
-$('.edit-user').click(function(e){
-  e.preventDefault();
+   $(document).ready(function(){
+    //assignee
+    $('#reportAssignee').change(function(){
+      $('#clear_assign').attr('hidden', false);
+      $('#reportDepartment').attr('disabled', true);
+      $('#reportType').attr('disabled', true);
+      $('.datepicker').attr('disabled', true);
+    });
+    //project
+    $('#reportDepartment').change(function(){
+      $('#clear_dept').attr('hidden', false);
+      $('#reportAssignee').attr('disabled', true);
+      $('#reportType').attr('disabled', true);
+      $('.datepicker').attr('disabled', true);
+    });
+    //category
+    $('#reportType').change(function(){
+      $('#clear_type').attr('hidden', false);
+      $('#reportDepartment').attr('disabled', true);
+      $('#reportAssignee').attr('disabled', true);
+      $('.datepicker').attr('disabled', true);
+    })
+    //Date
+    $('#date-from').change(function(){
+      $('#clear_date').attr('hidden', false);
+      $('#reportDepartment').attr('disabled', true);
+      $('#reportAssignee').attr('disabled', true);
+      $('#reportType').attr('disabled', true);
+    })
+  });
 
-  var id = $(this).attr('value');
+  //CLEAR DATA in report category
+  $('.clear-data').click(function(e){
+    $('#reportAssignee').prop('selectedIndex',0);
+    $('#reportDepartment').prop('selectedIndex',0);
+    $('#reportType').prop('selectedIndex',0);
+    $('.datepicker').val('');
+    //enable fields
+    $('#reportAssignee').attr('disabled', false);
+    $('#reportDepartment').attr('disabled', false);
+    $('#reportType').attr('disabled', false);
+    $('.datepicker').attr('disabled', false);
+    //hide the button after click event
+    $(this).attr('hidden', true);
+  });
 
-  $.ajax({
-    type: "POST",
-    url: "../../controls/view_user_byID.php",
-    data: {id: id},
+  //GENRATE REPORT FUNCTION
+  $('#btnGenerate').click(function(){
+    var assignee = $('#reportAssignee').val();
+    var project = $('#reportDepartment').val();
+    var category = $('#reportType').val();
+    var from = $('#date-from').val();
+    var to = $('#date-to').val();
+    var myData = 'assignee=' + assignee + '&project=' + project + '&category=' + category + '&from=' + from + '&to=' + to;
 
-    success: function(html)
+    if(assignee == null && project == null && category == null && from == '' && to == '')
     {
-      $('#editUserModal').modal('show');
-      $('#edit-user-body').html(html);
-    },
-    error: function(xhr, ajaxOptions, thrownError)
+      $('#report-warning').html("<center><i class='fa fa-warning menu-icon'></i> Please choose a date for report. </center>");
+      $('#report-warning').show();
+      setTimeout(function(){
+        $('#report-warning').fadeOut();
+      }, 3000)
+    }
+    else
     {
-      alert(thrownError);
+      window.open('../../print/form/printAssetReport.php?' + myData);
     }
   })
-})
-
-//SAVE USER UPDATE FUNCTION
-$('#upd_user').click(function(e){
-  e.preventDefault();
-
-  var id = $('#upd_id').val();
-  var firstname = $('#upd_fname').val();
-  var lastname = $('#upd_lname').val();
-  var access = $('#access_type').val();
-  var cat = $('#access_cat').val();
-  var project = $('#upd_project').val();
-  var username = $('#upd_username').val();
-  var password = $('#upd_password').val();
-  var password2 = $('#upd_password2').val();
-  var myData = 'id=' + id + '&firstname=' + firstname + '&lastname=' + lastname + '&username=' + username + '&access_type=' + access + 'access_cat='+ cat + '&project=' + project + '&password=' + password;
-
-  if(password == password2)
-  {
-    $.ajax({
-      type: "POST",
-      url: "../../controls/update_user.php", 
-      data: myData,
-
-      success: function(response)
-      {
-        if(response > 0)
-        {
-          $('#upd-success').html("<center><i class='fa fa-check menu-icon'></i> User details successfully updated.</center>");
-          $('#upd-success').show().fadeOut(5000);
-
-          setTimeout(function(){
-            location.reload();
-          }, 1000)
-        }
-        else
-        {
-          $('#upd-warning').html("<center><i class='fa fa-warning menu-icon'></i> Update Failed. Please contact the system administrator.</center>");
-          $('#upd-warning').show().fadeout(5000);
-        }
-      },
-      error: function(xhr, ajaxOptions, thrownError)
-      {
-        alert(thrownError);
-      }
-    })
-  }
-  else
-  {
-    $('#upd-warning').html("<center><i class='fa fa-warning menu-icon'></i> Password not match. Please try again.</center>");
-    $('#upd-warning').show().fadeOut(5000);
-    return false;
-  }
-}) 
-</script>
-
-<!-- DELETE USER FUNCTION -->
-<script>
-$('.delete-user').click(function(e){
-  e.preventDefault();
-
-  var id = $(this).attr('value');
-
-  if(confirm('WARNING! Are you sure you want to remove this user in the list?'))
-  {
-    $.ajax({
-      type: "POST",
-      url: "../../controls/delete_user.php",
-      data: {id: id},
-
-      success: function(response)
-      {
-        alert(response);
-        if(response > 0)
-        {
-          alert('User successfully removed!');
-          location.reload();
-        }
-        else
-        {
-          alert('ERROR! Remove Failed. Please contact the system administrator for assistance.');
-        }
-      },
-      error: function(xhr, ajaxOptions, thrownError)
-      {
-        alert(thrownError);
-      }
-    })
-  }
-})
-</script>
-
-<!--ADD-USER Auto Generate username based in input details -->
-<script>
-$('#lname').blur(function(e){
-  e.preventDefault();
-
-  var str = $('#fname').val();
-  var fname = str.replace(/\s/g,'');
-  var f = fname.toLowerCase();
-  var str1 = $('#lname').val();
-  var lname = str1.replace(/\s/g,'');
-  var l = lname.toLowerCase();
-  var username = f.concat('.').concat(l);
-  $('#username').val(username);
-})
-
-$('#fname').blur(function(e){
-  e.preventDefault();
-
-  var str = $('#fname').val();
-  var fname = str.replace(/\s/g,'');
-  var f = fname.toLowerCase();
-  var str1 = $('#lname').val();
-  var lname = str1.replace(/\s/g,'');
-  var l = lname.toLowerCase();
-  var username = f.concat('.').concat(l);
-  $('#username').val(username);
-})
-</script>
-
-<!-- checkbox functions -->
-<script>
-$('#checkboxall').change(function(){
-  if($(this).prop('checked'))
-  {
-    $('tbody tr td input[type="checkbox"]').each(function(){
-      $(this).prop('checked', true);
-
-      var selected = $.map($('input[name="checklist"]:checked'), function(c){return c.value;});
-      if(selected.length > 1)
-      {
-        $('#btndelete').show();
-        $('.delete-user').hide();
-        $('.edit-user').hide();
-      }
-      else
-      {
-        $('#btndelete').hide();
-        $('.delete-user').show();
-        $('.edit-user').show();
-      }
-    });
-  }
-  else
-  {
-    $('tbody tr td input[type="checkbox"]').each(function(){
-      $(this).prop('checked', false);
-      $('.edit-user').show();
-      $('.delete-user').show();
-      $('#btndelete').hide();
-    });
-  }
-});
-
-//checklist functions
-$(document).on('change', '.checklist', function(){
-  var selected = $.map($('input[name="checklist"]:checked'), function(c){return c.value;});
-  if(selected.length > 1)
-  {
-    //$('.delete_type').show();
-    $('#btndelete').show();
-    $('.delete-user').hide();
-    $('.edit-user').hide();
-  }
-  else
-  {
-    $('#btndelete').hide();
-    $('.delete-user').show();
-    $('.edit-user').show();
-  }
-});
-</script>
-
-<!-- call the functions of plugin  -->
-<script>
-$(document).ready(function(){
-  $('.js-example-basic-single').select2();
-})
-</script>
-
-<!-- BOOTSTRAP TABLE FUNCTION -->
-<script>
-  $(function(){
-    $('.table').DataTable()({
-      'paging'      : true,
-      'lengthChange': false,
-      'searching'   : true,
-      'ordering'    : true,
-      'info'        : true,
-      'autoWidth'   : false
-    });
-  });
 </script>
 </body>
 </html>

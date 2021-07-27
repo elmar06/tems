@@ -43,13 +43,21 @@ class Records
 		return $sel;
 	}
 
-	public function get_records_report($from, $to, $project, $add_by)
+	public function get_records_report_byDate($from, $to)
 	{
-		$query = 'SELECT records.project, records.tool_id, records.tool_code, records.tool_desc, records.borrow_code, records.borrow_name, records.date_borrow, records.returned_by, records.date_return, records.add_by, records.status, location.location as "project", CONCAT(users.firstname, " ", users.lastname) as "fullname" FROM records, location, users WHERE records.project=location.id AND records.add_by=users.id AND (records.date_borrow BETWEEN ? AND ? AND records.project=? AND records.add_by=?) ORDER BY records.date_borrow DESC';
+		$query = 'SELECT transfer.asset_id, asset.code, asset.description, CONCAT(from1.firstname, " ", from1.lastname) as "from", CONCAT(to1.firstname, " ", to1.lastname) as "to", loc1.location as "cur-location", loc2.location as "new-location", transfer.reason, transfer.transfer_date 
+		FROM transfer
+		INNER JOIN asset ON transfer.asset_id = asset.id
+		INNER JOIN personnel as from1 ON transfer.from_id = from1.id
+		INNER JOIN personnel as to1 ON transfer.to_id = to1.id
+		INNER JOIN location as loc1 ON transfer.cur_proj = loc1.id
+		INNER JOIN location as loc2 ON transfer.new_proj = loc2.id
+		WHERE transfer.transfer_date BETWEEN ? AND ?
+		ORDER BY transfer.transfer_date DESC';
 		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 		$sel = $this->conn->prepare($query);
 
-		$sel->execute(array($from, $to, $project, $add_by));
+		$sel->execute(array($from, $to));
 		return $sel;
 	}
 

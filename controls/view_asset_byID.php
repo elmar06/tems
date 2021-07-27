@@ -6,7 +6,7 @@ include '../objects/clsDepartment.php';
 include '../objects/clsPersonnel.php';
 include '../objects/clsUser.php';
 include '../objects/clsType.php';
-include '../objects/clsRecord.php';
+include '../objects/clsTransfer.php';
 
 $database = new clsConnection();
 $db = $database->connect();
@@ -221,8 +221,7 @@ while($row = $view->fetch(PDO::FETCH_ASSOC))
                   else
                   {
                      echo '<option value='.$row['person_id'].'>'.$row['fullname'].'</option>';
-                  }
-                 
+                  }                 
                 }
 
             echo'</select>
