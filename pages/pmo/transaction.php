@@ -37,6 +37,7 @@
     }
   ?>
   <input style="display:none" id="log_count" value="<?php echo $_SESSION['log_count']; ?>">
+  <input style="display:none" id="proj-id" value="<?php echo $_SESSION['project-id']; ?>">
   <!-- main panel -->
     <div class="container-fluid page-body-wrapper">
         <div class="content-wrapper">

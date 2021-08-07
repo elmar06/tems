@@ -50,7 +50,7 @@ while($row = $view->fetch(PDO::FETCH_ASSOC))
                 <select id="condition" type="text" class="form-control" style="width: 100%">
                     <option value="0" selected disabled>Please select a Tool Condition</option>
                     <option value="Under Repair">Mark as Under Repair</option>
-                    <option value="Functional">Mark as Repaired</option>
+                    <option value="Functional">Mark as Functional</option>
                 </select>
             </div>
             <div class="col-lg-6">

@@ -67,7 +67,7 @@
                         <td>'.$row['lastname'].'</td>
                         <td>'.$row['contact'].'</td>
                         <td><center>'.$row['project'].'</center></td>
-                        <td style="width:20%"><center><a class="edit-person" href="#" value="'.$row['person_id'].'" data-toggle="modal"><i class="fa fa-edit text-green"></i> Edit |</a> <a class="del-person" href="#" value="'.$row['person_id'].'" data-toggle="modal"><i class="fa fa-trash"></i> Delete</a></center></td>
+                        <td style="width:20%"><center><a class="edit-person" href="#" value="'.$row['person_id'].'" data-toggle="modal"><i class="fa fa-edit text-green"></i> Edit </center></td>
                       </tr>';
                     }
                   ?>

@@ -19,7 +19,7 @@ class Users
 
 	public function save_user()
 	{
-		$query = "INSERT INTO ".$this->table_name." SET firstname=?, lastname=?, username=?, password=?, log_count=?, access_type=?, access_cat=?, proj_id=?, status=?";
+		$query = "INSERT INTO ".$this->table_name." SET firstname=?, lastname=?, username=?, password=?, log_count=?, access_type=?, proj_id=?, status=?";
 		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 		$ins = $this->conn->prepare($query);
 
@@ -29,9 +29,8 @@ class Users
 		$ins->bindParam(4, $this->password);
 		$ins->bindParam(5, $this->log_count);
 		$ins->bindParam(6, $this->access_type);		
-		$ins->bindParam(7, $this->access_cat);
-		$ins->bindParam(8, $this->proj_id);
-		$ins->bindParam(9, $this->status);
+		$ins->bindParam(7, $this->proj_id);
+		$ins->bindParam(8, $this->status);
 
 		if($ins->execute())
 		{

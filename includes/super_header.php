@@ -26,7 +26,7 @@ session_start();
   $person = new Personnel($db);
   $user = new Users($db);
   $type = new Type($db);
-  $record = new TransferRecord($db);
+  $record = new Records($db);
 
 ?>
 <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex flex-row">

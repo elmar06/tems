@@ -17,6 +17,7 @@ session_start();
   include '../../objects/clsType.php';
   include '../../objects/clsRecord.php';
   include '../../objects/clsToolKeeper.php';
+  include '../../objects/clsTransfer.php';
 
   $database = new clsConnection();
   $db = $database->connect();

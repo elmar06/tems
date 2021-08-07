@@ -56,12 +56,10 @@
                     <thead>
                         <tr>
                           <th style="width:5%"><center><input type="checkbox" id="checkboxall"></center></th>
-                          <th style="max-width: 200px;">Tool Code</th>
-                          <th>Description</th>
-                          <th>Project</th>
-                          <th>Date Repair</th>
-                          <th>Date Returned</th>
-                          <th style="max-width: 200px;">Remarks</th>
+                          <th>Tool Code</th>
+                          <th style="max-width: 400px;">Description</th>
+                          <th><center>Project</center></th>
+                          <th style="max-width: 300px;"><center>Remarks</center></th>
                         </tr>
                     </thead>
                     <tbody id="listForRepairs">
@@ -69,29 +67,13 @@
                         $get = $asset->get_asset_for_repair();
                         while($row = $get->fetch(PDO::FETCH_ASSOC))
                         {
-                          //check the date if null
-                          $date1 = $row['date_repair'];
-                          $date2 = $row['date_return'];
-                          if($date1 == ''){
-                            $date1 = '-';
-                          }else{
-                            $date1 = date('F j, Y', strtotime($row['date_repair']));
-                          }
-                          if($date2 == ''){
-                            $date2 = '-';
-                          }else{
-                            $date2 = date('F j, Y', strtotime($row['date_return']));
-                          } 
-
                           echo '
                             <tr>
                                 <td><input type="checkbox" name="checklist" class="checklist" value="'.$row['asset_id'].'"></td>
                                 <td>'.$row['code'].'</td>
-                                <td style="max-width: 200px;">'.$row['description'].'</td>
+                                <td style="max-width: 400px;">'.$row['description'].'</td>
                                 <td><center>'.$row['location'].'</center></td>
-                                <td><center>'.$date1.'</center></td>
-                                <td><center>'.$date2.'</center></td>
-                                <td style="max-width: 200px;">'.$row['repair_remark'].'</td>
+                                <td style="max-width: 300px;">'.$row['repair_remark'].'</td>
                               </tr>';
                         }
                       ?>
@@ -107,12 +89,11 @@
                     <thead>
                         <tr>
                           <th style="width:5%"><center><input type="checkbox" id="checkboxall"></center></th>
-                          <th style="max-width: 200px;">Tool Code</th>
-                          <th>Description</th>
-                          <th>Project</th>
-                          <th>Date Repair</th>
-                          <th>Date Returned</th>
-                          <th style="max-width: 200px;">Remarks</th>
+                          <th>Tool Code</th>
+                          <th style="max-width: 300px;">Description</th>
+                          <th><center>Project</center></th>
+                          <th><center>Date Repair</center></th>
+                          <th style="max-width: 200px;"><center>Remarks</center></th>
                         </tr>
                     </thead>
                     <tbody id="listUnderRepair">
@@ -122,26 +103,19 @@
                         {
                           //check the date if null
                           $date1 = $row['date_repair'];
-                          $date2 = $row['date_return'];
                           if($date1 == ''){
                             $date1 = '-';
                           }else{
                             $date1 = date('F j, Y', strtotime($row['date_repair']));
                           }
-                          if($date2 == ''){
-                            $date2 = '-';
-                          }else{
-                            $date2 = date('F j, Y', strtotime($row['date_return']));
-                          } 
                           
                           echo '
                           <tr>
                               <td><input type="checkbox" name="checklist" class="checklist" value="'.$row['asset_id'].'"></td>
                               <td>'.$row['code'].'</td>
-                              <td style="max-width: 200px;">'.$row['description'].'</td>
+                              <td style="max-width: 300px;">'.$row['description'].'</td>
                               <td><center>'.$row['location'].'</center></td>
                               <td><center>'.$date1.'</center></td>
-                              <td><center>'.$date2.'</center></td>
                               <td style="max-width: 200px;">'.$row['repair_remark'].'</td>
                             </tr>';
                         }
@@ -157,8 +131,8 @@
                       <table id="personnel_table" class="table table-bordered" style="width:100%">
                       <thead>
                           <tr>
-                            <th style="max-width: 200px;">Tool Code</th>
-                            <th>Description</th>
+                            <th>Tool Code</th>
+                            <th style="max-width: 200px;">Description</th>
                             <th>Project</th>
                             <th>Date Repair</th>
                             <th>Date Returned</th>
@@ -185,7 +159,7 @@
                             } 
                             
                             echo '
-                            <tr>
+                              <tr>
                                 <td>'.$row['code'].'</td>
                                 <td style="max-width: 200px;">'.$row['description'].'</td>
                                 <td><center>'.$row['location'].'</center></td>

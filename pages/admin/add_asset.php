@@ -241,27 +241,55 @@
       </div>
       <div class="modal-body">
         <div class="form-group">
-          <div class="row">
-            <div class="col-lg-6">
-              <label for="exampleInputEmail1">Employee No.</label>
-              <input type="text" class="form-control" id="emp_no" placeholder="Enter Employee Number" value="0">
-            </div>
-            <div class="col-lg-6">
-              <label for="exampleInputEmail1">Contact Number</label>
-              <input type="text" class="form-control" id="contact_num" placeholder="Enter Contact Number" value="0">
-            </div>
-          </div><br>
-          <div class="row">
-            <div class="col-lg-6">
-              <label for="exampleInputEmail1">Firstname</label>
-              <input type="text" class="form-control" id="fname" placeholder="Enter Firstname">
-            </div>
-            <div class="col-lg-6">
-              <label for="exampleInputEmail1">Lastname</label>
-              <input type="text" class="form-control" id="lname" placeholder="Enter Lastname">
-            </div>
+        <div class="row">
+          <div class="col-lg-6">
+            <label for="exampleInputEmail1">Employee No.</label>
+            <input type="text" class="form-control" id="emp_no" placeholder="Enter Employee Number">
           </div>
-        </div><!-- end of form-group -->
+          <div class="col-lg-6">
+            <label for="exampleInputEmail1">Contact Number</label>
+            <input type="text" class="form-control" id="contact_num" placeholder="Enter Contact Number">
+          </div>
+        </div><br>
+        <div class="row">
+          <div class="col-lg-6">
+            <label for="exampleInputEmail1">Firstname</label>
+            <input type="text" class="form-control" id="fname" placeholder="Enter Firstname">
+          </div>
+          <div class="col-lg-6">
+            <label for="exampleInputEmail1">Lastname</label>
+            <input type="text" class="form-control" id="lname" placeholder="Enter Lastname">
+          </div>
+        </div><br>
+        <div class="row">
+          <div class="col-lg-6">
+            <label for="exampleInputEmail1"><span class="fa fa-building"></span> Project</label>
+            <select id="project" type="text" class="form-control select2" style="width: 100%">';
+            <?php
+              $view = $loc->view_loc();
+              while($loc_row=$view->fetch(PDO::FETCH_ASSOC))
+              {
+                if($row['project'] == $loc_row['id'])
+                {
+                  echo '<option value='.$loc_row['id'].' selected>'.$loc_row['location'].'</option>';
+                }
+                else
+                {
+                  echo '<option value='.$loc_row['id'].'>'.$loc_row['location'].'</option>';
+                }
+              }
+              ?>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12">
+            <!-- ALERTS -->
+            <div id="update-warning" class="alert alert-danger" role="alert" style="display: none"></div>
+            <div id="update-success" class="alert alert-success" role="alert" style="display: none"></div>
+          </div>
+        </div>
+      </div><!-- end of form-group -->
         <!-- ALERTS -->
         <div id="person-warning" class="alert alert-danger" role="alert" style="display: none"></div>
         <div id="person-success" class="alert alert-success" role="alert" style="display: none"></div>
@@ -666,9 +694,9 @@ $('#save-person').click(function(e){
   var contact_num = $('#contact_num').val();
   var firstname = $('#fname').val();
   var lastname = $('#lname').val();
-  var myData = 'emp_no=' + emp_no + '&contact_num=' + contact_num + '&firstname=' + firstname + '&lastname=' + lastname; /*+ '&department=' + department + '&location=' + location*/
+  var project = $('#project').val();
+  var myData = 'emp_no=' + emp_no + '&contact_num=' + contact_num + '&firstname=' + firstname + '&lastname=' + lastname + '&project=' + project;
 
-  //alert(myData);
   if(firstname == "" || lastname == "" || emp_no == "" || contact_num == "")
   {
     $('#person-warning').html("<center><i class='fa fa-warning menu-icon'></i> Please fill-out all fields needed.</center>");
@@ -686,6 +714,7 @@ $('#save-person').click(function(e){
         if(response > 0)
         {
           $('#person-success').html("<center><i class='fa fa-check menu-icon'></i> Adding Successfull.</center>");
+          $('#person-success').show();
           setTimeout(function(){
             $('#person-success').fadeOut();
           }, 3000)
@@ -698,6 +727,7 @@ $('#save-person').click(function(e){
         else
         {
           $('#person-warning').html("<center><i class='fa fa-warning menu-icon'></i> Adding failed. Please contact the administrator</center>");
+          $('#person-warning').show();
           setTimeout(function(){
             $('#person-warning').fadeOut();
           }, 5000)
