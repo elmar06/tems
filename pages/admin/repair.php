@@ -277,7 +277,7 @@ $('#btnSave').on('click', function(e){
   var condition = $('#condition').val();
   var remarks = $('#remarks').val();
   var myData = 'id=' + id + '&condition=' + condition + '&remarks=' + remarks;
-
+  alert(myData);
   if(condition != null)
   {
     $.ajax({
@@ -286,6 +286,7 @@ $('#btnSave').on('click', function(e){
       data: myData,
       success: function(response)
       {
+        alert(response);
         if(response > 0)
         {
           $('#upd-success').html("<center><i class='fa fa-check menu-icon'></i> T&E condition successfully updated.</center>");

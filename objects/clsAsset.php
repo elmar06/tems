@@ -193,11 +193,14 @@ class Asset
 		$upd->bindParam(3, $this->repair_remark);
 		$upd->bindParam(4, $this->id);
 
-		if($upd){
-			return true;
-		}else{
-			return false;
-		}
+		if($upd->execute())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
 	}
 
 	public function transfer_asset()

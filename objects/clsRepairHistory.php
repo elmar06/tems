@@ -18,7 +18,7 @@ class RepairHistory
 
     public function save_repair_history()
     {
-        $query = 'INSERT INTO '.$this->table_name.' SET asset_id=?, date_repair=?, datre_returned=?, remarks=?, status=1';
+        $query = 'INSERT INTO '.$this->table_name.' SET asset_id=?, date_repair=?, date_returned=?, remarks=?, status=1';
         $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
         $ins = $this->conn->prepare($query);
 
