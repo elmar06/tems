@@ -5,7 +5,7 @@ include '../../objects/clsRecord.php';
 $database = new clsConnection();
 $db = $database->connect();
 
-$records = new TransferRecord($db);
+$records = new Records($db);
 
 //initailize the passed data
 $name = "";

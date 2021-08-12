@@ -143,7 +143,7 @@ class Asset
 
 	public function get_asset_for_repair()
 	{
-		$query = 'SELECT asset.id as "asset_id", asset.project, asset.code, asset.description, asset.tool_condition, asset.date_repair, asset.date_return, asset.repair_remark, location.location FROM asset, location WHERE asset.tool_condition="For Repair" AND asset.project = location.id AND asset.project != 40 AND asset.project != 41 ORDER BY tool_condition DESC';
+		$query = 'SELECT asset.id as "asset_id", asset.project, asset.code, asset.description, asset.brand, asset.serial, asset.model, asset.tool_condition, asset.date_repair, asset.date_return, asset.repair_remark, location.location FROM asset, location WHERE asset.tool_condition="For Repair" AND asset.project = location.id AND asset.project != 40 AND asset.project != 41 ORDER BY tool_condition DESC';
 		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 		$sel = $this->conn->prepare($query);
 
@@ -151,11 +151,35 @@ class Asset
 		return $sel;
 	}
 
-	public function get_asset_under_repair()
+	public function get_asset_for_repair_by_proj()
 	{
-		$query = 'SELECT asset.id as "asset_id", asset.project, asset.code, asset.description, asset.tool_condition, asset.date_repair, asset.date_return, asset.repair_remark, location.location FROM asset, location WHERE asset.tool_condition="Under Repair" AND asset.project = location.id AND asset.project != 40 AND asset.project != 41 ORDER BY tool_condition DESC';
+		$query = 'SELECT asset.id as "asset_id", asset.project, asset.code, asset.description, asset.brand, asset.serial, asset.model, asset.tool_condition, asset.date_repair, asset.date_return, asset.repair_remark, location.location FROM asset, location WHERE asset.tool_condition="For Repair" AND asset.project = location.id AND asset.project != 40 AND asset.project != 41  AND asset.project = ? ORDER BY tool_condition DESC';
 		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 		$sel = $this->conn->prepare($query);
+
+		$sel->bindParam(1, $this->project);
+
+		$sel->execute();
+		return $sel;
+	}
+
+	public function get_asset_under_repair()
+	{
+		$query = 'SELECT asset.id as "asset_id", asset.project, asset.code, asset.description, asset.brand, asset.serial, asset.model, asset.tool_condition, asset.date_repair, asset.date_return, asset.repair_remark, location.location FROM asset, location WHERE asset.tool_condition="Under Repair" AND asset.project = location.id AND asset.project != 40 AND asset.project != 41 ORDER BY tool_condition DESC';
+		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+		$sel = $this->conn->prepare($query);
+
+		$sel->execute();
+		return $sel;
+	}
+
+	public function get_asset_under_repair_by_proj()
+	{
+		$query = 'SELECT asset.id as "asset_id", asset.project, asset.code, asset.description, asset.brand, asset.serial, asset.model, asset.tool_condition, asset.date_repair, asset.date_return, asset.repair_remark, location.location FROM asset, location WHERE asset.tool_condition="Under Repair" AND asset.project = location.id AND asset.project != 40 AND asset.project != 41 AND asset.project = 8 ORDER BY asset.tool_condition DESC';
+		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+		$sel = $this->conn->prepare($query);
+
+		$sel->bindParam(1, $this->project);
 
 		$sel->execute();
 		return $sel;

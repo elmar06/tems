@@ -37,7 +37,7 @@
         <div class="col-lg-12">
           <div>
             <button type="button" id="btnMark" class="btn btn-success btn-rounded" data-toggle="modal" data-target="#updConditionModal"><i class="fa fa-plus"></i>Change T&E Status</button>
-            <button type="button" class="btn btn-primary btn-rounded" data-toggle="modal" data-target="#newPersonnelModal"><i class="fa fa-print"></i>Generate Report</button>
+            <button type="button" class="btn btn-primary btn-rounded" data-toggle="modal" data-target="#reportModal"><i class="fa fa-print"></i>Generate Report</button>
           </div><br>
           <div class="card">
             <div class="card-body">
@@ -213,24 +213,113 @@
   </div>
 </div>
 
-  <!-- data tables -->
-  <script src="../../components/dataTables/js/jquery.dataTables.min.js"></script>
-  <!-- plugins:js -->
-  <script src="../../components/js/vendor.bundle.base.js"></script>
-  <script src="../../components/js/vendor.bundle.addons.js"></script>
-  <script src="../../js/off-canvas.js"></script>
-  <script src="../../js/misc.js"></script>
-  <!-- endinject -->
-  <!-- Custom js for this page-->
-  <script src="../../js/dashboard.js"></script>
-  <!-- select2 plugin -->
-  <script src="../../components/select2/select2.min.js"></script>
-  <!-- End custom js for this page-->
+<!-- reports generation modal -->
+<div id="reportModal" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-md" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"><span class="fa fa-bar-chart"></span> Report Generation</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-4">
+            <label>T&E Condition</label>
+          </div>
+          <div class="col-sm-7">
+            <select id="condition" type="text" class="form-control" style="width: 100%">
+              <option value="0" selected disabled>Please select a Tool Condition</option>
+              <option value="1">For Repair</option>
+              <option value="2">Under Repair</option>
+              <option value="3">Repaired T&E</option>
+            </select>
+          </div>
+          <div class="col-sm-1">
+            <button id="clear_condition" type="button" class="close clear-data" aria-label="Close" hidden>
+              <span style="color: red" class="fa fa-remove"></span>
+            </button>
+          </div>
+        </div><br>
+        <div class="row">
+          <div class="col-sm-4">
+            <label for="exampleInputEmail1">Project</label>
+          </div>
+          <div class="col-sm-7">
+            <select id="project" type="text" class="form-control" style="width: 100%">
+                <option value="0" selected disabled>Please select a Project</option>
+                <?php
+                  $view_loc = $loc->view_loc();
+                  while($loc_row=$view_loc->fetch(PDO::FETCH_ASSOC))
+                  {
+                    echo '<option value='.$loc_row['id'].'>'.$loc_row['location'].'</option>';
+                  }
+                ?>
+            </select>
+          </div>
+          <div class="col-sm-1">
+            <button id="clear_project" type="button" class="close clear-data" aria-label="Close" hidden>
+              <span style="color: red" class="fa fa-remove"></span>
+            </button>
+          </div>
+        </div><br>
+        <div id="report-warning" class="alert alert-danger" role="alert" style="display: none"></div>
+      </div>
+      <div class="modal-footer">
+        <button id="btnGenerate" class="btn btn-primary">Generate</button>
+      </div>
+    </div>
+  </div>
+</div> 
 
-  <!-- call the functions of plugin  -->
-<script>
+<!-- jquery -->
+<script src="../../components/jquery/jquery-3.4.1.min.js"></script>
+<!-- plugins:js -->
+<script src="../../components/js/vendor.bundle.base.js"></script>
+<script src="../../components/js/vendor.bundle.addons.js"></script>
+<script src="../../js/off-canvas.js"></script>
+<script src="../../js/misc.js"></script>
+<!-- endinject -->
+<!-- Custom js for this page-->
+<script src="../../js/dashboard.js"></script>
+<!-- select2 plugin -->
+<script src="../../components/select2/select2.min.js"></script>
+<!-- End custom js for this page-->
+
+<!-- call the functions of plugin  -->
+<script> 
 $(document).ready(function(){
-  $('.js-example-basic-single').select2();
+  $(function(){
+    $('.table').DataTable();
+  });
+
+  $('.select2').select2();
+   //tool condition
+   $('#condition').change(function(){
+      $('#clear_condition').attr('hidden', false);
+    });
+    //tool project
+   $('#project').change(function(){
+      $('#clear_project').attr('hidden', false);
+    });
+
+    //clear condition
+    $('#clear_condition').on('click', function(e){
+      e.preventDefault();
+      $('#condition option').prop('selected', function(){
+          return this.defaultSelected;
+      });
+      $(this).attr('hidden', true);
+    })
+    //clear project
+    $('#clear_project').on('click', function(e){
+      e.preventDefault();
+      $('#project option').prop('selected', function(){
+        return this.defaultSelected;
+      });
+      $(this).attr('hidden', true);
+    })
 })
 </script>
 
@@ -348,6 +437,34 @@ $('#btnSave').on('click', function(e){
 })
 </script>
 
+<!-- generate report -->
+<script>
+$('#btnGenerate').on('click', function(e){
+  e.preventDefault();
+
+  var condition = $('#condition').val();
+  var project = $('#project').val();
+  if(project == null || project == ''){
+    var type = 1;
+  }else{
+    var type = 2;
+  }
+  var myData = 'condition=' + condition + '&project=' + project + '&type=' + type;
+
+  if(condition != null){
+    window.open('../../print/form/printRepairRecord.php?' + myData);
+  }else{
+    $('#report-warning').html("<center><i class='fa fa-warning menu-icon'></i> Report Generation Failed.</center>");
+    $('#report-warning').show();
+
+    setTimeout(function(){
+      $('#report-warning').fadeOut();
+    }, 2500)
+  }
+  
+})
+</script>
+
 <!-- CHECK IF PASSWORD MATCH IN UPDATE USER DETAILS -->
 <script>
 $('#upd_password2').keyup(function(){
@@ -436,18 +553,5 @@ $(document).on('change', '.checklist', function(){
 });
 </script>
 
-<!-- BOOTSTRAP TABLE FUNCTION -->
-<script>
-  $(function(){
-    $('.table').DataTable()({
-      'paging'      : true,
-      'lengthChange': false,
-      'searching'   : true,
-      'ordering'    : true,
-      'info'        : true,
-      'autoWidth'   : false
-    });
-  });
-</script>
 </body>
 </html>

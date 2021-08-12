@@ -8,6 +8,7 @@ $db = $database->connect();
 $tool = new ToolKeeper($db);
 
 $tool->worker_id = $_POST['emp_code'];
+//$tool->fullname = $_POST['emp_code'];
 $tool->project = $_POST['project'];
 
 $get = $tool->get_worker_detail();

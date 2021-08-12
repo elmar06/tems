@@ -53,9 +53,21 @@ class RepairHistory
 
     public function view_repair_history()
     {
-        $query = 'SELECT asset.id, asset.code, asset.description, asset.project, location.location, repair.asset_id, repair.date_repair, date_returned, repair.remarks FROM asset, repair, location WHERE asset.id = repair.asset_id AND asset.project = location.id ORDER BY asset.id desc';
+        $query = 'SELECT asset.id, asset.code, asset.description, asset.project, asset.brand, location.location, repair.asset_id, repair.date_repair, date_returned, repair.remarks FROM asset, repair, location WHERE asset.id = repair.asset_id AND asset.project = location.id ORDER BY asset.id desc';
         $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
         $sel = $this->conn->prepare($query);
+
+        $sel->execute();
+        return $sel;
+    }
+
+    public function view_repair_history_by_proj()
+    {
+        $query = 'SELECT asset.id, asset.code, asset.description, asset.project, asset.brand, location.location, repair.asset_id, repair.date_repair, date_returned, repair.remarks FROM asset, repair, location WHERE asset.id = repair.asset_id AND asset.project = location.id AND asset.project = ? ORDER BY asset.id desc';
+        $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+        $sel = $this->conn->prepare($query);
+
+        $sel->bindParam(1, $this->project);
 
         $sel->execute();
         return $sel;

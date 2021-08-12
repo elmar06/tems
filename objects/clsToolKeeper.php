@@ -32,7 +32,7 @@ class ToolKeeper
 
 	public function get_worker_detail()
 	{
-		$query = 'SELECT worker.fullname, department.department as "trade" FROM worker, department WHERE worker.trade=department.id AND worker.worker_id = ? AND worker.project = ?';
+		$query = 'SELECT worker.worker_id, worker.fullname, department.department as "trade" FROM worker, department WHERE worker.worker_id = ? AND worker.project = ? AND worker.trade=department.id';
 		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 		$get = $this->conn->prepare($query);
 
