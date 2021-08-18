@@ -38,6 +38,7 @@
       <div class="row">
         <div class="col-lg-12">
           <h4><b>PROJECT: <u> <?php echo $_SESSION['proj-name']; ?></u></b></h4>
+          <input type="text" id="project" class="form-control" style="display:none" value="<?php echo $_SESSION['project-id'];?>"/>
           <div class="card">
             <div class="card-body">
               <div>
@@ -46,7 +47,7 @@
                 <button id="btndelete" type="button" class="btn btn-dark btn-rounded" style="display: none"><i class="fa fa-trash-o"></i>Delete</button>
               </div><br>
               <table id="record_table" class="table table-bordered" style="width:100%">
-                <thead>
+                  <thead>
                     <tr>
                       <th>Tool Code</th>
                       <th style="max-width: 150px;">Description</th>
@@ -56,7 +57,7 @@
                       <th><center>Date Returned</center></th>
                       <th><center>Status</center></th>
                     </tr>
-                </thead>
+                  </thead>
                 <tbody>
                 <?php
                   $view = $tool->view_records();
@@ -129,7 +130,7 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text fa fa-calendar"></span>
                 </div>
-                <input type="text" class="form-control date" id="date-from"/>
+                <input type="text" class="form-control datepicker" id="date-from"/>
               </div>
           </div>
           <div class="col-sm-6">
@@ -138,8 +139,18 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text fa fa-calendar"></span>
                 </div>
-                <input type="text" class="form-control date" id="date-to"/>
+                <input type="text" class="form-control datepicker" id="date-to"/>
               </div>
+          </div>
+        </div><br>
+        <div class="row">
+          <div class="col-sm-6">
+            <b><label for="exampleInputEmail1" style="font-size: 14px">Status</label></b>
+            <select type="text" class="form-control" id="status">
+              <option value="0" selected disabled>Select T&E status</option>
+              <option value="1">Returned</option>
+              <option value="2">Borrowed</option>
+            </select>
           </div>
         </div><br>
         <div id="report-warning" class="alert alert-danger" role="alert" style="display: none"></div>
@@ -173,7 +184,7 @@
 $(document).ready(function(){
   $('.js-example-basic-single').select2();
   //call datepicker function
-  $('.date').datepicker({
+  $('.datepicker').datepicker({
     format: 'mm/dd/yyyy'
   });
 })
@@ -191,11 +202,25 @@ $('#btnGenerate').on('click', function(e){
   e.preventDefault();
   var from = $('#date-from').val();
   var to = $('#date-to').val();
-  var project = $('#proj-id').val();
-  var add_by = $('#acc_id').val();
-  var myData = 'from=' + from + '&to=' + to + '&project=' + project + '&add_by=' + add_by;
-  if(from != '' && to != '')
+  var project = $('#project').val();
+  var status = $('#status').val();
+  
+  if(status != null && from == '' && to == '')
   {
+    var action = 1;//generate by status only
+    var myData = 'from=' + from + '&to=' + to + '&project=' + project + '&status=' + status + '&action=' + action;
+    window.open('../../print/form/printRecords.php?'+myData);
+  }
+  else if(from != '' && to != '' && status == null)
+  {
+    var action = 2;//generate by date span
+    var myData = 'from=' + from + '&to=' + to + '&project=' + project + '&status=' + status + '&action=' + action;
+    window.open('../../print/form/printRecords.php?'+myData);
+  }
+  else if(from != '' && to != '' && status != null)
+  {
+    var action = 3;//generate by date and status
+    var myData = 'from=' + from + '&to=' + to + '&project=' + project + '&status=' + status + '&action=' + action;
     window.open('../../print/form/printRecords.php?'+myData);
   }
   else

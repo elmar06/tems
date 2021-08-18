@@ -111,9 +111,37 @@ class ToolKeeper
 		return $sel;
 	}
 
-	public function get_project_id()
+	public function get_borrow_records_bystat()
 	{
+		$query = 'SELECT * FROM '.$this->table_name.' WHERE status=? AND project=?';
+		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+		$sel = $this->conn->prepare($query);
 
+		$sel->bindParam(1, $this->status);
+		$sel->bindParam(2, $this->project);
+
+		$sel->execute();
+		return $sel;
+	}
+
+	public function get_borrow_records_bydate($from, $to, $project)
+	{
+		$query = 'SELECT * FROM '.$this->table_name.' WHERE status != 0 AND (date_borrow BETWEEN ? AND ? AND project=?)';
+		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+		$sel = $this->conn->prepare($query);
+
+		$sel->execute(array($from, $to, $project));
+		return $sel;
+	}
+
+	public function get_borrow_records_bydate_stat($from, $to, $project, $status)
+	{
+		$query = 'SELECT * FROM '.$this->table_name.' WHERE (date_borrow BETWEEN ? AND ? AND project=? AND status=?)';
+		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+		$sel = $this->conn->prepare($query);
+
+		$sel->execute(array($from, $to, $project, $status));
+		return $sel;
 	}
 }
 ?>

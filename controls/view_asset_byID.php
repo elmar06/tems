@@ -75,11 +75,10 @@ while($row = $view->fetch(PDO::FETCH_ASSOC))
           <div class="col-lg-4">
             <label for="exampleInputEmail1">Tool Category</label>
             <select type="text" class="form-control js-example-basic-single" id="category" name="category" disabled>';
-
                 $view = $type->view_type();
                 while($row=$view->fetch(PDO::FETCH_ASSOC))
                 {
-                  if($category == $row['id'])
+                  if($category == $row['type_id'])
                   {
                     echo '<option value='.$project.' selected>'.$row['type'].'</option>';
                   }

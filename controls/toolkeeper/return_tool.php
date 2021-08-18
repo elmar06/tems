@@ -18,7 +18,7 @@ $tool->returned_by = $_POST['name'];
 $tool->date_return = date("Y-m-d H:i:s");
 $records = $tool->return_tool();
 //update tool status in Asset table
-$asset->status = 2;
+$asset->status = 1;
 $asset->id = $_POST['tool_id'];
 $upd = $asset->upd_tool_stat();
 

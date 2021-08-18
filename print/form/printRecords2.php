@@ -1,30 +1,33 @@
 <?php
 include '../../config/clsConnection.php';
-include '../../objects/clsToolKeeper.php';
+include '../../objects/clsRecord.php';
 
 $database = new clsConnection();
 $db = $database->connect();
 
-$records = new ToolKeeper($db);
+$records = new Records($db);
 
-$date_from = $_GET['from'];
-$date_to = $_GET['to'];
-$report_stat = '';
-
-//print report by status only
-if($_GET['action'] == 1)
+//initailize the passed data
+$name = "";
+$department = "";
+//check if date if empty/null
+if($_GET['from'] != null && $_GET['to'] != '' && $_GET['project'])
 {
 	//get the record base in date and by project
 	$tbl = "";
+	$from = date('Y-m-d', strtotime($_GET['from']));
+	$to = date('Y-m-d', strtotime($_GET['to']));
 	$project = $_GET['project'];
-	$status = $_GET['status'];
-	$records->status = $status;
-	$records->project = $project;
-	$get = $records->get_borrow_records_bystat();
+	$add_by = $_GET['add_by'];
+	$from_date = date('F j, Y', strtotime($_GET['from']));
+	$to_date = date('F j, Y', strtotime($_GET['to']));
+	$date_print = date('F j, Y');
+	$get = $records->get_records_report_byDate($from, $to);
 	while($row = $get->fetch(PDO::FETCH_ASSOC))
 	{
 		$proj_name = $row['project'];
 		$date_borrow = date('m/d/y (g:i a)', strtotime($row['date_borrow']));
+		$toolkeeper = $row['fullname'];
 		if($row['status'] == 1){
 			$status = 'Returned';
 		}else{
@@ -36,102 +39,6 @@ if($_GET['action'] == 1)
 		}else{
 			$date_return = ' - ';
 		}
-		$report_stat = $status;
-		$tbl .= '
-			<tr>
-				<td align="center" style="border-right-style:2px;">'.$row['tool_code'].'</td>
-				<td style="border-right-style:2px;">'.$row['tool_desc'].'</td>
-				<td style="border-right-style:2px;" align="center">'.$row['borrow_name'].'</td>
-				<td align="center" style="border-right-style:2px;">'.$date_borrow.'</td>
-				<td style="border-right-style:2px;" align="center">'.$row['returned_by'].'</td>
-				<td style="border-right-style:2px;" align="center">'.$date_return.'</td>				
-				<td style="border-right-style:2px;" align="center">'.$status.'</td>
-			</tr>';
-	}
-
-	//check if table is empty or not
-	if($tbl == null || $tbl == "")
-	{
-		$tbl .= '<tr>
-					<td width="100%" align="center"><p style="color: red"><b><i>No Details found - Status.</i></b></p></td>
-				</tr>';
-	}
-}
-
-//generate report by date span only
-if($_GET['action'] == 2)
-{
-	//get the record base in date and by project
-	$tbl = "";
-	$from = date('Y-m-d', strtotime($date_from));
-	$to = date('Y-m-d', strtotime($date_to));
-	$project = $_GET['project'];
-
-	$get = $records->get_borrow_records_bydate($from, $to, $project);
-	while($row = $get->fetch(PDO::FETCH_ASSOC))
-	{
-		$proj_name = $row['project'];
-		$date_borrow = date('m/d/y (g:i a)', strtotime($row['date_borrow']));
-		if($row['status'] == 1){
-			$status = 'Returned';
-		}else{
-			$status = 'Borrowed';
-		}
-		//format date return
-		if($row['date_return'] != ''){
-			$date_return = date('m/d/y (g:i a)', strtotime($row['date_return']));
-		}else{
-			$date_return = ' - ';
-		}
-		$report_stat = $date_from.' - '.$date_to;
-		$tbl .= '
-			<tr>
-				<td align="center" style="border-right-style:2px;">'.$row['tool_code'].'</td>
-				<td style="border-right-style:2px;">'.$row['tool_desc'].'</td>
-				<td style="border-right-style:2px;" align="center">'.$row['borrow_name'].'</td>
-				<td align="center" style="border-right-style:2px;">'.$date_borrow.'</td>
-				<td style="border-right-style:2px;" align="center">'.$row['returned_by'].'</td>
-				<td style="border-right-style:2px;" align="center">'.$date_return.'</td>				
-				<td style="border-right-style:2px;" align="center">'.$status.'</td>
-			</tr>';
-	}
-
-	//check if table is empty or not
-	if($tbl == null || $tbl == "")
-	{
-		$tbl .= '<tr>
-					<td width="100%" align="center"><p style="color: red"><b><i>No Details found.</i></b></p></td>
-				</tr>';
-	}
-}
-
-//generate report by date span and status
-if($_GET['action'] == 3)
-{
-	//get the record base in date and by project
-	$tbl = "";
-	$from = date('Y-m-d', strtotime($date_from));
-	$to = date('Y-m-d', strtotime($date_to));
-	$project = $_GET['project'];
-	$status = $_GET['status'];
-
-	$get = $records->get_borrow_records_bydate_stat($from, $to, $project, $status);
-	while($row = $get->fetch(PDO::FETCH_ASSOC))
-	{
-		$proj_name = $row['project'];
-		$date_borrow = date('m/d/y (g:i a)', strtotime($row['date_borrow']));
-		if($row['status'] == 1){
-			$status = 'Returned';
-		}else{
-			$status = 'Borrowed';
-		}
-		//format date return
-		if($row['date_return'] != ''){
-			$date_return = date('m/d/y (g:i a)', strtotime($row['date_return']));
-		}else{
-			$date_return = ' - ';
-		}
-		$report_stat = $date_from.' - '.$date_to;
 		$tbl .= '
 			<tr>
 				<td align="center" style="border-right-style:2px;">'.$row['tool_code'].'</td>
@@ -234,17 +141,34 @@ $html = <<<EOD
 <head>
 </head>
 <body>
-<h2><i>AMS T&E BORROWING RECORDS ($report_stat)</i></h2>
+<h2><i>T&E MANAGEMENT SYSTEM RECORDS</i></h2>
+<table width="100%">
+	<tbody>
+		<tr>
+			<td style="font-size: 11px" width="15%">PROJECT NAME:</td>
+			<td style="font-size: 11px" width="59%">$proj_name</td>
+			<td style="font-size: 11px" width="10%">DATE SPAN:</td>
+			<td style="font-size: 11px" width="20%">$from_date - $to_date</td>
+		</tr>
+		<tr>
+			<td style="font-size: 11px" width="15%">INCHARGE PERSON:</td>
+			<td style="font-size: 11px" width="59%">$toolkeeper</td>
+			<td style="font-size: 11px" width="10%">DATE PRINTED:</td>
+			<td style="font-size: 11px" width="20%">$date_print</td>
+		</tr>
+	</tbody>
+</table>
+<div></div>	
 <table width="100%" cellpadding="10" style="border-top-style:2px; border-left-style:2px; border-right-style:2px; border-bottom-style:2px; font-size: 10px">
 	<thead>
 		<tr>
-			<th style="border-bottom-style:2px;" align="center">Tool Code</th>
-			<th style="max-width: 200px; border-bottom-style:2px; border-left-style:2px;" align="center">Description</th>
-			<th style="border-bottom-style:2px; border-left-style:2px;" align="center">Borrower's name</th>
-			<th style="border-bottom-style:2px; border-left-style:2px;" align="center">Date Borrowed</th>
-			<th style="border-bottom-style:2px; border-left-style:2px;" align="center">Returned By</th>
-			<th style="border-bottom-style:2px; border-left-style:2px;" align="center">Date Returned</th>
-			<th style="border-bottom-style:2px; border-left-style:2px;" align="center">Status</th>
+			<td align="center" style="border-top-style:2px; border-bottom-style:2px">T&E Code</td>
+			<td align="center" style="border-top-style:2px; border-left-style:2px; border-bottom-style:2px">Description</td>
+			<td align="center" style="border-top-style:2px; border-left-style:2px; border-bottom-style:2px">Borrower's Name</td>
+			<td align="center" style="border-top-style:2px; border-left-style:2px; border-bottom-style:2px">Date Borrow</td>
+			<td align="center" style="border-top-style:2px; border-left-style:2px; border-bottom-style:2px">Returned By</td>
+			<td align="center" style="border-top-style:2px; border-left-style:2px; border-bottom-style:2px">Date Returned</td>
+			<td align="center" style="border-top-style:2px; border-left-style:2px; border-bottom-style:2px">Status</td>
 		</tr>
 	</thead>
 	<tbody>

@@ -343,7 +343,6 @@ $(document).ready(function(){
   $('.date-transfer').datepicker({
     format: 'mm/dd/yyyy'
   }).datepicker('setDate', new Date());
-  $('#save_asset').prop("disabled", true);
 })
 </script>
 <!-- MARK NOT APPLICABLE OF DATE WARRANTY-->

@@ -185,12 +185,12 @@ $('#save-person').click(function(e){
   var firstname = $('#fname').val();
   var lastname = $('#lname').val();
   // var location = $('#location').val();
-  // var department = $('#department').val();
+  var project = 40;
   var emp_no = $('#emp_no').val();
   var contact_num = $('#contact_num').val();
-  var myData = 'firstname=' + firstname + '&lastname=' + lastname + /*'&location=' + location + '&department=' + department +*/ '&emp_no=' + emp_no + '&contact_num=' + contact_num;
+  var myData = 'firstname=' + firstname + '&lastname=' + lastname + '&project=' + project + '&emp_no=' + emp_no + '&contact_num=' + contact_num;
 
-  if(firstname != "" && lastname != "" /*&& location != "" && department != ""*/)
+  if(firstname != "" && lastname != "")
   {
     $.ajax({
       type: "POST",
