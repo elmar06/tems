@@ -207,8 +207,10 @@ $('#btnGenerate').on('click', function(e){
   
   if(status != null && from == '' && to == '')
   {
+    
     var action = 1;//generate by status only
     var myData = 'from=' + from + '&to=' + to + '&project=' + project + '&status=' + status + '&action=' + action;
+    alert(myData);
     window.open('../../print/form/printRecords.php?'+myData);
   }
   else if(from != '' && to != '' && status == null)

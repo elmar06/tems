@@ -99,7 +99,9 @@ session_start();
               <div class="col-lg-6">
                 <label for="exampleInputEmail1">Firstname</label>
                 <input type="text" class="form-control" id="acc_fname" placeholder="Enter Firstname" value="<?php echo $_SESSION['firstname']; ?>">
-                 <input type="text" class="form-control" id="acc_id" placeholder="Enter Firstname" value="<?php echo $_SESSION['id']; ?>" hidden>
+                <input type="text" class="form-control" id="acc_id" placeholder="Enter Firstname" value="<?php echo $_SESSION['id']; ?>" hidden>
+                <input type="text" class="form-control" id="proj_id" placeholder="Enter Firstname" value="<?php echo $_SESSION['project-id']; ?>" hidden>
+
               </div>
               <div class="col-lg-6">
                 <label for="exampleInputEmail1">Lastname</label>

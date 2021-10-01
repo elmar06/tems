@@ -53,7 +53,7 @@ if($_GET['action'] == 1)
 	if($tbl == null || $tbl == "")
 	{
 		$tbl .= '<tr>
-					<td width="100%" align="center"><p style="color: red"><b><i>No Details found - Status.</i></b></p></td>
+					<td width="100%" align="center"><p style="color: red"><b><i>No Details found.</i></b></p></td>
 				</tr>';
 	}
 }

@@ -37,13 +37,13 @@
     }
   ?>
   <input style="display:none" id="log_count" value="<?php echo $_SESSION['log_count']; ?>">
-  <input style="display:none" id="proj-id" value="<?php echo $_SESSION['project-id']; ?>">
   <!-- main panel -->
     <div class="container-fluid page-body-wrapper">
         <div class="content-wrapper">
           <div class="row">
             <!-- Tool Details -->
             <div class="form-group col-lg-6">
+              <input style="display:none" id="proj-id" value="<?php echo $_SESSION['project-id']; ?>">
               <h4><b>PROJECT: <u> <?php echo $_SESSION['proj-name']; ?></u></b></h4>
               <div class="card">
                 <div class="card-body">
@@ -297,7 +297,7 @@ $('#code').change(function(){
   var code = $(this).val();
   var proj_id = $('#proj-id').val();
   var myData = 'code=' + code + '&proj_id=' + proj_id;
-
+  alert(myData);
   $.ajax({
     type: 'POST',
     url: '../../controls/toolkeeper/get_tool_details.php',

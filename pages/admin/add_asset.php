@@ -525,7 +525,7 @@ $('#save_asset').click(function(e){
   var cat_code = ('0000' + cat).slice(-2);
   var myUpdData = 'proj=' + proj + '&cat=' + cat;
 
-  if(description != '' && brand != '')//check if empty
+  if(description != '' && brand != '' )//check if empty
   {
       if(file_data)
       {
@@ -636,6 +636,7 @@ $('#save_asset').click(function(e){
                   if(response > 0)
                   {
                     $('#asset-success').html("<center><i class='fa fa-check menu-icon'></i> Asset Successfully added.</center>");
+                    $('#asset-success').show();
                     setTimeout(function(){
                       $('#asset-sucess').fadeOut();
                     }, 3000)
@@ -643,6 +644,7 @@ $('#save_asset').click(function(e){
                   else
                   {
                     $('#asset-warning').html("<center><i class='fa fa-warning menu-icon'></i> Logs Update Failed. Please contact the administrator.</center>");
+                    $('#asset-warning').show();
                     setTimeout(function(){
                       $('#asset-warning').fadeOut();
                     }, 5000)
@@ -653,6 +655,7 @@ $('#save_asset').click(function(e){
             else
             {
               $('#asset-warning').html("<center><i class='fa fa-warning menu-icon'></i> Adding Failed. Please contact the administrator.</center>");
+              $('#asset-warning').show();
               setTimeout(function(){
                 $('#asset-warning').fadeOut();
               }, 5000)
@@ -664,6 +667,7 @@ $('#save_asset').click(function(e){
   else
   {
     $('#asset-warning').html("<center><i class='fa fa-warning menu-icon'></i> Please fill-out all the data needed to proceed.</center>");
+    $('#asset-warning').show();
     setTimeout(function(){
       $('#asset-warning').fadeOut();
     }, 5000)

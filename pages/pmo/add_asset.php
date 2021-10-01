@@ -242,27 +242,55 @@
       </div>
       <div class="modal-body">
         <div class="form-group">
-          <div class="row">
-            <div class="col-lg-6">
-              <label for="exampleInputEmail1">Employee No.</label>
-              <input type="text" class="form-control" id="emp_no" placeholder="Enter Employee Number" value="0">
-            </div>
-            <div class="col-lg-6">
-              <label for="exampleInputEmail1">Contact Number</label>
-              <input type="text" class="form-control" id="contact_num" placeholder="Enter Contact Number" value="0">
-            </div>
-          </div><br>
-          <div class="row">
-            <div class="col-lg-6">
-              <label for="exampleInputEmail1">Firstname</label>
-              <input type="text" class="form-control" id="fname" placeholder="Enter Firstname">
-            </div>
-            <div class="col-lg-6">
-              <label for="exampleInputEmail1">Lastname</label>
-              <input type="text" class="form-control" id="lname" placeholder="Enter Lastname">
-            </div>
+        <div class="row">
+          <div class="col-lg-6">
+            <label for="exampleInputEmail1">Employee No.</label>
+            <input type="text" class="form-control" id="emp_no" placeholder="Enter Employee Number">
           </div>
-        </div><!-- end of form-group -->
+          <div class="col-lg-6">
+            <label for="exampleInputEmail1">Contact Number</label>
+            <input type="text" class="form-control" id="contact_num" placeholder="Enter Contact Number">
+          </div>
+        </div><br>
+        <div class="row">
+          <div class="col-lg-6">
+            <label for="exampleInputEmail1">Firstname</label>
+            <input type="text" class="form-control" id="fname" placeholder="Enter Firstname">
+          </div>
+          <div class="col-lg-6">
+            <label for="exampleInputEmail1">Lastname</label>
+            <input type="text" class="form-control" id="lname" placeholder="Enter Lastname">
+          </div>
+        </div><br>
+        <div class="row">
+          <div class="col-lg-6">
+            <label for="exampleInputEmail1"><span class="fa fa-building"></span> Project</label>
+            <select id="person-proj" type="text" class="form-control select2" style="width: 100%" disabled>
+            <?php
+              $view = $loc->view_loc();
+              while($loc_row=$view->fetch(PDO::FETCH_ASSOC))
+              {
+                if($_SESSION['project-id'] == $loc_row['id'])
+                {
+                  echo '<option value="'.$loc_row['id'].'" selected>'.$loc_row['location'].'</option>';
+                }
+                else
+                {
+                  echo '<option value="'.$loc_row['id'].'">'.$loc_row['location'].'</option>';
+                }
+              }
+              ?>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12">
+            <!-- ALERTS -->
+            <div id="update-warning" class="alert alert-danger" role="alert" style="display: none"></div>
+            <div id="update-success" class="alert alert-success" role="alert" style="display: none"></div>
+          </div>
+        </div>
+      </div><!-- end of form-group -->
         <!-- ALERTS -->
         <div id="person-warning" class="alert alert-danger" role="alert" style="display: none"></div>
         <div id="person-success" class="alert alert-success" role="alert" style="display: none"></div>
@@ -528,119 +556,124 @@ $('#save_asset').click(function(e){
 
               success: function(response)
               {
-                  if(response > 0)
-                  {
-                    //upload the image after saving the details in asset
-                    $.ajax({
-                      type: "POST",
-                      url: "../../controls/upload.php",
-                      data: form_data,
-                      contentType: false,
-                      cache: false,
-                      processData: false,
-                    
-                      success: function(response)
-                      {
-                        if(response > 0)
-                        {
-                          //if uploaded update the logs
-                          $.ajax({
-                            type: 'POST',
-                            url: '../../controls/upd_log.php',
-                            data: myUpdData,
-
-                            success: function(response)
-                            {
-                              if(response > 0)
-                              {
-                                $('#asset-success').html("<center><i class='fa fa-check menu-icon'></i> Asset Successfully added.</center>");
-                                $('#asset-success').show().fadeOut(5000);
-                                //reload page after 1 second
-                                setTimeout(function(){
-                                  location.reload();
-                                }, 1000)
-                              }
-                              else
-                              {
-                                $('#asset-warning').html("<center><i class='fa fa-warning menu-icon'></i> Logs Update Failed. Please contact the administrator.</center>");
-                                $('#asset-warning').show().fadeOut(5000);
-                              }
-                            }
-                          })                         
-                        }
-                        else
-                        {
-                          $('#asset-warning').html("<center><i class='fa fa-warning menu-icon'></i> Image Upload Failed. Please contact the administrator.</center>");
-                          $('#asset-warning').show().fadeOut(5000);
-                        }
-                      }
-                    })
-                  }
-                  else
-                  {
-                    $('#asset-warning').html("<center><i class='fa fa-warning menu-icon'></i> Adding Failed. Please contact the administrator.</center>");
-                    $('#asset-warning').show().fadeOut(5000);
-                  }
-                }
-              })
-            }
-          },
-          error: function(xhr, ajaxOptions, thrownError)
-          {
-            alert(thrownError);
-          }
-        })
-      }
-      else//save asset without image attachment
-      {
-        $.ajax({
-          type: 'POST',
-          url: '../../controls/save_asset.php',
-          data: myData,
-
-          success: function(response)
-          {
-            if(response > 0)
-            {
-              //if uploaded update the logs
-              $.ajax({
-                type: 'POST',
-                url: '../../controls/upd_log.php',
-                data: myUpdData,
-
-                success: function(response)
+                if(response > 0)
                 {
-                  if(response > 0)
-                  {
-                    $('#asset-success').html("<center><i class='fa fa-check menu-icon'></i> Asset Successfully added.</center>");
-                    setTimeout(function(){
-                      $('#asset-sucess').fadeOut();
-                    }, 3000)
-                  }
-                  else
-                  {
-                    $('#asset-warning').html("<center><i class='fa fa-warning menu-icon'></i> Logs Update Failed. Please contact the administrator.</center>");
-                    setTimeout(function(){
-                      $('#asset-warning').fadeOut();
-                    }, 5000)
-                  }
+                  //upload the image after saving the details in asset
+                  $.ajax({
+                    type: "POST",
+                    url: "../../controls/upload.php",
+                    data: form_data,
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                  
+                    success: function(response)
+                    {
+                      alert(response);
+                      if(response > 0)
+                      {
+                        //if uploaded update the logs
+                        $.ajax({
+                          type: 'POST',
+                          url: '../../controls/upd_log.php',
+                          data: myUpdData,
+
+                          success: function(response)
+                          {
+                            if(response > 0)
+                            {
+                              $('#asset-success').html("<center><i class='fa fa-check menu-icon'></i> Asset Successfully added.</center>");
+                              $('#asset-success').show().fadeOut(5000);
+                              //reload page after 1 second
+                              setTimeout(function(){
+                                location.reload();
+                              }, 1000)
+                            }
+                            else
+                            {
+                              $('#asset-warning').html("<center><i class='fa fa-warning menu-icon'></i> Logs Update Failed. Please contact the administrator.</center>");
+                              $('#asset-warning').show().fadeOut(5000);
+                            }
+                          }
+                        })                         
+                      }
+                      else
+                      {
+                        $('#asset-warning').html("<center><i class='fa fa-warning menu-icon'></i> Image Upload Failed. Please contact the administrator.</center>");
+                        $('#asset-warning').show().fadeOut(5000);
+                      }
+                    }
+                  })
                 }
-              })              
-            }
-            else
-            {
-              $('#asset-warning').html("<center><i class='fa fa-warning menu-icon'></i> Adding Failed. Please contact the administrator.</center>");
-              setTimeout(function(){
-                $('#asset-warning').fadeOut();
-              }, 5000)
-            }
+                else
+                {
+                  $('#asset-warning').html("<center><i class='fa fa-warning menu-icon'></i> Adding Failed. Please contact the administrator.</center>");
+                  $('#asset-warning').show().fadeOut(5000);
+                }
+              }
+            })
           }
-        })
-      }
+        },
+          error: function(xhr, ajaxOptions, thrownError)
+        {
+          alert(thrownError);
+        }
+      })
+    }
+    else//save asset without image attachment
+    {
+      $.ajax({
+        type: 'POST',
+        url: '../../controls/save_asset.php',
+        data: myData,
+
+        success: function(response)
+        {
+          if(response > 0)
+          {
+            //if uploaded update the logs
+            $.ajax({
+              type: 'POST',
+              url: '../../controls/upd_log.php',
+              data: myUpdData,
+
+              success: function(response)
+              {
+                if(response > 0)
+                {
+                  $('#asset-success').html("<center><i class='fa fa-check menu-icon'></i> Asset Successfully added.</center>");
+                  $('#asset-success').show();
+                  setTimeout(function(){
+                    $('#asset-sucess').fadeOut();
+                  }, 3000)
+                }
+                else
+                {
+                  $('#asset-warning').html("<center><i class='fa fa-warning menu-icon'></i> Logs Update Failed. Please contact the administrator.</center>");
+                  $('#asset-warning').show();
+                  setTimeout(function(){
+                    $('#asset-warning').fadeOut();
+                  }, 5000)
+                }
+              }
+            })              
+          }
+          else
+          {
+            $('#asset-warning').html("<center><i class='fa fa-warning menu-icon'></i> Adding Failed. Please contact the administrator.</center>");
+            $('#asset-warning').show();
+            setTimeout(function(){
+              $('#asset-warning').fadeOut();
+            }, 5000)
+          }
+        }
+      })
+    }
   }
   else
   {
     $('#asset-warning').html("<center><i class='fa fa-warning menu-icon'></i> Please fill-out all the data needed to proceed.</center>");
+    $('#asset-warning').show();
     setTimeout(function(){
       $('#asset-warning').fadeOut();
     }, 5000)
@@ -670,10 +703,10 @@ $('#save-person').click(function(e){
   var contact_num = $('#contact_num').val();
   var firstname = $('#fname').val();
   var lastname = $('#lname').val();
-  var project = 40;
+  var project = $('#person-proj').val();
   var myData = 'emp_no=' + emp_no + '&contact_num=' + contact_num + '&firstname=' + firstname + '&lastname=' + lastname + '&project=' + project; 
 
-  //alert(myData);
+  alert(myData);
   if(firstname == "" || lastname == "" || emp_no == "" || contact_num == "")
   {
     $('#person-warning').html("<center><i class='fa fa-warning menu-icon'></i> Please fill-out all fields needed.</center>");
@@ -688,6 +721,7 @@ $('#save-person').click(function(e){
 
       success: function(response)
       {
+        alert(response);
         if(response > 0)
         {
           $('#person-success').html("<center><i class='fa fa-check menu-icon'></i> Adding Successfull.</center>");
