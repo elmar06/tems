@@ -54,6 +54,7 @@
                         <tr>
                             <th align="center"  style="max-width: 5%;"><input type="checkbox" id="checkboxall"/></th>
                             <th align="center" style="max-width: 80px;">T&E Code</th>
+                            <th align="center" style="max-width: 80px;">Serial No.</th>
                             <th align="center" style="max-width: 200px;">Description</th>
                             <th align="center" style="max-width: 150px;">Project</th>
                             <th align="center" style="max-width: 150px;">Category</th>
@@ -70,10 +71,14 @@
                         while($row = $view->fetch(PDO::FETCH_ASSOC))
                         {
                           extract($row);
+                          if($row['serial'] == ''){
+                            $serial = '-';
+                          }
                           echo '
                             <tr>
                               <td><input type="checkbox" name="checklist" class="checklist" value="'.$row['asset_id'].'" style="max-width: 5%;"></td>
                               <td class="barcode" style="max-width: 80px;">'.$row['code'].'</td>
+                              <td class="barcode" style="max-width: 80px;"><center>'.$serial.'<center></td>
                               <td class="description" style="max-width: 200px;">'.$row['description'].'</td>
                               <td class="asset_type" style="max-width: 150px;">'.$row['loc_name'].'</td>
                               <td class="asset_loc" style="max-width: 150px;">'.$row['cat_name'].'</td>
