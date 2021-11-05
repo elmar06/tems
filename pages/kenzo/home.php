@@ -133,19 +133,6 @@
                 ?>
             </select>
           </div>
-          <div class="col-sm-6">
-            <label for="exampleInputEmail1"><span class="fa fa-building"></span> Project</label>
-            <select id="project" type="text" class="form-control" style="width: 100%">
-              <option selected disabled>Please select Project</option>
-                <?php
-                  $view = $loc->view_loc();
-                  while($row=$view->fetch(PDO::FETCH_ASSOC))
-                  {
-                    echo '<option value='.$row['id'].'>'.$row['location'].'</option>';
-                  }
-                ?>
-            </select>
-          </div>
         </div><br><!-- end of row -->
         <div id="add-success" class="alert alert-success" role="alert" style="display: none"></div>
         <div id="add-warning" class="alert alert-danger" role="alert" style="display: none"></div>
@@ -254,10 +241,10 @@ $('#addWorker').click(function(e){
   var fullname = $('#fullname').val();
   var position = $('#position').val();
   var trade = $('#trade').val();
-  var project = $('#project').val();
+  var project = $('#proj-id').val();
   var myData = 'id=' + id + '&fullname=' + fullname + '&position=' + position + '&trade=' + trade + '&project=' + project;
 
-  if(id != '' && fullname != '' && position != '' && trade != null && project != null)
+  if(id != '' && fullname != '' && position != '' && trade != null)
   {
     $.ajax({
       type: 'POST',
@@ -434,12 +421,11 @@ $('#btnUpdWorker').click(function(e){
       {
         if(response > 0)
         {
-          $('#UpdWorkerModal').modal('hide');
-          $('#upd-success').html("Worker Details successfully updated.");
+          $('#upd-success').html("<center>Worker Details successfully updated.</center>");
           $('#upd-success').show();
           setTimeout(function(){
             $('#upd-success').hide();
-          }, 3000);
+          }, 2500);
           //get the updated list
           $.ajax({
             type: 'POST',

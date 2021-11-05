@@ -103,4 +103,21 @@ $('#btndelete').on('click', function(e){
     })
   }
 })
+
+//edit worker details function
+$('.edit-worker').click(function(){
+  var id = $(this).attr('value');
+
+  $.ajax({
+    type: 'POST',
+    url: '../../controls/toolkeeper/get_worker_data.php',
+    data: {id: id},
+
+    success: function(html)
+    {
+      $('#update-body').html(html);
+      $('#UpdWorkerModal').modal('show');
+    }
+  })
+})
 </script>

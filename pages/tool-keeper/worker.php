@@ -114,8 +114,8 @@
             <input type="text" class="form-control date-warranty" id="fullname" placeholder="Fullname here" />
           </div>
           <div class="col-sm-6">
-            <label for="exampleInputEmail1"><span class="fa fa-address-card-o"></span> Address</label>
-            <input type="text" class="form-control date-warranty" id="address" placeholder="Address here" />
+            <label for="exampleInputEmail1"><span class="fa fa-address-card-o"></span> Position</label>
+            <input type="text" class="form-control date-warranty" id="position" placeholder="Position here" />
           </div>
         </div><br>
         <div class="row">
@@ -132,20 +132,8 @@
                 ?>
             </select>
           </div>
-          <div class="col-sm-6">
-            <label for="exampleInputEmail1"><span class="fa fa-building"></span> Project</label>
-            <select id="project" type="text" class="form-control" style="width: 100%">
-              <option selected disabled>Please select Project</option>
-                <?php
-                  $view = $loc->view_loc();
-                  while($row=$view->fetch(PDO::FETCH_ASSOC))
-                  {
-                    echo '<option value='.$row['id'].'>'.$row['location'].'</option>';
-                  }
-                ?>
-            </select>
-          </div>
         </div><br><!-- end of row -->
+        <div id="add-success" class="alert alert-success" role="alert" style="display: none"></div>
         <div id="add-warning" class="alert alert-danger" role="alert" style="display: none"></div>
       </div>
       <div class="modal-footer">
@@ -154,7 +142,7 @@
       </div>
     </div>
   </div>
-</div> 
+</div>
 
 <!-- UPDATE WORKER DETAILS MODAL -->
 <div id="UpdWorkerModal" class="modal" tabindex="-1" role="dialog">
@@ -250,12 +238,12 @@ $('#addWorker').click(function(e){
 
   var id = $('#worker-id').val();
   var fullname = $('#fullname').val();
-  var address = $('#address').val();
+  var position = $('#position').val();
   var trade = $('#trade').val();
-  var project = $('#project').val();
-  var myData = 'id=' + id + '&fullname=' + fullname + '&address=' + address + '&trade=' + trade + '&project=' + project;
+  var project = $('#proj-id').val();
+  var myData = 'id=' + id + '&fullname=' + fullname + '&position=' + position + '&trade=' + trade + '&project=' + project;
 
-  if(id != '' && fullname != '' && address != '' && trade != null && project != null)
+  if(id != '' && fullname != '' && position != '' && trade != null)
   {
     $.ajax({
       type: 'POST',
@@ -268,10 +256,15 @@ $('#addWorker').click(function(e){
         {
           $('#worker-id').val('');
           $('#fullname').val('');
-          $('#address').val('');
+          $('#position').val('');
           $('#trade option:eq(0)').prop('selected', true);
           $('#project option:eq(0)').prop('selected', true);
-          $('#NewWorkerModal').modal('hide');
+          //$('#NewWorkerModal').modal('hide');
+          $('#add-success').html("<center><i class='fa fa-check menu-icon'></i> Worker successfully added.</center>");
+          $('#add-success').show();
+          setTimeout(function(){
+            $('#add-success').hide();
+          }, 2500);
 
           //get the new list of worker
           $.ajax({

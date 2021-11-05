@@ -202,15 +202,14 @@ $('#btnGenerate').on('click', function(e){
   e.preventDefault();
   var from = $('#date-from').val();
   var to = $('#date-to').val();
-  var project = $('#project').val();
   var status = $('#status').val();
-  
+  var project = $('#proj-id').val();
+  var add_by = $('#acc_id').val();
+
   if(status != null && from == '' && to == '')
-  {
-    
+  {    
     var action = 1;//generate by status only
     var myData = 'from=' + from + '&to=' + to + '&project=' + project + '&status=' + status + '&action=' + action;
-    alert(myData);
     window.open('../../print/form/printRecords.php?'+myData);
   }
   else if(from != '' && to != '' && status == null)
