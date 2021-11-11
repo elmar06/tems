@@ -42,12 +42,12 @@
               <table id="personnel_table" class="table table-bordered" style="width:100%">
                 <thead>
                     <tr>
-                      <th><center>Tool Code</center></th>
+                      <th style="max-width: 100px;"><center>Tool Code</center></th>
                       <th style="max-width: 150px;"><center>Description</center></th>
                       <th><center>From</th>
                       <th><center>To</center></th>
-                      <th><center>Current Project</center></th>
-                      <th><center>New Project</center></th>
+                      <th style="max-width: 120px;"><center>Current Project</center></th>
+                      <th style="max-width: 120px;"><center>New Project</center></th>
                       <th><center>Date</center></th>
                     </tr>
                 </thead>
@@ -103,12 +103,12 @@
                       }
                        echo 
                         '<tr>
-                          <td>'.$code.'</td>
+                          <td style="max-width: 100px;">'.$code.'</td>
                           <td style="max-width: 150px;">'.$desc.'</td>
                           <td>'.$from.'</td>
                           <td>'.$to.'</td>
-                          <td>'.$cur_proj.'</td>
-                          <td>'.$new_proj.'</td>
+                          <td style="max-width: 120px;">'.$cur_proj.'</td>
+                          <td style="max-width: 120px;">'.$new_proj.'</td>
                           <td>'.$date.'</td>
                         </tr>';
                     }
