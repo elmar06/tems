@@ -137,8 +137,8 @@
                   }
                 ?>
             </select>
-          </div>
-        </div><!-- end of form-group -->
+          </div><br>
+        </div><br><!-- end of form-group -->
         <!-- ALERTS -->
         <div id="save-warning" class="alert alert-danger" role="alert" style="display: none"></div>
         <div id="save-success" class="alert alert-success" role="alert" style="display: none"></div>

@@ -88,7 +88,7 @@
 
 <!-- MODALS SECTION -->
 <!-- NEW PERSONNEL/CLIENT MODAL -->
-<div class="modal fade" id="newPersonnelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="newPersonnelModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-md" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -119,7 +119,22 @@
               <input type="text" class="form-control" id="lname" placeholder="Enter Lastname">
             </div>
           </div>          
-        </div><!-- end of form-group -->
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <label for="exampleInputEmail1"><span class="fa fa-building"></span> Project</label>
+            <select id="project" type="text" class="form-control js-example-basic-single" style="width: 100%">
+              <option selected disabled>Please select Project</option>
+                <?php
+                  $view = $loc->view_loc();
+                  while($row=$view->fetch(PDO::FETCH_ASSOC))
+                  {
+                    echo '<option value='.$row['id'].'>'.$row['location'].'</option>';
+                  }
+                ?>
+            </select>
+          </div><br>
+        </div><br><!-- end of form-group -->
         <!-- ALERTS -->
         <div id="save-warning" class="alert alert-danger" role="alert" style="display: none"></div>
         <div id="save-success" class="alert alert-success" role="alert" style="display: none"></div>
@@ -190,13 +205,12 @@ $('#save-person').click(function(e){
 
   var firstname = $('#fname').val();
   var lastname = $('#lname').val();
-  // var location = $('#location').val();
-  // var department = $('#department').val();
   var emp_no = $('#emp_no').val();
   var contact_num = $('#contact_num').val();
-  var myData = 'firstname=' + firstname + '&lastname=' + lastname + /*'&location=' + location + '&department=' + department +*/ '&emp_no=' + emp_no + '&contact_num=' + contact_num;
+  var project = $('#project').val();
+  var myData = 'firstname=' + firstname + '&lastname=' + lastname + '&emp_no=' + emp_no + '&contact_num=' + contact_num + '&project=' + project;
 
-  if(firstname != "" && lastname != "" /*&& location != "" && department != ""*/)
+  if(firstname != "" && lastname != "")
   {
     $.ajax({
       type: "POST",
@@ -232,7 +246,7 @@ $('#save-person').click(function(e){
     $('#save-warning').html("<center><i class='fa fa-warning menu-icon'></i> Please fill out all the fields needed.</center>");
     $('#save-warning').show().fadeOut(5000);
   }
-});  
+}); 
 </script>
 
 <!-- UPDATE PERSONNEL FUNCTION -->

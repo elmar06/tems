@@ -35,7 +35,7 @@
           <div class="card">
             <div class="card-body">
               <div>
-                <button type="button" class="btn btn-success btn-rounded" data-toggle="modal" data-target="#newPersonnelModal"><i class="fa fa-plus"></i>New Personnel/Client</button>
+                <button type="button" class="btn btn-success btn-rounded" data-toggle="modal" data-target="#newPersonModal"><i class="fa fa-plus"></i>New Personnel/Client</button>
                 <a href="personnel.php" class="btn btn-dark btn-rounded" ><span class ="fa fa-refresh"></span> Refresh Table</a>
                 <button type="button" class="btn btn-dark btn-rounded" style="display: none" id="btndelete"><i class="fa fa-trash-o"></i>Delete</button>
               </div><br>
@@ -89,41 +89,65 @@
 
 <!-- MODALS SECTION -->
 <!-- NEW PERSONNEL/CLIENT MODAL -->
-<div class="modal fade" id="newPersonnelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="newPersonModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-md" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel"><span class="fa fa-plus-square"></span> Add New Personnel</h5>
+        <h5 class="modal-title" id="exampleModalLabel"><span class="fa fa-plus-square"></span> Add New Personnel/Client</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
         <div class="form-group">
-          <div class="row">
-            <div class="col-lg-6">
-              <label for="exampleInputEmail1">Employee No.</label>
-              <input type="text" class="form-control" id="emp_no" placeholder="Enter Employee Number" value="0">
-            </div>
-            <div class="col-lg-6">
-              <label for="exampleInputEmail1">Contact Number</label>
-              <input type="text" class="form-control" id="contact_num" placeholder="Enter Contact Number" value="0">
-            </div>
-          </div><br>
-          <div class="row">
-            <div class="col-lg-6">
-              <label for="exampleInputEmail1">Firstname</label>
-              <input type="text" class="form-control" id="fname" placeholder="Enter Firstname">
-            </div>
-            <div class="col-lg-6">
-              <label for="exampleInputEmail1">Lastname</label>
-              <input type="text" class="form-control" id="lname" placeholder="Enter Lastname">
-            </div>
-          </div>          
-        </div><!-- end of form-group -->
+        <div class="row">
+          <div class="col-lg-6">
+            <label for="exampleInputEmail1">Employee No.</label>
+            <input type="text" class="form-control" id="emp_no" placeholder="Enter Employee Number">
+          </div>
+          <div class="col-lg-6">
+            <label for="exampleInputEmail1">Contact Number</label>
+            <input type="text" class="form-control" id="contact_num" placeholder="Enter Contact Number">
+          </div>
+        </div><br>
+        <div class="row">
+          <div class="col-lg-6">
+            <label for="exampleInputEmail1">Firstname</label>
+            <input type="text" class="form-control" id="fname" placeholder="Enter Firstname">
+          </div>
+          <div class="col-lg-6">
+            <label for="exampleInputEmail1">Lastname</label>
+            <input type="text" class="form-control" id="lname" placeholder="Enter Lastname">
+          </div>
+        </div><br>
+        <div class="row">
+          <div class="col-lg-6">
+            <label for="exampleInputEmail1"><span class="fa fa-building"></span> Project</label>
+            <select id="person_proj" type="text" class="form-control select2" style="width: 100%" disabled>';
+            <?php
+              $view = $loc->view_loc();
+              while($loc_row=$view->fetch(PDO::FETCH_ASSOC))
+              {
+                if($_SESSION['project-id'] == $loc_row['id'])
+                {
+                  echo '<option value='.$loc_row['id'].' selected>'.$loc_row['location'].'</option>';
+                }
+              }
+              ?>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12">
+            <!-- ALERTS -->
+            <div id="update-warning" class="alert alert-danger" role="alert" style="display: none"></div>
+            <div id="update-success" class="alert alert-success" role="alert" style="display: none"></div>
+          </div>
+        </div>
+      </div><!-- end of form-group -->
         <!-- ALERTS -->
-        <div id="save-warning" class="alert alert-danger" role="alert" style="display: none"></div>
-        <div id="save-success" class="alert alert-success" role="alert" style="display: none"></div>
+        <div id="person-warning" class="alert alert-danger" role="alert" style="display: none"></div>
+        <div id="person-success" class="alert alert-success" role="alert" style="display: none"></div>
       </div><!-- end of modal body -->
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -184,11 +208,10 @@ $('#save-person').click(function(e){
 
   var firstname = $('#fname').val();
   var lastname = $('#lname').val();
-  // var location = $('#location').val();
-  var project = 40;
   var emp_no = $('#emp_no').val();
   var contact_num = $('#contact_num').val();
-  var myData = 'firstname=' + firstname + '&lastname=' + lastname + '&project=' + project + '&emp_no=' + emp_no + '&contact_num=' + contact_num;
+  var project = $('#project').val();
+  var myData = 'firstname=' + firstname + '&lastname=' + lastname + '&emp_no=' + emp_no + '&contact_num=' + contact_num + '&project=' + project;
 
   if(firstname != "" && lastname != "")
   {

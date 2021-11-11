@@ -335,6 +335,25 @@ class Asset
   		}
   	}
 
+	public function upd_image()
+  	{
+  		$query = "UPDATE ".$this->table_name." SET image=? WHERE id=?";
+  		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+  		$upd = $this->conn->prepare($query);
+
+  		$upd->bindParam(1, $this->image);
+  		$upd->bindParam(2, $this->id);
+
+  		if($upd->execute())
+  		{
+  			return true;
+  		}
+  		else
+  		{
+  			return false;
+  		}
+  	}
+
   	public function view_asset_by_user()
 	{
 		$query = "SELECT asset.id as 'asset_id', asset.barcode, asset.description, asset.type_id, type.id, type.type as 'asset_type', type.created_by, asset.location_id, location.id, location.location as 'asset_loc', asset.manufacturer, asset.brand, asset.model, asset.price, asset.quantity, asset.date_warranty, asset.serial, asset.price, asset.quantity, asset.asset_status, asset.date_transfer, asset.asset_condition, asset.assign, asset.asset_status, asset.dept_id, asset.notes, asset.image, personnel.id as 'person_id', personnel.firstname, personnel.lastname, personnel.contact_num, department.id, department.department FROM asset, type, location, personnel, department WHERE asset.type_id=type.type_id AND asset.assign=personnel.id AND asset.location_id=location.id AND asset.dept_id=department.id AND asset.status != 0 AND type.created_by = ? ORDER BY asset.id DESC";
