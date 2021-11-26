@@ -53,6 +53,12 @@ session_start();
         </a>
       </li>
       <li class="nav-item">
+        <a class="nav-link" href="category.php">
+          <i class="menu-icon fa fa-list-alt"></i>
+          <span class="menu-title">Tool Category</span>
+        </a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link" href="transfer.php">
           <i class="menu-icon fa fa-exchange"></i>
           <span class="menu-title">Transfer Record</span>

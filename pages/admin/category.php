@@ -26,7 +26,7 @@
 <div class="container-scroller">
   <!-- page navbar -->
   <?php 
-    include '../../includes/super_header.php'; 
+    include '../../includes/admin_header.php'; 
   ?>
   <!-- main panel -->
   <div class="container-fluid page-body-wrapper">
@@ -34,12 +34,7 @@
       <div class="row">
         <div class="col-lg-12">
           <div class="card">
-            <div class="card-body">
-              <div>
-                <a href="#" class="btn btn-success btn-rounded" data-toggle="modal" data-target="#newTypeModal"><i class="fa fa-plus"></i>New T&E Category</a>
-                <a href="category.php" class="btn btn-dark btn-rounded" ><span class ="fa fa-refresh"></span> Refresh Table</a>
-                <a href="#" class="btn btn-dark btn-rounded" style="display:none" id="btndelete"><i class="fa fa-trash-o"></i>Delete Asset Type</a>
-              </div><br>
+            <div class="card-body"><br>
               <table id="type-table" class="table table-bordered" style="width:100%">
                 <thead>
                     <tr>
