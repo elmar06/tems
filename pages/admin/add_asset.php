@@ -55,12 +55,13 @@
                     <div class="col-lg-4">
                       <label for="exampleInputEmail1">Project/Building</label>&nbsp;<span style="color: red; font-size: 16px">*</span>
                       <select type="text" class="form-control js-example-basic-single" id="project" required="required">
+                        <option value="0" selected disabled>Select Project Here</option>
                         <?php
                           $loc->status = 0;
                           $view = $loc->view_loc();
                           while($row=$view->fetch(PDO::FETCH_ASSOC))
                           {
-                            echo '<option value='.$row['id'].'>'.$row['location'].'</option>';
+                            echo '<option value='.$row['id'].'>'.$row['code'].' - '.$row['location'].'</option>';
                           }
                         ?>
                       </select>
@@ -68,12 +69,14 @@
                     <div class="col-lg-4">
                       <label for="exampleInputEmail1">Tool Category</label>&nbsp;<span style="color: red; font-size: 16px">*</span>
                       <select type="text" class="form-control js-example-basic-single" id="category" name="category" required="required">
+                        <option value="0" selected disabled>Select Tool Category Here</option>
                         <?php
                           $type->status = 0;
                           $view = $type->view_type();
                           while($row=$view->fetch(PDO::FETCH_ASSOC))
                           {
-                            echo '<option value='.$row['type_id'].'>'.$row['type'].'</option>';
+                            $code = str_pad($row['type_id'], 2, '0', STR_PAD_LEFT);
+                            echo '<option value='.$row['type_id'].'>'.$code.' - '.$row['type'].'</option>';
                           }
                         ?>
                       </select>
@@ -84,7 +87,7 @@
                         <div class="input-group-prepend">
                           <span class="input-group-text fa fa-barcode"></span>
                         </div>
-                        <input type="text" class="form-control" id="code" required="required">
+                        <input type="text" class="form-control" id="code" placeholder="AAABB0000" disabled>
                       </div>
                     </div>                    
                   </div><br>
@@ -368,34 +371,6 @@ $(document).ready(function(){
   })
 </script>
 
-<!-- get the new T&E code -->
-<!-- get code upon loading the page -->
-<script>
-$(document).ready(function(){
-  var proj = $('#project').val();
-  var cat = $('#category').val();
-  var cat_code = ('0000' + cat).slice(-2);
-  var myData = 'proj=' + proj + '&cat=' + cat;
-
-  $.ajax({
-    type: 'POST',
-    url: '../../controls/get_code.php',
-    data: myData,
-    dataType: 'json',
-    cache: false,
-
-    success: function(result)
-    {
-      var proj_code = result[0];
-      var series = result[1];
-      var series_no = ('0000' + series).slice(-4);
-      var code = proj_code + '-' + cat_code + '-' + series_no;
-      $('#code').val(code);
-    }
-  })
-})
-</script>
-
 <!-- when category is changed -->
 <script>
 $('#category').on('change', function(){
@@ -416,7 +391,7 @@ $('#category').on('change', function(){
       var proj_code = result[0];
       var series = result[1];
       var series_no = ('0000' + series).slice(-4);
-      var code = proj_code + '-' + cat_code + '-' + series_no;
+      var code = proj_code + cat_code + series_no;
       $('#code').val(code);
     }
   })
@@ -442,7 +417,7 @@ $('#project').on('change', function(){
       var proj_code = result[0];
       var series = result[1];
       var series_no = ('0000' + series).slice(-4);
-      var code = proj_code + '-' + cat_code + '-' + series_no;
+      var code = proj_code + cat_code + series_no;
       $('#code').val(code);
     }
   })

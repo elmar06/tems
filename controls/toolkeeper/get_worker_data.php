@@ -54,7 +54,7 @@ while($row = $get->fetch(PDO::FETCH_ASSOC))
           </div>
           <div class="col-sm-6">
             <label for="exampleInputEmail1"><span class="fa fa-building"></span> Project</label>
-            <select id="upd_project" type="text" class="form-control" style="width: 100%" disabled>';
+            <select id="upd_project" type="text" class="form-control" style="width: 100%">';
                   $view_loc = $loc->view_loc();
                   while($row2 = $view_loc->fetch(PDO::FETCH_ASSOC))
                   {

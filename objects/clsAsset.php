@@ -384,5 +384,25 @@ class Asset
 			return false;
 		}
 	}
+
+	public function add_remarks()
+	{
+		$query = 'UPDATE '.$this->table_name.' SET tool_condition=?, notes=? WHERE id=?';
+		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+		$upd = $this->conn->prepare($query);
+
+		$upd->bindParam(1, $this->tool_condition);
+		$upd->bindParam(2, $this->notes);
+		$upd->bindParam(3, $this->id);
+
+		if($upd->execute())
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 }
 ?>

@@ -14,7 +14,7 @@ while($row = $view->fetch(PDO::FETCH_ASSOC))
 {
   echo '
   <tr>
-    <td><input type="checkbox" name="checklist" class="checklist" value="'.$row['work-id'].'" style="max-width: 30px;"></td>
+    <td><input type="checkbox" name="checklist" class="checklist" value="'.$row['work-id'].'" style="max-width: 10px;"></td>
     <td>'.$row['worker_id'].'</td>
     <td>'.$row['fullname'].'</td>
     <td>'.$row['position'].'</td>

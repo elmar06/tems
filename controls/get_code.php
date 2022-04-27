@@ -15,6 +15,7 @@ $log = new Logs($db);
 $loc_id = $_POST['proj'];
 $type_id = $_POST['cat'];
 $proj_code = '';
+$series_no = '';
 
 //get the code of project/building(location)
 $location->id = $loc_id;
@@ -25,12 +26,11 @@ while($row = $get_proj->fetch(PDO::FETCH_ASSOC))
 }
 
 //get the series no
-$log->loc_id = $loc_id;
-$log->type_id = $type_id;
-$get_series = $log->get_series();
+$type->type_id = $type_id;
+$get_series = $type->get_series();
 while($row = $get_series->fetch(PDO::FETCH_ASSOC))
 {
-	$series_no = $row['series_no'];
+	$series_no = $row['series_no'] + 1;
 }
 
 //return the data gathered

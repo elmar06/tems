@@ -152,11 +152,11 @@ class Type
 
 	public function get_series()
 	{
-		$query = 'SELECT max(series_no) + 1 as "series_no" FROM type WHERE status != 0 AND type_id=?';
+		$query = 'SELECT series_no FROM type WHERE type_id=?';
 		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 		$sel = $this->conn->prepare($query);
 
-		$sel->bindParam(1, $this->id);
+		$sel->bindParam(1, $this->type_id);
 
 		$sel->execute();
 		return $sel;

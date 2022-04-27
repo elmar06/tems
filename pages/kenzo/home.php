@@ -31,8 +31,7 @@
   <div class="container-fluid page-body-wrapper">
     <div class="content-wrapper">
       <div class="row">
-        <div class="col-lg-12">
-        <h4><b>PROJECT: <u> <?php echo $_SESSION['proj-name']; ?></u></b></h4>
+        <div class="col-lg-12"><br>
           <div class="card">
             <div class="card-body">
               <div>
@@ -56,7 +55,6 @@
                 </thead>
                 <tbody id="worker-body">
                   <?php
-                    $worker->project = $_SESSION['project-id'];
                     $view = $worker->view_worker();
                     while($row = $view->fetch(PDO::FETCH_ASSOC))
                     {

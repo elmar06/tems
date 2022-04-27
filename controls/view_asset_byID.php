@@ -57,7 +57,7 @@ else
     echo '<div class="row">
             <div class="col-lg-8">
               <label for="exampleInputEmail1">Asset Description</label>
-              <input type="text" class="form-control" id="upd_id" value="<?php echo $id;?>" style="display: none"/>
+              <input type="text" class="form-control" id="upd_id" value="'.$id.'" style="display:none">
               <textarea type="text" class="form-control" id="description" placeholder="Enter description" rows="5" disabled>'.$desc.'</textarea>
             </div>
             <div class="col-lg-4">
@@ -317,6 +317,12 @@ else
                 </p>
               </form>
             </div>
+          </div><br>
+          <div class="row">
+            <div class="col-lg-12">
+              <div id="asset-warning" class="alert alert-danger" role="alert" style="display: none"></div>
+              <div id="asset-success" class="alert alert-success" role="alert" style="display: none"></div>
+            </div>            
           </div>';
   }
 }

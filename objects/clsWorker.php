@@ -64,6 +64,28 @@ class Worker
 
 	public function view_worker()
 	{
+		$query = 'SELECT worker.id as "work-id", worker.fullname, worker.worker_id, worker.position, worker.trade as "trade_id", worker.project as "proj_id", department.id, department.department as "trade_name", location.id, location.location as "proj_name" FROM worker, department, location WHERE worker.trade = department.id AND worker.project = location.id AND worker.status != 0 ORDER BY worker.worker_id ASC';
+		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+		$sel = $this->conn->prepare($query);
+		
+		$sel->execute();
+		return $sel;
+	}
+
+	public function view_worker_by_id()
+	{
+		$query = 'SELECT worker.id as "work-id", worker.fullname, worker.worker_id, worker.position, worker.trade as "trade_id", worker.project as "proj_id", department.id, department.department as "trade_name", location.id, location.location as "proj_name" FROM worker, department, location WHERE worker.trade = department.id AND worker.project = location.id AND worker.status != 0 AND worker.worker_id = ?';
+		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+		$sel = $this->conn->prepare($query);
+
+		$sel->bindParam(1, $this->worker_id);
+		
+		$sel->execute();
+		return $sel;
+	}
+
+	public function view_worker_by_proj()
+	{
 		$query = 'SELECT worker.id as "work-id", worker.fullname, worker.worker_id, worker.position, worker.trade as "trade_id", worker.project as "proj_id", department.id, department.department as "trade_name", location.id, location.location as "proj_name" FROM worker, department, location WHERE worker.trade = department.id AND worker.project = location.id AND worker.status != 0 AND worker.project = ? ORDER BY worker.worker_id ASC';
 		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 		$sel = $this->conn->prepare($query);

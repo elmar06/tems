@@ -45,6 +45,7 @@
               <h4><b>PROJECT: <u> <?php echo $_SESSION['proj-name']; ?></u></b></h4>  
               <div class="card">
                 <div class="card-body">
+                    <a href="add_asset.php" class="btn btn-success btn-rounded"><span class="fa fa-plus"></span> New Tool/Equipment</a><br><br>
                   <table id="asset_table" class="table table-bordered table-hover" style="cursor:pointer">
                     <thead>
                         <tr>
@@ -116,7 +117,9 @@
 
       </div>
       <div class="modal-footer">
-        <button class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button id="btnAddRemarks" class="btn btn-primary">Add Remarks</button>
+        <button id="btnSave" class="btn btn-success" style="display: none;">SAVE</button>
+        <button id="btnClose" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
@@ -163,6 +166,60 @@ $(document).ready(function(){
   $(function(){
     $('.table').DataTable();
   });
+</script>
+<!-- Add Remarks event handler -->
+<script>
+$('#btnAddRemarks').on('click', function(e){
+  e.preventDefault();
+
+  $('#notes').attr('disabled', false);
+  $('#condition').attr('disabled', false);
+  $(this).hide();
+  $('#btnSave').fadeIn();
+})
+
+//Close button event handler
+$('#btnClose').on('click', function(e){
+  e.preventDefault();
+
+  $('#btnSave').hide();
+  $('#btnAddRemarks').show();
+})
+
+//btnSave Event handler
+$('#btnSave').on('click', function(e){
+  e.preventDefault();
+
+  var id = $('#upd_id').val();
+  var condition = $('#condition').val();
+  var notes = $('#notes').val();
+  var myData = 'id=' + id + '&condition=' + condition + '&notes=' + notes;
+  alert(myData);
+  $.ajax({
+    type: 'POST',
+    url: '../../controls/toolkeeper/add_remark.php',
+    data: myData,
+    success: function(response)
+    {
+      if(response > 0)
+      {
+        $('#asset-success').html("<center><i class='fa fa-check menu-icon'></i> T&E details successfully updated.</center>");
+        $('#asset-success').show();
+        setTimeout(function(){
+          $('#asset-success').fadeOut();
+        }, 2000)
+      }
+      else
+      {
+        $('#asset-warning').html("<center><i class='fa fa-warning menu-icon'></i> Update Failed. Please contact the administrator.</center>");
+        $('#asset-warning').show();
+        setTimeout(function(){
+          $('#asset-success').fadeOut();
+        }, 2000)
+      }
+    }
+  })
+})
 </script>
 
 <!-- Get the data from asset_table when doubleclicking -->

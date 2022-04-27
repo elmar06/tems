@@ -153,9 +153,10 @@
                   <select type="text" class="form-control select2" id="reason" style="width: 100%;">
                     <option>Transfer to Inventory</option>
                     <option>Transfer from Inventory</option>
-                    <option>Resignee</option>
+                    <option>Transfer Assignee</option>
                     <option>Transfer to another Location</option>
                     <option>Temporary</option>
+                    <option>Resignee</option>
                   </select>
                 </div>
             </div><br>

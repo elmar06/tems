@@ -354,12 +354,13 @@ $('#code').change(function(){
               var date_borrowed = result[1];
               var borrowers_code = result[2];
               var borrowers_name = result[3];
+              var borrowers_trade = result[4];
               $('#record-id').val(id);
               $('#date_borrowed').val(date_borrowed);
               //display the name of borrower
-              $('#borrowers-code').text(borrowers_code);  
-              $('#borrowers-name').text(borrowers_name);  
-              $('.borrowers-detail').show(300);
+              $('#borrow-code').val(borrowers_code); 
+              $('#emp-name').val(borrowers_name);
+              $('#emp-trade').val(borrowers_trade);  
               //set the date returned
               $('#date_returned').datetimepicker({
                 format: 'mm/dd/yyyy hh:mm',
@@ -452,8 +453,9 @@ $('#btnSubmit').on('click', function(e){
                 $('#borrow-success').show();
                 setTimeout(function(){
                   $('#borrow-success').fadeOut();
-                }, 2000)
-                clearAll();
+                  location.reload();
+                }, 1000)              
+                //clearAll();
               }
               else
               {
@@ -461,7 +463,7 @@ $('#btnSubmit').on('click', function(e){
                 $('#borrow-warning').show();
                 setTimeout(function(){
                   $('#borrow-warning').fadeOut();
-                }, 3000)
+                }, 2000)
               }
             },
             error: function(xhr, ajaxOptions, thrownError)
@@ -488,7 +490,8 @@ $('#btnSubmit').on('click', function(e){
                 $('#borrow-success').show();
                 setTimeout(function(){
                   $('#borrow-success').fadeOut();
-                }, 2000)
+                  location.reload();
+                }, 1000)
                 clearAll();
               }
               else
@@ -497,7 +500,7 @@ $('#btnSubmit').on('click', function(e){
                 $('#borrow-warning').show();
                 setTimeout(function(){
                   $('#borrow-warning').fadeOut();
-                }, 3000)
+                }, 2000)
               }
             },
             error: function(xhr, ajaxOptions, thrownError)
