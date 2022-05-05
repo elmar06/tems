@@ -105,6 +105,10 @@
                     <div class="col-lg-8">
                       <label for="exampleInputEmail1" style="font-size: 16px">Employee ID Code</label>&nbsp;<span style="color: red; font-size: 16px">*</span>
                       <input type="text" class="form-control" id="borrow-code" placeholder="Please scan the Code" required="required">
+                      <?php 
+                        date_default_timezone_set('Asia/Manila');
+                        echo date('Y-m-d H:i', strtotime('-1 hour'));
+                      ?>
                     </div>
                   </div><br>
                   <div class="row">
