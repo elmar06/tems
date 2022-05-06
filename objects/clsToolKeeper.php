@@ -30,13 +30,26 @@ class ToolKeeper
 		return $get;
 	}
 
-	public function get_worker_detail()
+	public function get_worker_detail_by_id()
 	{
 		$query = 'SELECT worker.worker_id, worker.fullname, department.department as "trade" FROM worker, department WHERE worker.worker_id = ? AND worker.project = ? AND worker.trade=department.id';
 		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 		$get = $this->conn->prepare($query);
 
 		$get->bindParam(1, $this->worker_id);
+		$get->bindParam(2, $this->project);
+
+		$get->execute();
+		return $get;
+	}
+
+	public function get_worker_detail_by_name()
+	{
+		$query = 'SELECT worker.worker_id, worker.fullname, department.department as "trade" FROM worker, department WHERE worker.fullname = ? AND worker.project = ? AND worker.trade=department.id';
+		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+		$get = $this->conn->prepare($query);
+
+		$get->bindParam(1, $this->fullname);
 		$get->bindParam(2, $this->project);
 
 		$get->execute();

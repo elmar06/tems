@@ -105,16 +105,12 @@
                     <div class="col-lg-8">
                       <label for="exampleInputEmail1" style="font-size: 16px">Employee ID Code</label>&nbsp;<span style="color: red; font-size: 16px">*</span>
                       <input type="text" class="form-control" id="borrow-code" placeholder="Please scan the Code" required="required">
-                      <?php 
-                        date_default_timezone_set('Asia/Manila');
-                        echo date('Y-m-d H:i', strtotime('-1 hour'));
-                      ?>
                     </div>
                   </div><br>
                   <div class="row">
                     <div class="col-lg-6">
                       <label for="exampleInputEmail1">Borrower Name</label>
-                      <input type="text" class="form-control" id="emp-name" disabled>
+                      <input type="text" class="form-control" id="emp-name" placeholder="Enter name here!">
                     </div>
                     <div class="col-lg-6">
                       <label for="exampleInputEmail1">Trade</label>
@@ -408,6 +404,45 @@ $('#borrow-code').change(function(){
         //display data in the input box
         $('#emp-name').val(name);
         $('#emp-trade').val(trade);
+      }
+    },
+    error: function(xhr, ajaxOptions, thrownError)
+    {
+      alert(thrownError);
+    }
+  })
+})
+//search employee name in DB
+$('#emp-name').change(function(){
+  var emp_name = $(this).val();
+  var project = $('#proj-id').val();
+  var emp_code = '';
+  var myData = 'emp_name=' + emp_name + '&project=' + project + '&emp_code=' + emp_code;
+
+  $.ajax({
+    type: 'POST',
+    url: '../../controls/toolkeeper/get_emp_details.php',
+    data: myData,
+    dataType: 'json',
+    cache: false,
+    success: function(result)
+    {
+      if(result == ''){
+        $('#emp-warning').html("<center><i class='fa fa-warning menu-icon'></i> ERROR! Worker details not found!.</center>");
+        $('#emp-warning').show();
+        setTimeout(function(){
+          $('#emp-warning').fadeOut();
+        }, 3000)
+        clearWorkerData();
+      }else{
+        //initialize data
+        var name = result[0];
+        var trade = result[1];
+        var code = result[2];
+        //display data in the input box
+        $('#emp-name').val(name);
+        $('#emp-trade').val(trade);
+        $('#borrow-code').val(code);
       }
     },
     error: function(xhr, ajaxOptions, thrownError)
