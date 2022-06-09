@@ -200,7 +200,7 @@ $html = <<<EOD
 		<tr>
 			<td width="25%"></td>
 			<td width="50%"></td>
-			<td width="23%" align="center">Blanca Amor Jaravelo-Palermo</td>
+			<td width="23%" align="center">Arvin Alinsolorin</td>
 			<td width="2%"></td>
 		</tr>
 	</tbody>

@@ -199,12 +199,12 @@ else
                         <option selected>For Repair</option>
                         <option>Stored</option>';
                   }
-                  elseif($condition == 'Stored')
+                  elseif($condition == 'In Storage')
                   {
                   echo '<option>Functional</option>
                         <option selected>For Trade In</option>
                         <option>For Repair</option>
-                        <option selected>Stored</option>';
+                        <option selected>In Storage</option>';
                   }
                   else
                   {

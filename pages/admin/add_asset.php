@@ -87,7 +87,7 @@
                         <div class="input-group-prepend">
                           <span class="input-group-text fa fa-barcode"></span>
                         </div>
-                        <input type="text" class="form-control" id="code" placeholder="AAABB0000" disabled>
+                        <input type="text" class="form-control" id="code" placeholder="AAABB0000">
                       </div>
                     </div>                    
                   </div><br>
@@ -490,8 +490,10 @@ $('#save_asset').click(function(e){
 
   //initialize the form data for further validation
   var file_data = $('#filecover').prop('files')[0];
+  var action = 1;
   var form_data = new FormData();
   form_data.append('files', file_data);
+  form_data.append('action', action);
 
   var myData = 'description=' + description + '&specification=' + specs + '&project=' + project + '&category=' + category + '&code=' + code + '&trade=' + trade + '&brand=' + brand + '&barcode=' + barcode + '&quantity=' + quantity + '&price=' + price + '&date_warranty=' + date_warranty + '&serial=' + serial + '&model=' + model + '&condition=' + condition + '&assign_person=' + assign_person + '&date_transfer=' + date_transfer + '&notes=' + notes;
   //data for updating the logs

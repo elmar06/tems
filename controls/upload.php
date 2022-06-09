@@ -21,7 +21,7 @@ $asset = new Asset($db);
 		if(move_uploaded_file($temp, $path))
 		{
 			//check if asset is newly added (action = 1)
-			if($_GET['action'] == 1)
+			if($_POST['action'] == 1)
 			{
 				$id = "";
 				$get_id = $asset->get_last_id();
@@ -36,7 +36,7 @@ $asset = new Asset($db);
 
 				if($save)//update the database 
 				{
-					echo 1;
+					echo $id;
 				}
 				else
 				{
