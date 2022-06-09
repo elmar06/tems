@@ -9,7 +9,7 @@ $db = $database->connect();
 $worker = new Worker($db);
 
 $worker->project = $_SESSION['project-id'];
-$view = $worker->view_worker();
+$view = $worker->view_worker_by_proj();
 while($row = $view->fetch(PDO::FETCH_ASSOC))
 {
   echo '
