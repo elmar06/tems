@@ -107,7 +107,7 @@
                           {
                             if($category == $row['type_id'])
                             {
-                              echo '<option value='.$project.' selected>'.$row['type'].'</option>';
+                              echo '<option value='.$row['type_id'].' selected>'.$row['type'].'</option>';
                             }
                             else
                             {

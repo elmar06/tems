@@ -332,6 +332,8 @@ $('#code').change(function(){
         $('#model').val(model);
         $('#tool-id').val(id);
         $('#status').val(status);
+        //auto focus in emp ID
+        $('#borrow-code').focus();
         //check the status of tools & equipment
         if(result[5] == 1 || result[5] == 2){
          $('#tool-status').html('<label id="tool-status" style="font-size: 20px; color: green;">In Storage</label>');

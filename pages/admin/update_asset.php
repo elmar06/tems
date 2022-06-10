@@ -107,11 +107,11 @@
                           {
                             if($category == $row['type_id'])
                             {
-                              echo '<option value='.$project.' selected>'.$row['type'].'</option>';
+                              echo '<option value='.$row['type_id'].' selected>'.$row['type'].'</option>';
                             }
                             else
                             {
-                               echo '<option value='.$row['type_id'].'>'.$row['type'].'</option>';
+                              echo '<option value='.$row['type_id'].'>'.$row['type'].'</option>';
                             }
                           }
                         ?>
@@ -511,7 +511,7 @@ $('#category').on('change', function(){
       var proj_code = result[0];
       var series = result[1];
       var series_no = ('0000' + series).slice(-4);
-      var code = proj_code + '-' + cat_code + '-' + series_no;
+      var code = proj_code + cat_code + series_no;
       $('#code').val(code);
     }
   })
@@ -538,7 +538,7 @@ $('#project').on('change', function(){
       var proj_code = result[0];
       var series = result[1];
       var series_no = ('0000' + series).slice(-4);
-      var code = proj_code + '-' + cat_code + '-' + series_no;
+      var code = proj_code + cat_code + series_no;
       $('#code').val(code);
     }
   })

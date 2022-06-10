@@ -45,12 +45,13 @@
               <h4><b>PROJECT: <u> <?php echo $_SESSION['proj-name']; ?></u></b></h4>  
               <div class="card">
                 <div class="card-body">
-                    <a href="add_asset.php" class="btn btn-success btn-rounded"><span class="fa fa-plus"></span> New Tool/Equipment</a><br><br>
+                  <a href="add_asset.php" class="btn btn-success btn-rounded"><span class="fa fa-plus"></span> New Tool/Equipment</a><br><br>
                   <table id="asset_table" class="table table-bordered table-hover" style="cursor:pointer">
                     <thead>
                         <tr>
                             <th style="width: 10px;"><input type="checkbox" id="checkboxall"/></th>
                             <th>T&E Code</th>
+                            <th><center>Serial No.</center></th>
                             <th>Description</th>
                             <th>Category</th>
                             <th>Trade</th>
@@ -72,10 +73,17 @@
                           }else{
                             $status = '<label style="color: red"> Borrowed </label>';
                           }
+                          //serial
+                          if($row['serial'] == ''){
+                            $serial = '-';
+                          }else{
+                            $serial = $row['serial'];
+                          }
                           echo '
                             <tr>
                               <td><input type="checkbox" name="checklist" class="checklist" value="'.$row['asset_id'].'" style="max-width: 50px;"></td>
                               <td>'.$row['code'].'</td>
+                              <td><center>'.$serial.'</center></td>
                               <td>'.$row['description'].'</td>
                               <td>'.$row['cat_name'].'</td>
                               <td>'.$row['dept_name'].'</td>
@@ -169,6 +177,7 @@ $(document).ready(function(){
 </script>
 <!-- Add Remarks event handler -->
 <script>
+//add remarks event handler
 $('#btnAddRemarks').on('click', function(e){
   e.preventDefault();
 
