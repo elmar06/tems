@@ -48,49 +48,49 @@
                     <a id="btnTransfer" href="#" class="btn btn-primary btn-rounded"><i class="fa fa-share"></i>Transfer Asset</a>
                     <button id="btnReport" class="btn btn-primary btn-rounded" data-toggle="modal" data-target="#reportModal"><i class="fa fa-print"></i>Reports</button>
                   </div><br>
-                  <div id="table-content">
-                  <table id="asset_table" class="table table-bordered table-responsive table-hover asset_table" style="cursor:pointer">
-                    <thead>
-                        <tr>
-                            <th align="center"  style="max-width: 5%;"><input type="checkbox" id="checkboxall"/></th>
-                            <th align="center" style="max-width: 80px;">T&E Code</th>
-                            <th align="center" style="max-width: 80px;">Serial No.</th>
-                            <th align="center" style="max-width: 200px;">Description</th>
-                            <th align="center" style="max-width: 150px;">Project</th>
-                            <th align="center" style="max-width: 150px;">Category</th>
-                            <th align="center" style="max-width: 100px;">Trade</th>
-                            <th align="center" style="max-width: 100px;">Assignee</th>
-                            <th align="center" style="width: 10%;">Condition</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                      <?php
-                        //$asset->project = $_SESSION['project-id'];
-                        $view = $asset->view_asset();
+                  <!-- <div id="table-content"> -->
+                    <table id="asset_table" class="table table-bordered table-responsive table-hover asset_table" style="cursor:pointer">
+                      <thead>
+                          <tr>
+                              <th align="center" style="max-width: 5%;"><input type="checkbox" id="checkboxall"/></th>
+                              <th align="center" style="max-width: 80px;">T&E Code</th>
+                              <th align="center" style="max-width: 80px;">Serial No.</th>
+                              <th align="center" style="max-width: 200px;">Description</th>
+                              <th align="center" style="max-width: 150px;">Project</th>
+                              <th align="center" style="max-width: 150px;">Category</th>
+                              <th align="center" style="max-width: 100px;">Trade</th>
+                              <th align="center" style="max-width: 100px;">Assignee</th>
+                              <th align="center" style="width: 10%;">Condition</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                        <?php
+                          //$asset->project = $_SESSION['project-id'];
+                          $view = $asset->view_asset();
 
-                        while($row = $view->fetch(PDO::FETCH_ASSOC))
-                        {
-                          extract($row);
-                          if($row['serial'] == ''){
-                            $serial = '-';
+                          while($row = $view->fetch(PDO::FETCH_ASSOC))
+                          {
+                            extract($row);
+                            if($row['serial'] == ''){
+                              $serial = '-';
+                            }
+                            echo '
+                              <tr>
+                                <td><input type="checkbox" name="checklist" class="checklist" value="'.$row['asset_id'].'" style="max-width: 50px;"></td>
+                                <td class="barcode" style="max-width: 80px;">'.$row['code'].'</td>
+                                <td class="barcode" style="max-width: 80px;"><center>'.$serial.'<center></td>
+                                <td class="description" style="max-width: 200px;">'.$row['description'].'</td>
+                                <td class="asset_type" style="max-width: 150px;">'.$row['loc_name'].'</td>
+                                <td class="asset_loc" style="max-width: 150px;">'.$row['cat_name'].'</td>
+                                <td class="brand" style="max-width: 100px;">'.$row['dept_name'].'</td>
+                                <td class="brand" style="max-width: 100px;">'.$row['fullname'].'</td>
+                                <td class="asset_status" style="width: 10%;">'.$row['tool_condition'].'</td>
+                              </tr>';
                           }
-                          echo '
-                            <tr>
-                              <td><input type="checkbox" name="checklist" class="checklist" value="'.$row['asset_id'].'" style="max-width: 5%;"></td>
-                              <td class="barcode" style="max-width: 80px;">'.$row['code'].'</td>
-                              <td class="barcode" style="max-width: 80px;"><center>'.$serial.'<center></td>
-                              <td class="description" style="max-width: 200px;">'.$row['description'].'</td>
-                              <td class="asset_type" style="max-width: 150px;">'.$row['loc_name'].'</td>
-                              <td class="asset_loc" style="max-width: 150px;">'.$row['cat_name'].'</td>
-                              <td class="brand" style="max-width: 100px;">'.$row['dept_name'].'</td>
-                              <td class="brand" style="max-width: 100px;">'.$row['fullname'].'</td>
-                              <td class="asset_status" style="width: 10%;">'.$row['tool_condition'].'</td>
-                            </tr>';
-                        }
-                      ?>
-                    </tbody>
-                  </table>
-                  </div><!-- end of table content div -->
+                        ?>
+                      </tbody>
+                    </table>
+                 <!--  </div> --><!-- end of table content div -->
                 </div>
               </div>
             </div><!-- end of column -->
@@ -590,14 +590,14 @@ $('#btnAssetTransfer').click(function(){
   var date_transfer = $('#date_transfer').val();
   var reason = $('#reason').val();
   var location = $('#new_location').val();
+  var trade = $('#new_department').val();
   var quantity = $('#quantity').val();
 
   $.each(id, function(key, value){
     $.ajax({
       type: 'POST',
       url: '../../controls/transfer_asset.php',
-      data: {id: value, assign: assign, date_transfer: date_transfer, reason: reason, location: location, quantity: quantity},
-
+      data: {id: value, assign:assign, date_transfer:date_transfer, reason:reason, location:location, quantity:quantity, department:trade},
       success: function(response)
       {
         if(response > 0)

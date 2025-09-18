@@ -37,6 +37,7 @@ $asset->assign = $_POST['assign'];
 $asset->date_transfer = date("Y-m-d H:i:s", strtotime($_POST['date_transfer']));
 $asset->project = $_POST['location'];
 $asset->quantity = $_POST['quantity'];
+$asset->trade = $_POST['department'];
 
 //save the details of transfer
 $transfer->transfer_id = $transfer_id;

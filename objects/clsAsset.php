@@ -229,14 +229,15 @@ class Asset
 
 	public function transfer_asset()
 	{
-		$query = "UPDATE ".$this->table_name." SET assign=?, date_transfer=?, project=? WHERE id=?";
+		$query = "UPDATE ".$this->table_name." SET assign=?, date_transfer=?, project=?, trade=? WHERE id=?";
 		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 		$upd = $this->conn->prepare($query);
 
 		$upd->bindParam(1, $this->assign);
 		$upd->bindParam(2, $this->date_transfer);
 		$upd->bindParam(3, $this->project);
-		$upd->bindParam(4, $this->id);
+		$upd->bindParam(4, $this->trade);
+		$upd->bindParam(5, $this->id);
 
 		if($upd->execute())
 		{
