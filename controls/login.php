@@ -1,32 +1,30 @@
 <?php
 session_start();
-
-	include "../config/clsConnection.php";
+	include "../config/clsConnectionMain.php";
 	include "../objects/clsUser.php";
 
-	$database = new clsConnection();
-	$db = $database->connect();
+	$databaseMain = new clsConnectionMain();
+	$dbMain = $databaseMain->connectMain();
 
-	$user = new Users($db);
+	$user = new Users($dbMain);
 
-	$user->username = $_POST['uname'];
-	$user->password = md5($_POST['pword']);
+	$user->username = $_POST['username'];
+	$user->password = md5($_POST['password']);
+	$user->admin_pass = md5($_POST['password']);
 	$user->status = 0;
 
 	$login = $user->login();
 
 	if($row = $login->fetch(PDO::FETCH_ASSOC))
 	{
-		$_SESSION['fullname'] = $row['fullname'];
+		$_SESSION['id'] = $row['id'];
+		$_SESSION['fullname'] = $row['firstname'].' '.$row['lastname'];
 		$_SESSION['firstname'] = $row['firstname'];
 		$_SESSION['lastname'] = $row['lastname'];
-		$_SESSION['log_count'] = $row['log_count'];
 		$_SESSION['username'] = $row['username'];
-		$_SESSION['id'] = $row['id'];
-		$_SESSION['access_type'] = $row['access_type'];
-		$_SESSION['project-id'] = $row['proj_id'];
-		$_SESSION['proj-name'] = $row['proj_loc'];
-
+		$_SESSION['logcount'] = $row['logcount'];
+		$_SESSION['dept-id'] = $row['dept'];
+		$_SESSION['email'] = $row['email'];
 		echo 1;
 	}
 	else

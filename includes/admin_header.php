@@ -1,6 +1,6 @@
 <?php
 session_start();
-  if($_SESSION['access_type'] != '2')
+  if($_SESSION['role'] != '2')
   {
     header('Location: ../../controls/logout.php');
   }
@@ -9,6 +9,7 @@ session_start();
   $user_id = $_SESSION['id'];
 
   include '../../config/clsConnection.php';
+  include '../../config/clsConnectionMain.php';
   include '../../objects/clsAsset.php';
   include '../../objects/clsLocation.php';
   include '../../objects/clsDepartment.php';
@@ -21,12 +22,14 @@ session_start();
 
   $database = new clsConnection();
   $db = $database->connect();
+  $databaseMain = new clsConnectionMain();
+  $dbMain = $databaseMain->connectMain();
 
   $asset = new Asset($db);
   $loc = new Location($db);
-  $dept = new Department($db);
+  $dept = new Department($dbMain);
   $person = new Personnel($db);
-  $user = new Users($db);
+  $user = new Users($dbMain);
   $type = new Type($db);
   $record = new TransferRecord($db);
   $records = new Records($db);

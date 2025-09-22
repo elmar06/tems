@@ -132,16 +132,16 @@
                       <label for="exampleInputEmail1">Trade</label>
                       <select type="text" class="form-control js-example-basic-single" id="trade" name="trade">
                         <?php
-                          $view = $dept->view_dept();
+                          $view = $dept->view_trade();
                           while($row=$view->fetch(PDO::FETCH_ASSOC))
                           {
                             if($trade == $row['id'])
                             {
-                              echo '<option value='.$trade.' selected>'.$row['department'].'</option>';
+                              echo '<option value='.$trade.' selected>'.$row['trade_name'].'</option>';
                             }
                             else
                             {
-                               echo '<option value='.$row['id'].'>'.$row['department'].'</option>';
+                               echo '<option value='.$row['id'].'>'.$row['trade_name'].'</option>';
                             }
                           }
                         ?>

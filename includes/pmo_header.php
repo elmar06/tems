@@ -1,9 +1,5 @@
 <?php
 session_start();
-  if($_SESSION['access_type'] != '3')
-  {
-    header('Location: ../../controls/logout.php');
-  }
 
   $name = $_SESSION['fullname'];
   $user_id = $_SESSION['id'];

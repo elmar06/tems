@@ -1,9 +1,5 @@
 <?php 
   include '../../includes/admin_header.php';//include the header 
-    if(!$_SESSION['username'])
-    {
-      header("Location: index.php");
-    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -177,10 +173,10 @@
                   <label for="exampleInputEmail1">New Trade</label><br>
                   <select id="new_department" type="text" class="form-control select2" style="width: 100%">
                       <?php
-                        $view_dept = $dept->view_dept();
+                        $view_dept = $dept->view_trade();
                         while($dept_row=$view_dept->fetch(PDO::FETCH_ASSOC))
                         {
-                          echo '<option value='.$dept_row['id'].'>'.$dept_row['department'].'</option>';
+                          echo '<option value='.$dept_row['id'].'>'.$dept_row['trade_name'].'</option>';
                         }
                       ?>
                   </select>
@@ -195,9 +191,10 @@
                   <label for="exampleInputEmail1">LIST OF ITEM TO TRANSFER</label>
                   <table id="tbltransfer" class="table-bordered transfer_table" style="width: 100%">
                     <thead>
-                        <tr>
-                          <th></th>
+                        <tr style="font-size: 14px">
+                            <th></th>
                             <th>T&E Code</th>
+                            <th>SN #</th>
                             <th>Description</th>
                             <th>Project</th>
                             <th>Category</th>
@@ -207,7 +204,7 @@
                             <th>Action</th>
                         </tr>
                     </thead>
-                    <tbody id="tbody-transfer">
+                    <tbody id="tbody-transfer" style="font-size: 13px">
                       <!-- asset items must be placed here -->
                     </tbody>
                   </table>
@@ -442,7 +439,9 @@ $(document).ready(function(){
 <!-- BOOTSTRAP DATATABLE FUNCTION -->
 <script>
   $(function(){
-    $('.table').DataTable();
+    $('.table').DataTable({
+      //stateSave: true
+    });
   });
 </script>
 
@@ -455,7 +454,6 @@ $(document).ready(function(){
       type: 'POST',
       url: '../../controls/view_asset_byID.php',
       data: {id:id},
-
       success: function(html)
       {
         $('#viewAssetModal').modal('show');
@@ -504,7 +502,7 @@ $(document).ready(function(){
     $('body').on('click', '.btnremove', function(e){
       tr = $(this).parent();
       tr.find('.btnRemove').remove();
-      $('#tbltransfer th:last-child, #tbltransfer td:last-child').remove();//Remove the action button
+      //$('#tbltransfer th:last-child, #tbltransfer td:last-child').remove();//Remove the action button
       $('.asset_table').append(tr.clone());
       tr.remove();
     })

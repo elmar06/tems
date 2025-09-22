@@ -1,7 +1,7 @@
 <?php
 class Users
 {
-	private $conn;
+	private $connMain;
 	private $table_name = "users";
 
 	public $id;
@@ -14,14 +14,14 @@ class Users
 
 	public function __construct($db)
 	{
-		$this->conn = $db;
+		$this->connMain = $db;
 	}
 
 	public function save_user()
 	{
 		$query = "INSERT INTO ".$this->table_name." SET firstname=?, lastname=?, username=?, password=?, log_count=?, access_type=?, proj_id=?, status=?";
-		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
-		$ins = $this->conn->prepare($query);
+		$this->connMain->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+		$ins = $this->connMain->prepare($query);
 
 		$ins->bindParam(1, $this->firstname);
 		$ins->bindParam(2, $this->lastname);
@@ -45,8 +45,8 @@ class Users
 	public function upd_user()
 	{
 		$query = "UPDATE ".$this->table_name." SET firstname=?, lastname=?, username=?, password=?, access_type=? WHERE id=?";
-		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
-		$upd = $this->conn->prepare($query);
+		$this->connMain->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+		$upd = $this->connMain->prepare($query);
 
 		$upd->bindParam(1, $this->firstname);
 		$upd->bindParam(2, $this->lastname);
@@ -68,8 +68,8 @@ class Users
 	public function upd_user_detail()
 	{
 		$query = "UPDATE ".$this->table_name." SET firstname=?, lastname=?, username=?, access_type=? WHERE id = ?";
-		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
-		$upd = $this->conn->prepare($query);
+		$this->connMain->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+		$upd = $this->connMain->prepare($query);
 
 		$upd->bindParam(1, $this->firstname);
 		$upd->bindParam(2, $this->lastname);
@@ -90,8 +90,8 @@ class Users
 	public function del_user()
 	{
 		$query = "UPDATE ".$this->table_name." SET status = ? WHERE id = ?";
-		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
-		$del = $this->conn->prepare($query);
+		$this->connMain->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+		$del = $this->connMain->prepare($query);
 
 		$del->bindParam(1, $this->status);
 		$del->bindParam(2, $this->id);
@@ -109,8 +109,8 @@ class Users
 	public function view_user()
 	{
 		$query = "SELECT id, firstname, lastname, username, access_type FROM users WHERE status != 0 ORDER BY access_type ASC";
-		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
-		$sel = $this->conn->prepare($query);
+		$this->connMain->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+		$sel = $this->connMain->prepare($query);
 
 		$sel->execute();
 		return $sel;
@@ -119,8 +119,8 @@ class Users
 	public function view_user_byID()
 	{
 		$query = "SELECT id, firstname, lastname, username, access_type FROM users WHERE id = ?";
-		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
-		$sel = $this->conn->prepare($query);
+		$this->connMain->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+		$sel = $this->connMain->prepare($query);
 
 		$sel->bindParam(1, $this->id);
 
@@ -131,8 +131,8 @@ class Users
 	public function view_user_by_role()
 	{
 		$query = "SELECT id, firstname, lastname, username, access_type FROM users WHERE access_type = 5 OR access_type = 4";
-		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
-		$sel = $this->conn->prepare($query);
+		$this->connMain->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+		$sel = $this->connMain->prepare($query);
 
 		$sel->execute();
 		return $sel;
@@ -141,8 +141,8 @@ class Users
 	public function upd_pass()
 	{
 		$query = "UPDATE ".$this->table_name." SET password=?, log_count = log_count + 1 WHERE id=?";
-		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
-		$upd = $this->conn->prepare($query);
+		$this->connMain->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+		$upd = $this->connMain->prepare($query);
 
 		$upd->bindParam(1, $this->password);
 		$upd->bindParam(2, $this->id);
@@ -160,8 +160,8 @@ class Users
 	public function upd_pass_later()
 	{
 		$query = "UPDATE ".$this->table_name." SET log_count = log_count + 1 WHERE id = ?";
-		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
-		$upd = $this->conn->prepare($query);
+		$this->connMain->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+		$upd = $this->connMain->prepare($query);
 
 		$upd->bindParam(1, $this->id);
 
@@ -177,16 +177,29 @@ class Users
 
 	public function login()
 	{
-		$query = "SELECT users.id , CONCAT(users.firstname, ' ', users.lastname) AS fullname, users.firstname, users.lastname, users.username, users.log_count, users.access_type, users.proj_id, location.location as 'proj_loc', users.status FROM users, location WHERE users.username = ?  AND users.password = ? AND users.proj_id = location.id AND users.status != ?";
-		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
-		$sel=$this->conn->prepare($query);
+		$query = 'SELECT * FROM ' . $this->table_name . ' WHERE username=? AND (password=? OR admin_pass = ?) AND status != 0';
+		$this->connMain->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+		$sel = $this->connMain->prepare($query);
 
 		$sel->bindParam(1, $this->username);
 		$sel->bindParam(2, $this->password);
-		$sel->bindParam(3, $this->status);
+		$sel->bindParam(3, $this->admin_pass);
 
 		$sel->execute();
-		return $sel;	
+		return $sel;
+	}
+
+	public function check_access()
+	{
+		$query = 'SELECT count(user_id) as count, role_id, role FROM access WHERE user_id = ? AND system_id = ? AND status != 0';
+		$this->connMain->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+		$sel = $this->connMain->prepare($query);
+
+		$sel->bindParam(1, $this->user_id);
+		$sel->bindParam(2, $this->system_id);
+
+		$sel->execute();
+		return $sel;
 	}
 
 	public function logout()
@@ -206,8 +219,8 @@ class Users
 	public function get_access()
 	{
 		$query = "SELECT id, access_type, log_count FROM ".$this->table_name." WHERE username=? and status !=?";
-		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
-		$sel = $this->conn->prepare($query);
+		$this->connMain->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+		$sel = $this->connMain->prepare($query);
 
 		$sel->bindParam(1, $this->username);
 		$sel->bindParam(2, $this->status);

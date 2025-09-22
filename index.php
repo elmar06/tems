@@ -48,7 +48,7 @@
                   <button id="btnlogin" class="btn btn-primary submit-btn btn-block">Login</button>
                 </div>
                 <div id="warning" class="alert alert-danger" role="alert">
-                  <center><i class="fa fa-warning menu-icon"></i> Invalid username or password. Please try again.</center>
+                  <center><p class="error-msg"> Error Message here!</p></center>
                 </div>
               </form>
             </div>
@@ -70,52 +70,7 @@
   <!-- inject:js -->
   <script src="js/off-canvas.js"></script>
   <script src="js/misc.js"></script>
+  <script src="index.js"></script>
   <!-- endinject -->
-<script>
-$('.alert').hide();
-$('#pword').keyup(function(event){
-  if(event.keycode === 13)
-  {
-    $('btnlogin').click
-  }
-});
-
-$('#btnlogin').click(function(e){
-  e.preventDefault();
-  var uname = $('#uname').val();
-  var pword = $('#pword').val();
-  var myData = 'uname=' + uname + '&pword=' + pword;
-
-  if(uname != "" && pword != "")
-  {
-    $.ajax({
-      type: "POST",
-      url: "controls/login.php",
-      data: myData,
-
-      success: function(response)
-      {
-        if(response > 0)
-        {
-          window.location = "controls/checkaccess.php";
-        }
-        else
-        {
-          $('#warning').show().fadeOut(5000);
-        }
-      },
-      error: function(xhr, ajaxOptions, thrownError)
-      {
-        alert(thrownError);
-      }
-    });
-  }
-  else
-  {
-    $('#warning').html("<center>ERROR!! All fields are required.</center>");
-    $('#warning').show().fadeOut(5000);
-  }
-});
-</script>
 </body>
 </html>

@@ -93,13 +93,13 @@
                   </div><br>
                   <div class="row">
                     <div class="col-lg-4">
-                      <label for="exampleInputEmail1">Trade</label>&nbsp;<span style="color: red; font-size: 16px">*</span>
+                      <label for="trade">Trade</label>&nbsp;<span style="color: red; font-size: 16px">*</span>
                       <select type="text" class="form-control js-example-basic-single" id="trade" name="trade" required="required">
                         <?php
-                          $view = $dept->view_dept();
-                          while($row=$view->fetch(PDO::FETCH_ASSOC))
+                          $view = $dept->view_trade();
+                          while($row = $view->fetch(PDO::FETCH_ASSOC))
                           {
-                            echo '<option value='.$row['id'].'>'.$row['department'].'</option>';
+                            echo '<option value='.$row['id'].'>'.$row['trade_name'].'</option>';
                           }
                         ?>
                       </select>
